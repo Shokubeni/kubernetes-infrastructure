@@ -4,29 +4,17 @@ provider "aws" {
   region     = "${var.provider_info["region"]}"
 }
 
-resource "null_resource" "cluster_dir_creator" {
-  provisioner "local-exec" {
-    command = "rm -rf cluster || true && mkdir cluster"
-  }
-}
-
 module "network" {
   source = "./module/network"
 
   virtual_cloud_cidr = "${var.virtual_cloud_cidr}"
   private_subnets = "${var.private_subnets}"
   public_subnets = "${var.public_subnets}"
-  cluster_info = {
-    label = "${var.cluster_info["label"]}"
-    name  = "${var.cluster_info["name"]}"
-  }
+  cluster_info = "${var.cluster_info}"
 }
 
 module "security" {
   source = "./module/security"
 
-  cluster_info = {
-    label = "${var.cluster_info["label"]}"
-    name  = "${var.cluster_info["name"]}"
-  }
+  cluster_info = "${var.cluster_info}"
 }
