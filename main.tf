@@ -25,6 +25,7 @@ module "network" {
 module "security" {
   source = "./module/security"
 
+  vpc_id = "${module.network.vpc_id}"
   cluster_info = {
     label = "${var.cluster_info["label"]}"
     name  = "${var.cluster_info["name"]}"
