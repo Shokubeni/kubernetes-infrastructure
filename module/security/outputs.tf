@@ -1,17 +1,17 @@
-output "master_key_name" {
-  value = "${module.key_pairs.master_key_name}"
+output "master_private_key" {
+  value = "${module.key_pairs.master_private_key}"
 }
 
-output "master_key_fingerpint" {
-  value = "${module.key_pairs.master_key_fingerprint}"
+output "master_public_key" {
+  value = "${module.key_pairs.master_public_key}"
 }
 
-output "worker_key_name" {
-  value = "${module.key_pairs.worker_key_name}"
+output "worker_private_key" {
+  value = "${module.key_pairs.worker_private_key}"
 }
 
-output "worker_key_fingerprint" {
-  value = "${module.key_pairs.worker_key_fingerprint}"
+output "worker_public_key" {
+  value = "${module.key_pairs.worker_public_key}"
 }
 
 output "master_security_group_id" {
