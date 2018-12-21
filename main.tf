@@ -8,13 +8,14 @@ module "network" {
   source = "./module/network"
 
   virtual_cloud_cidr = "${var.virtual_cloud_cidr}"
-  private_subnets = "${var.private_subnets}"
-  public_subnets = "${var.public_subnets}"
-  cluster_info = "${var.cluster_info}"
+  private_subnets    = "${var.private_subnets}"
+  public_subnets     = "${var.public_subnets}"
+  cluster_info       = "${var.cluster_info}"
 }
 
 module "security" {
   source = "./module/security"
 
   cluster_info = "${var.cluster_info}"
+  vpc_id       = "${module.network.vpc_id}"
 }
