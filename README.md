@@ -6,16 +6,12 @@ This configuration provides a simple way for quick, secure and fully management 
 ## Requirements
 We use Terragrunt. It is provides extra tools for working with multiple Terraform modules. In the beginning you need to install Terraform and Terragrunt console applications as showing below.
 
-##### Terraform
-###### Manual
-Download the binary for your OS from [Releases Page](https://www.terraform.io/downloads.html), rename it to `terraform`, and add it to your PATH.
-###### OSX
-You can install Terragrunt on OSX using [Homebrew](https://brew.sh/): `brew install terrafrom`.
-##### Terragrunt
-###### Manual
-Download the binary for your OS from [Releases Page](https://github.com/gruntwork-io/terragrunt/releases), rename it to `terragrunt`, and add it to your PATH.
-###### OSX
-You can install Terragrunt on OSX using [Homebrew](https://brew.sh/): `brew install terragrunt`.
+#### Terraform
+ - Download the binary for your OS from [Releases Page](https://www.terraform.io/downloads.html), rename it to `terraform`, and add it to your PATH.
+ - You can install Terragrunt on OSX using [Homebrew](https://brew.sh/): `brew install terrafrom`.
+#### Terragrunt
+ - Download the binary for your OS from [Releases Page](https://github.com/gruntwork-io/terragrunt/releases), rename it to `terragrunt`, and add it to your PATH.
+ - You can install Terragrunt on OSX using [Homebrew](https://brew.sh/): `brew install terragrunt`.
 
 ## Environments
 Directory `environment` contains subdirectories used for splitting independent configurations with different requirements for cloud infrastucture. By default there is only `default` subdirectory with common parameters preset. For deep understanding this concept please read Terragrunt [documentation](https://github.com/gruntwork-io/terragrunt).
