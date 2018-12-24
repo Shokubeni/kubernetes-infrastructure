@@ -9,7 +9,7 @@ terragrunt = {
       profile        = "cluster_operator"
       bucket         = "smart-gears.cluster-state"
       dynamodb_table = "smart-gears.cluster-locks"
-      region         = "eu-west-1"
+      region         = "us-east-1"
       key            = "${path_relative_to_include()}/terraform.tfstate"
     }
   }
