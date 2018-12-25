@@ -34,7 +34,7 @@ Most common directory structure can be represented as showing bellow. Or you can
 ```
 
 ## Quick start
-At the beggining you must create `cluster_operator` profile inside `~/.aws/creditnails` file or use another 
+At the beginning you must create `cluster_operator` profile inside `~/.aws/creditnails` file or use another 
 way [standartized by AWS](https://aws.amazon.com/blogs/security/a-new-and-standardized-way-to-manage-credentials-in-the-aws-sdks/). Then just execute the commands follow below.
 ```sh
 cd environment/default
