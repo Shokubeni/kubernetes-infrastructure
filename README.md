@@ -4,7 +4,7 @@
 This configuration provides a simple way for quick, secure and fully management installation of Kubernetes cluster. Advanced settings give the possibility to configure support tools such as Rancher and Grafana, which helps to monitor cluster resources and simplify its management.
 
 ## Requirements
-We use Terragrunt. It is provides extra tools for working with multiple Terraform modules. In the beginning you need to install Terraform and Terragrunt console applications as showing below.
+We use Terragrunt. It is provides extra tools for working with multiple Terraform modules. At the beginning you need to install Terraform and Terragrunt console applications as showing below.
 
 #### Terraform
  - Download the binary for your OS from [Releases Page](https://www.terraform.io/downloads.html), rename it to `terraform`, and add it to your PATH.
@@ -34,7 +34,7 @@ Most common directory structure can be represented as showing bellow. Or you can
 ```
 
 ## Quick start
-In the beggining you must create `cluster_operator` profile inside `~/.aws/creditnails` file or use another 
+At the beggining you must create `cluster_operator` profile inside `~/.aws/creditnails` file or use another 
 way [standartized by AWS](https://aws.amazon.com/blogs/security/a-new-and-standardized-way-to-manage-credentials-in-the-aws-sdks/). Then just execute the commands follow below.
 ```sh
 cd environment/default
