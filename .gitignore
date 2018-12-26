@@ -1,4 +1,4 @@
+.terragrunt-cache
 .terraform
 .idea
-cluster
-local.*
+environment/develop

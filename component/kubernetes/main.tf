@@ -1,7 +1,10 @@
+terraform {
+  backend "s3" {}
+}
+
 provider "aws" {
-  access_key = "${var.provider_info["access_key"]}"
-  secret_key = "${var.provider_info["secret_key"]}"
-  region     = "${var.provider_info["region"]}"
+  profile = "${var.provider_info["profile"]}"
+  region  = "${var.provider_info["region"]}"
 }
 
 module "network" {
