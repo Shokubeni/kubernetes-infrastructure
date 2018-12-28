@@ -20,14 +20,17 @@ Most common directory structure can be represented as showing bellow. Or you can
 ```
 └── environment
     ├── production
+    |   ├── parameters.tfvars
     |   ├── terraform.tfvars
     │   └── component
     │       └── terraform.tfvars
     ├── development
+    |   ├── parameters.tfvars
     |   ├── terraform.tfvars
     │   └── component
     │       └── terraform.tfvars
     └── stage
+        ├── parameters.tfvars
         ├── terraform.tfvars
         └── component
             └── terraform.tfvars
