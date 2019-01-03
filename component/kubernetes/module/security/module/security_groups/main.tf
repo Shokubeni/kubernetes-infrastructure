@@ -1,6 +1,6 @@
 resource "aws_security_group" "master" {
-  name   = "${var.cluster_info["label"]}-master-node"
-  vpc_id = "${var.vpc_id}"
+  name   = "${var.cluster_config["label"]}-master-node"
+  vpc_id = "${var.virtual_cloud_id}"
 
   ingress {
     description = "SSH client"
@@ -43,16 +43,16 @@ resource "aws_security_group" "master" {
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Master Node",
+      "Name", "${var.cluster_config["name"]} Master Node",
       "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
     )
   )}"
 }
 
 resource "aws_security_group" "worker" {
-  name   = "${var.cluster_info["label"]}-worker-node"
-  vpc_id = "${var.vpc_id}"
+  name   = "${var.cluster_config["label"]}-worker-node"
+  vpc_id = "${var.virtual_cloud_id}"
 
   ingress {
     description = "SSH client"
@@ -112,9 +112,9 @@ resource "aws_security_group" "worker" {
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Worker Node",
+      "Name", "${var.cluster_config["name"]} Worker Node",
       "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
     )
   )}"
 }

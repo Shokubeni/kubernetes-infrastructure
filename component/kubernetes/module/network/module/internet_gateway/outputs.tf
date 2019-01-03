@@ -1,3 +1,3 @@
-output "gateway_ids" {
+output "gateways_ids" {
   value = "${aws_internet_gateway.internet.*.id}"
 }

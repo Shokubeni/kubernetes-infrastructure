@@ -1,7 +1,7 @@
-variable "vpc_id" {
+variable "virtual_cloud_id" {
   type = "string"
 }
 
-variable "cluster_info" {
+variable "cluster_config" {
   type = "map"
 }

@@ -1,17 +1,17 @@
 resource "aws_internet_gateway" "internet" {
-  vpc_id = "${var.vpc_id}"
+  vpc_id = "${var.virtual_cloud_id}"
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Internet Gateway",
+      "Name", "${var.cluster_config["name"]} Internet Gateway",
       "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
     )
   )}"
 }
 
 resource "aws_route_table" "internet" {
-  vpc_id = "${var.vpc_id}"
+  vpc_id = "${var.virtual_cloud_id}"
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -20,15 +20,15 @@ resource "aws_route_table" "internet" {
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Internet Table",
+      "Name", "${var.cluster_config["name"]} Internet Table",
       "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
     )
   )}"
 }
 
 resource "aws_route_table_association" "internet" {
-  count          = "${length(var.subnets_count)}"
+  count          = "${var.subnets_count}"
   subnet_id      = "${element(var.subnets_ids, count.index)}"
   route_table_id = "${aws_route_table.internet.id}"
 }

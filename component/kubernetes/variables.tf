@@ -1,3 +1,11 @@
+variable "provider_config" {
+  type = "map"
+}
+
+variable "cluster_config" {
+  type = "map"
+}
+
 variable "virtual_cloud_cidr" {
   type = "string"
 }
@@ -10,10 +18,18 @@ variable "public_subnets" {
   type = "map"
 }
 
-variable "cluster_info" {
+variable "master_node_instance" {
   type = "map"
 }
 
-variable "provider_info" {
+variable "master_root_volume" {
+  type = "map"
+}
+
+variable "worker_node_instance" {
+  type = "map"
+}
+
+variable "worker_root_volume" {
   type = "map"
 }
