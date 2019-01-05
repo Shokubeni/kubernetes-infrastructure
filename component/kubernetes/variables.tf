@@ -18,18 +18,18 @@ variable "public_subnets" {
   type = "map"
 }
 
-variable "master_node_instance" {
+variable "master_launch_config" {
   type = "map"
 }
 
-variable "master_root_volume" {
+variable "master_volume_config" {
   type = "map"
 }
 
-variable "worker_node_instance" {
+variable "worker_launch_config" {
   type = "map"
 }
 
-variable "worker_root_volume" {
+variable "worker_volume_config" {
   type = "map"
 }

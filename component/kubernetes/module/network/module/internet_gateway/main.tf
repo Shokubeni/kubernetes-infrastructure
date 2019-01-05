@@ -4,8 +4,7 @@ resource "aws_internet_gateway" "internet" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Internet Gateway",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }
@@ -21,8 +20,7 @@ resource "aws_route_table" "internet" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Internet Table",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }

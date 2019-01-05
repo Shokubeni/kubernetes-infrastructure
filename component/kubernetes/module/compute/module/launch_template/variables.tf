@@ -34,6 +34,6 @@ variable "cluster_config" {
   type = "map"
 }
 
-variable "tempate_postfix" {
+variable "template_postfix" {
   type = "string"
 }

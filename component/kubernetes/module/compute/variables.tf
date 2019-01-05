@@ -1,3 +1,7 @@
+variable "autoscaling_iam_role_id" {
+  type = "string"
+}
+
 variable "master_security_group_id" {
   type = "string"
 }
@@ -10,11 +14,11 @@ variable "master_key_name" {
   type = "string"
 }
 
-variable "master_node_instance" {
+variable "master_launch_config" {
   type = "map"
 }
 
-variable "master_root_volume" {
+variable "master_volume_config" {
   type = "map"
 }
 
@@ -30,11 +34,11 @@ variable "worker_key_name" {
   type = "string"
 }
 
-variable "worker_node_instance" {
+variable "worker_launch_config" {
   type = "map"
 }
 
-variable "worker_root_volume" {
+variable "worker_volume_config" {
   type = "map"
 }
 

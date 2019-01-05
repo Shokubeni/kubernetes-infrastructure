@@ -5,8 +5,7 @@ resource "aws_eip" "nat" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} NAT Elastic IP",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }
@@ -19,8 +18,7 @@ resource "aws_nat_gateway" "nat" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} NAT Gateway",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }
@@ -37,8 +35,7 @@ resource "aws_route_table" "nat" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} NAT Table",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }

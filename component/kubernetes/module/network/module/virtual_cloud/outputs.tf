@@ -1,3 +1,3 @@
-output "virtual_cloud_id" {
+output "cloud_id" {
   value = "${aws_vpc.main.id}"
 }

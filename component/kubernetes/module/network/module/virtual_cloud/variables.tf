@@ -5,3 +5,7 @@ variable "virtual_cloud_cidr" {
 variable "cluster_config" {
   type = "map"
 }
+
+variable "cluster_id" {
+  type = "string"
+}

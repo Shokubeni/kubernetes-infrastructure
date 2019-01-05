@@ -1,18 +1,28 @@
-module "security_groups" {
-  source = "./module/security_groups"
+module "security_group" {
+  source = "./module/security_group"
 
   virtual_cloud_id = "${var.virtual_cloud_id}"
   cluster_config   = "${var.cluster_config}"
+  cluster_id       = "${var.cluster_id}"
 }
 
-module "iam_roles" {
-  source = "./module/iam_roles"
+module "autoscaling_role" {
+  source = "./module/autoscaling_role"
 
-  cluster_config = "${var.cluster_config}"
+  cluster_config   = "${var.cluster_config}"
+  cluster_id       = "${var.cluster_id}"
 }
 
-module "key_pairs" {
-  source = "./module/key_pairs"
+module "node_role" {
+  source = "./module/node_role"
 
-  cluster_config = "${var.cluster_config}"
+  cluster_config   = "${var.cluster_config}"
+  cluster_id       = "${var.cluster_id}"
+}
+
+module "tls_key_pair" {
+  source = "./module/tls_key_pair"
+
+  cluster_config   = "${var.cluster_config}"
+  cluster_id       = "${var.cluster_id}"
 }

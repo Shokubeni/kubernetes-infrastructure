@@ -1,5 +1,5 @@
 resource "aws_subnet" "private" {
-  count             = "${length(var.subnets_cidrs)}"
+  count             = "${var.subnets_count}"
   availability_zone = "${element(var.subnets_zones, count.index)}"
   cidr_block        = "${element(var.subnets_cidrs, count.index)}"
   vpc_id            = "${var.virtual_cloud_id}"
@@ -7,8 +7,7 @@ resource "aws_subnet" "private" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Private Subnet",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_config["label"]}", "owned"
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }

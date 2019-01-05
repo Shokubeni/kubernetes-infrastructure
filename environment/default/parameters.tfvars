@@ -27,7 +27,7 @@ public_subnets = {
 //**********************************************************************
 //*                               Nodes                                *
 //**********************************************************************
-master_node_instance = {
+master_launch_config = {
   shutdown_behavior     = "terminate"
   instance_type         = "t3.medium"
   image_id              = "ami-66506c1c"
@@ -41,7 +41,7 @@ master_node_instance = {
   max_size              = 3
 }
 
-worker_node_instance = {
+worker_launch_config = {
   shutdown_behavior     = "terminate"
   instance_type         = "r5.large"
   image_id              = "ami-66506c1c"
@@ -55,14 +55,14 @@ worker_node_instance = {
   max_size              = 2
 }
 
-master_root_volume = {
+master_volume_config = {
   delete_on_termination = true
   volume_type           = "gp2"
   volume_size           = 10
   iops                  = 100
 }
 
-worker_root_volume = {
+worker_volume_config = {
   delete_on_termination = true
   volume_type           = "gp2"
   volume_size           = 10
