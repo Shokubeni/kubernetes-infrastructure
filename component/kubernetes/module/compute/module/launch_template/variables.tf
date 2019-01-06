@@ -1,32 +1,32 @@
+variable "cluster_role" {
+  type = "list"
+}
+
 variable "security_group_id" {
   type = "string"
 }
 
-variable "iam_role_id" {
+variable "node_role_id" {
   type = "string"
 }
 
-variable "node_instance" {
-  type = "map"
-}
-
-variable "root_volume" {
-  type = "map"
-}
-
-variable "key_name" {
+variable "key_pair_id" {
   type = "string"
 }
 
-variable "subnets_cidrs" {
-  type = "list"
+variable "launch_config" {
+  type = "map"
 }
 
-variable "subnets_zones" {
-  type = "list"
+variable "volume_config" {
+  type = "map"
 }
 
-variable "subnets_ids" {
+variable "subnet_count" {
+  type = "string"
+}
+
+variable "subnet_ids" {
   type = "list"
 }
 
@@ -34,6 +34,6 @@ variable "cluster_config" {
   type = "map"
 }
 
-variable "template_postfix" {
+variable "cluster_id" {
   type = "string"
 }

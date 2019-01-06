@@ -1,5 +1,5 @@
 resource "aws_security_group" "master" {
-  name   = "${var.cluster_config["label"]}-master@${var.cluster_id}"
+  name   = "${var.cluster_config["label"]}-master.${var.cluster_id}"
   vpc_id = "${var.virtual_cloud_id}"
 
   ingress {
@@ -50,7 +50,7 @@ resource "aws_security_group" "master" {
 }
 
 resource "aws_security_group" "worker" {
-  name   = "${var.cluster_config["label"]}-worker@${var.cluster_id}"
+  name   = "${var.cluster_config["label"]}-worker.${var.cluster_id}"
   vpc_id = "${var.virtual_cloud_id}"
 
   ingress {

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "autoscale" {
-  name               = "${var.cluster_config["name"]}Autoscaling@${var.cluster_id}"
+  name               = "${var.cluster_config["name"]}Autoscaling.${var.cluster_id}"
   description        = "Enables resource access for autoscaling groups"
   assume_role_policy = "${file("${path.module}/assume-policy.json")}"
 }

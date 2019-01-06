@@ -18,8 +18,8 @@ output "master_public_key" {
   value = "${module.tls_key_pair.master_public_key}"
 }
 
-output "master_key_name" {
-  value = "${module.tls_key_pair.master_key_name}"
+output "master_key_id" {
+  value = "${module.tls_key_pair.master_key_id}"
 }
 
 output "worker_security_group_id" {
@@ -38,6 +38,6 @@ output "worker_public_key" {
   value = "${module.tls_key_pair.worker_public_key}"
 }
 
-output "worker_key_name" {
-  value = "${module.tls_key_pair.worker_key_name}"
+output "worker_key_id" {
+  value = "${module.tls_key_pair.worker_key_id}"
 }
