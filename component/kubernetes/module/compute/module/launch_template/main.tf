@@ -8,16 +8,21 @@ locals {
   volume_type           = "${lookup(var.volume_config, "volume_type", "gp2")}"
   volume_size           = "${lookup(var.volume_config, "volume_size", 10)}"
   market_type           = "${
-                              contains(keys(var.launch_config), "spot_fleet") &&
-                              var.launch_config["spot_fleet"]
-                                  ? "spot"
-                                  : "ondemand"
-                           }"
+    contains(keys(var.launch_config), "spot_fleet") &&
+    var.launch_config["spot_fleet"]
+        ? "spot"
+        : "ondemand"
+  }"
   role_postfix          = "${
-                              contains(var.cluster_role, "controlplane")
-                                  ? "master"
-                                  : "worker"
-                           }"
+    contains(var.cluster_role, "controlplane")
+        ? "master"
+        : "worker"
+  }"
+  role_name             = "${
+    contains(var.cluster_role, "controlplane")
+        ? "Master"
+        : "Worker"
+  }"
 }
 
 locals {
@@ -43,21 +48,19 @@ locals {
 
 data "aws_region" "defaul" {}
 
-resource "aws_iam_instance_profile" "default" {
+resource "aws_iam_instance_profile" "launch" {
   name = "${var.cluster_config["label"]}-${local.role_postfix}.${var.cluster_id}."
   role = "${var.node_role_id}"
 }
 
-resource "aws_launch_template" "default" {
-  count                                = "${var.subnet_count}"
-  name                                 = "${var.cluster_config["label"]}-${local.role_postfix}.${var.cluster_id}.${element(var.subnet_ids, count.index)}"
+resource "aws_launch_template" "launch" {
+  name                                 = "${var.cluster_config["label"]}-${local.role_postfix}.${var.cluster_id}"
   image_id                             = "${local.zone_image[data.aws_region.defaul.name]}"
   instance_type                        = "${var.launch_config["instance_type"]}"
   ebs_optimized                        = "${local.ebs_optimized}"
   instance_initiated_shutdown_behavior = "${local.shutdown_behavior}"
   disable_api_termination              = "${local.disable_termination}"
   key_name                             = "${var.key_pair_id}"
-  security_group_names                 = ["${var.security_group_id}"]
 
   instance_market_options {
     market_type = "${local.market_type}"
@@ -79,15 +82,8 @@ resource "aws_launch_template" "default" {
     }
   }
 
-  network_interfaces {
-    associate_public_ip_address = true
-    delete_on_termination       = true
-    security_groups             = ["${var.security_group_id}"]
-    subnet_id                   = "${element(var.subnet_ids, count.index)}"
-  }
-
   iam_instance_profile {
-    name = "${aws_iam_instance_profile.default.id}"
+    name = "${aws_iam_instance_profile.launch.id}"
   }
 
   credit_specification {
@@ -102,7 +98,7 @@ resource "aws_launch_template" "default" {
     resource_type = "volume"
     tags          = "${merge(
       map(
-        "Name", "${var.cluster_config["name"]} Master Node",
+        "Name", "${var.cluster_config["name"]} ${local.role_name} Node",
         "kubernetes.io/cluster/${var.cluster_id}", "owned"
       )
     )}"
@@ -112,7 +108,7 @@ resource "aws_launch_template" "default" {
     resource_type = "instance"
     tags          = "${merge(
       map(
-        "Name", "${var.cluster_config["name"]} Master Node",
+        "Name", "${var.cluster_config["name"]} ${local.role_name} Node",
         "kubernetes.io/cluster/${var.cluster_id}", "owned"
       )
     )}"
@@ -120,7 +116,7 @@ resource "aws_launch_template" "default" {
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_config["name"]} Master Template",
+      "Name", "${var.cluster_config["name"]} ${local.role_name} Template",
       "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"

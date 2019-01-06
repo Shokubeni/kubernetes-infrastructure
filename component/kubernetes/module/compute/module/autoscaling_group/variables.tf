@@ -1,23 +1,23 @@
-variable "groups_count" {
-  type = "string"
-}
-
-variable "autoscaling_id" {
-  type = "string"
-}
-
-variable "templates_ids" {
+variable "cluster_role" {
   type = "list"
 }
 
-variable "node_instance" {
+variable "launch_config" {
   type = "map"
+}
+
+variable "subnet_ids" {
+  type = "list"
+}
+
+variable "template_id" {
+  type = "string"
 }
 
 variable "cluster_config" {
   type = "map"
 }
 
-variable "group_postfix" {
+variable "cluster_id" {
   type = "string"
 }

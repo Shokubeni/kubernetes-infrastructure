@@ -22,10 +22,6 @@ variable "volume_config" {
   type = "map"
 }
 
-variable "subnet_count" {
-  type = "string"
-}
-
 variable "subnet_ids" {
   type = "list"
 }

@@ -6,10 +6,6 @@ variable "private_subnet_ids" {
   type = "list"
 }
 
-variable "private_subnets" {
-  type = "map"
-}
-
 variable "security_group_id" {
   type = "string"
 }

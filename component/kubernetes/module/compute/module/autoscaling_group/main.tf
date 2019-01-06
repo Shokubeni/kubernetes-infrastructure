@@ -1,11 +1,25 @@
-resource "aws_autoscaling_group" "default" {
-  count    = "${var.groups_count}"
-  name     = "${var.cluster_config["label"]}-${var.group_postfix}-${substr(sha512(timestamp()), 0, 5)}"
-  max_size = "${var.node_instance["max_size"]}"
-  min_size = "${var.node_instance["min_size"]}"
+locals {
+  desired_capacity = "${lookup(var.launch_config, "desired_capacity", 1)}"
+  max_size         = "${lookup(var.launch_config, "max_size", 1)}"
+  min_size         = "${lookup(var.launch_config, "min_size", 1)}"
+  role_postfix     = "${
+    contains(var.cluster_role, "controlplane")
+        ? "master"
+        : "worker"
+  }"
+}
+
+resource "aws_autoscaling_group" "autoscaling" {
+  name                      = "${var.cluster_config["label"]}-${local.role_postfix}.${var.cluster_id}"
+  desired_capacity          = "${local.desired_capacity}"
+  max_size                  = "${local.max_size}"
+  min_size                  = "${local.min_size}"
+  vpc_zone_identifier       = ["${var.subnet_ids}"]
+  health_check_grace_period = 900
+  force_delete              = false
 
   launch_template = {
-    id      = "${element(var.templates_ids, count.index)}"
+    id      = "${var.template_id}"
     version = "$Latest"
   }
 }

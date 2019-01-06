@@ -1,3 +1,3 @@
-output "template_ids" {
-  value = "${aws_launch_template.default.*.id}"
+output "template_id" {
+  value = "${aws_launch_template.launch.id}"
 }
