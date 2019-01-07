@@ -1,11 +1,3 @@
-variable "virtual_cloud_id" {
-  type = "string"
-}
-
-variable "subnets_count" {
-  type = "string"
-}
-
 variable "subnets_ids" {
   type = "list"
 }

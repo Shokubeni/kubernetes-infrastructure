@@ -1,14 +1,13 @@
 resource "aws_vpc" "main" {
-  cidr_block           = "${var.cidr}"
+  cidr_block           = "${var.virtual_cloud_cidr}"
   instance_tenancy     = "default"
   enable_dns_hostnames = true
   enable_dns_support   = true
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Cluster VPC",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "Name", "${var.cluster_config["name"]} Cluster VPC",
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }
@@ -18,9 +17,8 @@ resource "aws_default_route_table" "default" {
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Default Table",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "Name", "${var.cluster_config["name"]} Default Table",
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }
@@ -30,9 +28,8 @@ resource "aws_default_security_group" "default" {
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Default Group",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "Name", "${var.cluster_config["name"]} Default Group",
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }
@@ -42,9 +39,8 @@ resource "aws_default_network_acl" "default" {
 
   tags = "${merge(
     map(
-      "Name", "${var.cluster_info["name"]} Network ACL",
-      "Environment", "${terraform.workspace}",
-      "kubernetes.io/cluster/${var.cluster_info["label"]}", "owned"
+      "Name", "${var.cluster_config["name"]} Network ACL",
+      "kubernetes.io/cluster/${var.cluster_id}", "owned"
     )
   )}"
 }

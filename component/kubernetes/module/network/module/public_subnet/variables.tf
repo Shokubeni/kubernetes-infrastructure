@@ -6,7 +6,11 @@ variable "subnets_count" {
   type = "string"
 }
 
-variable "subnets_ids" {
+variable "subnets_zones" {
+  type = "list"
+}
+
+variable "subnets_cidrs" {
   type = "list"
 }
 
