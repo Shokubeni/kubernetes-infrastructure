@@ -9,11 +9,6 @@ variable "private_subnet_ids" {
 variable "security_group_id" {
   type = "string"
 }
-
-variable "autoscale_role_id" {
-  type = "string"
-}
-
 variable "node_role_id" {
   type = "string"
 }

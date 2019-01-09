@@ -15,7 +15,6 @@ resource "aws_autoscaling_group" "autoscaling" {
   max_size                  = "${local.max_size}"
   min_size                  = "${local.min_size}"
   vpc_zone_identifier       = ["${var.subnet_ids}"]
-  health_check_grace_period = 900
   force_delete              = false
 
   launch_template = {
