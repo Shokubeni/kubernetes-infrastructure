@@ -46,7 +46,7 @@ module "master" {
   cluster_id         = "${random_id.cluster.hex}"
 }
 
-module "worker_compute" {
+module "worker" {
   source = "./module/compute"
 
   cluster_role       = ["worker"]
