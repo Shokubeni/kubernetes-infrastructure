@@ -9,6 +9,15 @@ variable "private_subnet_ids" {
 variable "security_group_id" {
   type = "string"
 }
+
+variable "publish_role_arn" {
+  type = "string"
+}
+
+variable "lambda_role_arn" {
+  type = "string"
+}
+
 variable "node_role_id" {
   type = "string"
 }

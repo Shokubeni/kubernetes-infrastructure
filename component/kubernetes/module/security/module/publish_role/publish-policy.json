@@ -7,8 +7,8 @@
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:sns:::${worker_topic}",
-        "arn:aws:sns:::${master_topic}"
+        "arn:aws:sns:*:*:${worker_topic}",
+        "arn:aws:sns:*:*:${master_topic}"
       ]
     }
   ]

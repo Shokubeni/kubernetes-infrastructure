@@ -2,14 +2,14 @@ data "template_file" "publish" {
   template = "${file("${path.module}/publish-policy.json")}"
 
   vars {
-    worker_topic = "${var.cluster_config["label"]}-worker-hooks.${var.cluster_id}"
-    master_topic = "${var.cluster_config["label"]}-master-hooks.${var.cluster_id}"
+    worker_topic = "${var.cluster_config["label"]}-worker-lifecycle_${var.cluster_id}"
+    master_topic = "${var.cluster_config["label"]}-master-lifecycle_${var.cluster_id}"
   }
 }
 
 resource "aws_iam_role" "publish" {
-  name               = "${var.cluster_config["name"]}LifecyclePublish.${var.cluster_id}"
-  description        = "Enables ASG to publish lifecycle events into SNS topic"
+  name               = "${var.cluster_config["name"]}LifecyclePublish_${var.cluster_id}"
+  description        = "Enables ASG to publish lifecycle hook events into SNS topic"
   assume_role_policy = "${file("${path.module}/assume-policy.json")}"
 }
 

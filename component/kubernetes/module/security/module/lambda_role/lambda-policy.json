@@ -5,8 +5,11 @@
       "Action": [
         "autoscaling:CompleteLifecycleAction",
         "ec2:DescribeInstances",
+        "ec2:CreateNetworkInterface",
+        "ec2:AttachNetworkInterface",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
         "ssm:SendCommand",
-        "ssm:*",
         "ssm:CancelCommand",
         "ssm:ListCommands",
         "ssm:ListCommandInvocations",
