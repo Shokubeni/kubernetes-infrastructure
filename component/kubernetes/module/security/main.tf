@@ -6,15 +6,22 @@ module "security_group" {
   cluster_id       = "${var.cluster_id}"
 }
 
-module "autoscaling_role" {
-  source = "./module/autoscaling_role"
+module "instance_role" {
+  source = "./module/instance_role"
 
   cluster_config   = "${var.cluster_config}"
   cluster_id       = "${var.cluster_id}"
 }
 
-module "node_role" {
-  source = "./module/node_role"
+module "lambda_role" {
+  source = "./module/lambda_role"
+
+  cluster_config   = "${var.cluster_config}"
+  cluster_id       = "${var.cluster_id}"
+}
+
+module "publish_role" {
+  source = "./module/publish_role"
 
   cluster_config   = "${var.cluster_config}"
   cluster_id       = "${var.cluster_id}"

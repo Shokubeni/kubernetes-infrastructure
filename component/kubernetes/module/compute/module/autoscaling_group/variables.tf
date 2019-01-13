@@ -10,6 +10,14 @@ variable "subnet_ids" {
   type = "list"
 }
 
+variable "publish_topic_arn" {
+  type = "string"
+}
+
+variable "publish_role_arn" {
+  type = "string"
+}
+
 variable "template_id" {
   type = "string"
 }

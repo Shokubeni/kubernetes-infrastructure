@@ -10,7 +10,11 @@ variable "security_group_id" {
   type = "string"
 }
 
-variable "autoscale_role_id" {
+variable "publish_role_arn" {
+  type = "string"
+}
+
+variable "lambda_role_arn" {
   type = "string"
 }
 

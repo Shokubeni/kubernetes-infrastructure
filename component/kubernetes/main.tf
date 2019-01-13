@@ -36,7 +36,8 @@ module "master" {
   cluster_role       = ["controlplane"]
   private_subnet_ids = "${module.network.private_subnet_ids}"
   security_group_id  = "${module.security.master_security_group_id}"
-  autoscale_role_id  = "${module.security.autoscaling_iam_role_id}"
+  publish_role_arn   = "${module.security.publish_iam_role_arn}"
+  lambda_role_arn    = "${module.security.lambda_iam_role_arn}"
   node_role_id       = "${module.security.master_iam_role_id}"
   key_pair_id        = "${module.security.master_key_id}"
   launch_config      = "${var.master_launch_config}"
@@ -51,7 +52,8 @@ module "worker" {
   cluster_role       = ["worker"]
   private_subnet_ids = "${module.network.private_subnet_ids}"
   security_group_id  = "${module.security.worker_security_group_id}"
-  autoscale_role_id  = "${module.security.autoscaling_iam_role_id}"
+  publish_role_arn   = "${module.security.publish_iam_role_arn}"
+  lambda_role_arn    = "${module.security.lambda_iam_role_arn}"
   node_role_id       = "${module.security.worker_iam_role_id}"
   key_pair_id        = "${module.security.worker_key_id}"
   launch_config      = "${var.worker_launch_config}"

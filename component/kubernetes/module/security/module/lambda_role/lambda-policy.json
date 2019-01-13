@@ -1,0 +1,31 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "autoscaling:CompleteLifecycleAction",
+        "ec2:DescribeInstances",
+        "ssm:SendCommand",
+        "ssm:CancelCommand",
+        "ssm:ListCommands",
+        "ssm:ListCommandInvocations",
+        "ssm:ListDocuments",
+        "ssm:DescribeDocument*",
+        "ssm:GetDocument",
+        "ssm:DescribeInstance*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:logs:*:*:*"
+    }
+  ]
+}
