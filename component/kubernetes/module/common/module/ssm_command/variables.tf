@@ -1,7 +1,3 @@
-variable "subnets_ids" {
-  type = "list"
-}
-
 variable "cluster_config" {
   type = "map"
 }

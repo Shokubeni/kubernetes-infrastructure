@@ -8,8 +8,10 @@ provider "aws" {
   version = ">= 1.50.0"
 }
 
-resource "random_id" "cluster" {
-  byte_length = 8
+module "common" {
+  source = "./module/common"
+
+  cluster_config     = "${var.cluster_config}"
 }
 
 module "network" {
@@ -19,7 +21,7 @@ module "network" {
   private_subnets    = "${var.private_subnets}"
   public_subnets     = "${var.public_subnets}"
   cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${random_id.cluster.hex}"
+  cluster_id         = "${module.common.cluster_id}"
 }
 
 module "security" {
@@ -27,7 +29,7 @@ module "security" {
 
   virtual_cloud_id   = "${module.network.virtual_cloud_id}"
   cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${random_id.cluster.hex}"
+  cluster_id         = "${module.common.cluster_id}"
 }
 
 module "master" {
@@ -40,10 +42,11 @@ module "master" {
   lambda_role_arn    = "${module.security.lambda_iam_role_arn}"
   node_role_id       = "${module.security.master_iam_role_id}"
   key_pair_id        = "${module.security.master_key_id}"
+  system_comands     = "${module.common.system_commands}"
   launch_config      = "${var.master_launch_config}"
   volume_config      = "${var.master_volume_config}"
   cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${random_id.cluster.hex}"
+  cluster_id         = "${module.common.cluster_id}"
 }
 
 module "worker" {
@@ -56,8 +59,9 @@ module "worker" {
   lambda_role_arn    = "${module.security.lambda_iam_role_arn}"
   node_role_id       = "${module.security.worker_iam_role_id}"
   key_pair_id        = "${module.security.worker_key_id}"
+  system_comands     = "${module.common.system_commands}"
   launch_config      = "${var.worker_launch_config}"
   volume_config      = "${var.worker_volume_config}"
   cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${random_id.cluster.hex}"
+  cluster_id         = "${module.common.cluster_id}"
 }

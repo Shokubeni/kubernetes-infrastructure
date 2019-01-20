@@ -6,6 +6,10 @@ variable "lambda_role_arn" {
   type = "string"
 }
 
+variable "system_comands" {
+  type = "map"
+}
+
 variable "cluster_config" {
   type = "map"
 }

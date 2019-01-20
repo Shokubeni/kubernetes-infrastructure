@@ -3,6 +3,7 @@ module "autoscaling_hook" {
 
   cluster_role      = "${var.cluster_role}"
   lambda_role_arn   = "${var.lambda_role_arn}"
+  system_comands    = "${var.system_comands}"
   cluster_config    = "${var.cluster_config}"
   cluster_id        = "${var.cluster_id}"
 }

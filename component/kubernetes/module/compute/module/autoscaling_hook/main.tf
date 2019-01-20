@@ -24,6 +24,12 @@ resource "aws_lambda_function" "lifecycle" {
   role             = "${var.lambda_role_arn}"
   handler          = "index.handler"
   runtime          = "nodejs8.10"
+
+  environment {
+    variables = {
+      KUBERNETES_INSTALL_COMMAND = "${var.system_comands["kubernetes_install"]}"
+    }
+  }
 }
 
 resource "aws_sns_topic" "lifecycle" {

@@ -26,6 +26,10 @@ variable "key_pair_id" {
   type = "string"
 }
 
+variable "system_comands" {
+  type = "map"
+}
+
 variable "launch_config" {
   type = "map"
 }

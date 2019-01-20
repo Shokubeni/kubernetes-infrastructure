@@ -94,6 +94,11 @@ resource "aws_launch_template" "launch" {
     enabled = "${local.monitoring}"
   }
 
+  network_interfaces {
+    delete_on_termination = true
+    security_groups       = ["${var.security_group_id}"]
+  }
+
   tag_specifications {
     resource_type = "volume"
     tags          = "${merge(

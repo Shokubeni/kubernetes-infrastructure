@@ -8,50 +8,52 @@ locals {
 module "virtual_cloud" {
   source = "./module/virtual_cloud"
 
-  virtual_cloud_cidr = "${var.virtual_cloud_cidr}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${var.cluster_id}"
+  virtual_cloud_cidr    = "${var.virtual_cloud_cidr}"
+  cluster_config        = "${var.cluster_config}"
+  cluster_id            = "${var.cluster_id}"
 }
 
 module "private_subnet" {
   source = "./module/private_subnet"
 
-  virtual_cloud_id   = "${module.virtual_cloud.cloud_id}"
-  subnets_count      = "${length(local.private_subnets_cidrs)}"
-  subnets_zones      = "${local.private_subnets_zones}"
-  subnets_cidrs      = "${local.private_subnets_cidrs}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${var.cluster_id}"
+  virtual_cloud_id      = "${module.virtual_cloud.cloud_id}"
+  subnets_count         = "${length(local.private_subnets_cidrs)}"
+  subnets_zones         = "${local.private_subnets_zones}"
+  subnets_cidrs         = "${local.private_subnets_cidrs}"
+  cluster_config        = "${var.cluster_config}"
+  cluster_id            = "${var.cluster_id}"
 }
 
 module "public_subnet" {
   source = "./module/public_subnet"
 
-  virtual_cloud_id   = "${module.virtual_cloud.cloud_id}"
-  subnets_count      = "${length(local.public_subnets_cidrs)}"
-  subnets_zones      = "${local.public_subnets_zones}"
-  subnets_cidrs      = "${local.public_subnets_cidrs}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${var.cluster_id}"
+  virtual_cloud_id      = "${module.virtual_cloud.cloud_id}"
+  subnets_count         = "${length(local.public_subnets_cidrs)}"
+  subnets_zones         = "${local.public_subnets_zones}"
+  subnets_cidrs         = "${local.public_subnets_cidrs}"
+  cluster_config        = "${var.cluster_config}"
+  cluster_id            = "${var.cluster_id}"
 }
 
 module "internet_gateway" {
   source = "./module/internet_gateway"
 
-  virtual_cloud_id   = "${module.virtual_cloud.cloud_id}"
-  subnets_count      = "${length(local.public_subnets_cidrs)}"
-  subnets_ids        = "${module.public_subnet.subnet_ids}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${var.cluster_id}"
+  virtual_cloud_id      = "${module.virtual_cloud.cloud_id}"
+  public_subnets_count  = "${length(local.public_subnets_cidrs)}"
+  public_subnets_ids    = "${module.public_subnet.subnet_ids}"
+  cluster_config        = "${var.cluster_config}"
+  cluster_id            = "${var.cluster_id}"
 
 }
 
 module "nat_gateway" {
   source = "./module/nat_gateway"
 
-  virtual_cloud_id   = "${module.virtual_cloud.cloud_id}"
-  subnets_count      = "${length(local.private_subnets_cidrs)}"
-  subnets_ids        = "${module.private_subnet.subnet_ids}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${var.cluster_id}"
+  virtual_cloud_id      = "${module.virtual_cloud.cloud_id}"
+  private_subnets_count = "${length(local.private_subnets_cidrs)}"
+  private_subnets_ids   = "${module.private_subnet.subnet_ids}"
+  public_subnets_count  = "${length(local.public_subnets_cidrs)}"
+  public_subnets_ids    = "${module.public_subnet.subnet_ids}"
+  cluster_config        = "${var.cluster_config}"
+  cluster_id            = "${var.cluster_id}"
 }
