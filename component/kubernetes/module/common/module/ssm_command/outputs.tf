@@ -1,5 +1,5 @@
 output "sustem_commands" {
   value = {
-    kubernetes_install = "${aws_ssm_document.kubernetes.name}"
+    docker_install = "${aws_ssm_document.docker.name}"
   }
 }

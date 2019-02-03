@@ -28,7 +28,7 @@ module "autoscaling_group" {
   cluster_role      = "${var.cluster_role}"
   launch_config     = "${var.launch_config}"
   subnet_ids        = "${var.private_subnet_ids}"
-  publish_topic_arn = "${module.autoscaling_hook.topic_arn}"
+  publish_queue_arn = "${module.autoscaling_hook.queue_arn}"
   publish_role_arn  = "${var.publish_role_arn}"
   template_id       = "${module.launch_tempate.template_id}"
   cluster_config    = "${var.cluster_config}"

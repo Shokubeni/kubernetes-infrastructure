@@ -3,12 +3,12 @@
   "Statement": [
     {
       "Action": [
-        "sns:Publish"
+        "sqs:*"
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:sns:*:*:${worker_topic}",
-        "arn:aws:sns:*:*:${master_topic}"
+        "arn:aws:sqs:*:*:${worker_queue}",
+        "arn:aws:sqs:*:*:${master_queue}"
       ]
     }
   ]

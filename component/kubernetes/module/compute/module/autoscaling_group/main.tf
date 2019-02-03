@@ -7,6 +7,11 @@ locals {
         ? "master"
         : "worker"
   }"
+  role_name        = "${
+    contains(var.cluster_role, "controlplane")
+        ? "Master"
+        : "Worker"
+  }"
 }
 
 resource "aws_autoscaling_group" "autoscaling" {
@@ -20,9 +25,9 @@ resource "aws_autoscaling_group" "autoscaling" {
   initial_lifecycle_hook {
     name                    = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}"
     default_result          = "ABANDON"
-    heartbeat_timeout       = 300
+    heartbeat_timeout       = 420
     lifecycle_transition    = "autoscaling:EC2_INSTANCE_LAUNCHING"
-    notification_target_arn = "${var.publish_topic_arn}"
+    notification_target_arn = "${var.publish_queue_arn}"
     role_arn                = "${var.publish_role_arn}"
   }
 

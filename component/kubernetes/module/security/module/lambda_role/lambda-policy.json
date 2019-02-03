@@ -10,6 +10,7 @@
         "ssm:ListCommands",
         "ssm:ListCommandInvocations",
         "ssm:ListDocuments",
+        "ssm:getCommandInvocation",
         "ssm:DescribeDocument*",
         "ssm:GetDocument",
         "ssm:DescribeInstance*"
@@ -26,6 +27,18 @@
       ],
       "Effect": "Allow",
       "Resource": "arn:aws:logs:*:*:*"
+    },
+    {
+      "Action": [
+        "sqs:receiveMessage",
+        "sqs:deleteMessage",
+        "sqs:GetQueueAttributes"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:sqs:*:*:${worker_queue}",
+        "arn:aws:sqs:*:*:${master_queue}"
+      ]
     }
   ]
 }

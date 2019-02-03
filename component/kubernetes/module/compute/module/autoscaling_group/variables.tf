@@ -10,7 +10,7 @@ variable "subnet_ids" {
   type = "list"
 }
 
-variable "publish_topic_arn" {
+variable "publish_queue_arn" {
   type = "string"
 }
 
