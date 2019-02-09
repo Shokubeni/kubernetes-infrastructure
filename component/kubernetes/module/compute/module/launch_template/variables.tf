@@ -26,6 +26,10 @@ variable "subnet_ids" {
   type = "list"
 }
 
+variable "is_public_ip" {
+  type = "string"
+}
+
 variable "cluster_config" {
   type = "map"
 }

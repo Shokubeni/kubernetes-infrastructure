@@ -1,3 +1,7 @@
+variable "use_nat_gateways" {
+  type = "string"
+}
+
 variable "virtual_cloud_id" {
   type = "string"
 }

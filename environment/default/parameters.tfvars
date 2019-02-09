@@ -16,6 +16,7 @@ cluster_config = {
 //*                              Network                               *
 //**********************************************************************
 virtual_cloud_cidr = "172.16.0.0/16"
+use_nat_gateways = "true"
 private_subnets = {
   "172.16.0.0/20"  = "us-east-1b"
 }

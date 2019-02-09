@@ -95,8 +95,9 @@ resource "aws_launch_template" "launch" {
   }
 
   network_interfaces {
-    delete_on_termination = true
-    security_groups       = ["${var.security_group_id}"]
+    security_groups             = ["${var.security_group_id}"]
+    associate_public_ip_address = "${var.is_public_ip}"
+    delete_on_termination       = true
   }
 
   tag_specifications {

@@ -10,6 +10,10 @@ variable "subnet_ids" {
   type = "list"
 }
 
+variable "load_balancer_id" {
+  type = "string"
+}
+
 variable "publish_queue_arn" {
   type = "string"
 }

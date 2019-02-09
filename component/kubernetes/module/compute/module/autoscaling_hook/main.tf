@@ -34,8 +34,10 @@ resource "aws_lambda_function" "lifecycle" {
 
   environment {
     variables = {
-      DOCKER_INSTALL_COMMAND = "${var.system_comands["docker_install"]}"
-      SQS_QUEUE_URL = "${aws_sqs_queue.lifecycle.id}"
+      CHANGE_HOSTNAME_COMMAND    = "${var.system_comands["change_hostname"]}"
+      KUBERNETES_INSTALL_COMMAND = "${var.system_comands["kubernetes_install"]}"
+      DOCKER_INSTALL_COMMAND     = "${var.system_comands["docker_install"]}"
+      SQS_QUEUE_URL              = "${aws_sqs_queue.lifecycle.id}"
     }
   }
 }

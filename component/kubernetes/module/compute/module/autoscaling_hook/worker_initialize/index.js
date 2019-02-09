@@ -1,92 +1,82 @@
 const Promise = require('bluebird');
 const AWS = require('aws-sdk');
 
-AWS.config.setPromisesDependency(Promise);
-const autoscaling = new AWS.AutoScaling();
-const ssm = new AWS.SSM();
-const sqs = new AWS.SQS();
+const autoScalingGroup = new AWS.AutoScaling();
+const systemManager = new AWS.SSM();
+const queueService = new AWS.SQS();
 
+AWS.config.setPromisesDependency(Promise);
 exports.handler = async (event, context) => {
-    const eventType = JSON.parse(event.Records[0].body).Event;
+    const { Event } = JSON.parse(event.Records[0].body);
 
     try {
-        if (eventType === 'autoscaling:TEST_NOTIFICATION') {
-            await deleteMessageFromQueue(event);
-
-        } else {
-            await runSystemManagerCommands(event);
-            await deleteMessageFromQueue(event);
-            await completeLifecycleEvent(event);
+        if (Event !== 'autoscaling:TEST_NOTIFICATION') {
+            await runCommand(event, process.env.CHANGE_HOSTNAME_COMMAND);
+            await runCommand(event, process.env.DOCKER_INSTALL_COMMAND);
+            await runCommand(event, process.env.KUBERNETES_INSTALL_COMMAND);
+            await completeEvent(event);
         }
 
-        context.succeed()
+        await deleteFromQueue(event);
+        return context.succeed();
     } catch (error) {
-        context.fail();
+        return context.fail();
     }
 };
 
-async function runSystemManagerCommands(event) {
-    const messageBody = JSON.parse(event.Records[0].body);
-    const dockerInstall = await ssm
-        .sendCommand({
-            DocumentName: process.env.DOCKER_INSTALL_COMMAND,
-            InstanceIds: [ messageBody.EC2InstanceId ]
-        })
-        .promise();
+async function runCommand(event, commandName) {
+    const { EC2InstanceId } = JSON.parse(event.Records[0].body);
+    const commandLaunch = await systemManager.sendCommand({
+        InstanceIds: [ EC2InstanceId ],
+        DocumentName: commandName
+    }).promise();
 
-    return new Promise(async (resolve, reject) => {
-        const { CommandId, InstanceIds } = dockerInstall.Command;
-        let isComplete = dockerInstall.Command.Status === 'Success';
+    const { CommandId, InstanceIds, DocumentName } = commandLaunch.Command;
+    let isComplete = commandLaunch.Command.Status === 'Success';
 
-        while (!isComplete) {
-            await new Promise(timeout => setTimeout(timeout, 5000));
-            const invocation = await ssm
-                .getCommandInvocation({
-                    InstanceId: InstanceIds[0],
-                    CommandId: CommandId,
-                })
-                .promise();
+    await new Promise(timeout => setTimeout(timeout, 2000));
+    while (!isComplete) {
+        const invocation = await systemManager.getCommandInvocation({
+            InstanceId: InstanceIds[0],
+            CommandId: CommandId,
+        }).promise();
 
-            switch (invocation.Status) {
-                case 'Pending':
-                case 'InProgress':
-                case 'Delayed':
-                    isComplete = false;
-                    break;
+        switch (invocation.Status) {
+            case 'InProgress':
+            case 'Pending':
+            case 'Delayed':
+                isComplete = false;
+                break;
 
-                case 'Success':
-                    isComplete = true;
-                    resolve(invocation);
-                    break;
+            case 'Success':
+                isComplete = true;
+                break;
 
-                default:
-                    reject(new Error(`Docker can't be installed`));
-            }
-
-            await new Promise(timeout => setTimeout(timeout, 10000));
+            default:
+                throw new Error(`${DocumentName} can not be finished`);
         }
-    });
+
+        if (!isComplete) {
+            await new Promise(timeout => setTimeout(timeout, 2000));
+        }
+    }
 }
 
-async function completeLifecycleEvent(event) {
+async function completeEvent(event) {
     const messageBody = JSON.parse(event.Records[0].body);
-    return autoscaling
-        .completeLifecycleAction({
-            AutoScalingGroupName: messageBody.AutoScalingGroupName,
-            LifecycleActionToken: messageBody.LifecycleActionToken,
-            LifecycleHookName: messageBody.LifecycleHookName,
-            InstanceId: messageBody.EC2InstanceId,
-            LifecycleActionResult: "CONTINUE"
-        })
-        .promise();
+    return autoScalingGroup.completeLifecycleAction({
+        AutoScalingGroupName: messageBody.AutoScalingGroupName,
+        LifecycleActionToken: messageBody.LifecycleActionToken,
+        LifecycleHookName: messageBody.LifecycleHookName,
+        InstanceId: messageBody.EC2InstanceId,
+        LifecycleActionResult: "CONTINUE"
+    }).promise();
 }
 
-async function deleteMessageFromQueue(event) {
+async function deleteFromQueue(event) {
     const message = event.Records[0];
-    return sqs
-        .deleteMessage({
-            ReceiptHandle: message.receiptHandle,
-            QueueUrl: process.env.SQS_QUEUE_URL,
-        })
-        .promise();
+    return queueService.deleteMessage({
+        ReceiptHandle: message.receiptHandle,
+        QueueUrl: process.env.SQS_QUEUE_URL,
+    }).promise();
 }

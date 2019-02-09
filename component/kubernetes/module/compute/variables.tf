@@ -10,6 +10,11 @@ variable "security_group_id" {
   type = "string"
 }
 
+variable "load_balancer_id" {
+  type = "string"
+  default = ""
+}
+
 variable "publish_role_arn" {
   type = "string"
 }
@@ -36,6 +41,10 @@ variable "launch_config" {
 
 variable "volume_config" {
   type = "map"
+}
+
+variable "is_public_ip" {
+  type = "string"
 }
 
 variable "cluster_config" {

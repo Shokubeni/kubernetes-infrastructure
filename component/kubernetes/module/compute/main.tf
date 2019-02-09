@@ -20,6 +20,7 @@ module "launch_tempate" {
   subnet_ids        = "${var.private_subnet_ids}"
   cluster_config    = "${var.cluster_config}"
   cluster_id        = "${var.cluster_id}"
+  is_public_ip      = "${var.is_public_ip}"
 }
 
 module "autoscaling_group" {
@@ -27,6 +28,7 @@ module "autoscaling_group" {
 
   cluster_role      = "${var.cluster_role}"
   launch_config     = "${var.launch_config}"
+  load_balancer_id  = "${var.load_balancer_id}"
   subnet_ids        = "${var.private_subnet_ids}"
   publish_queue_arn = "${module.autoscaling_hook.queue_arn}"
   publish_role_arn  = "${var.publish_role_arn}"

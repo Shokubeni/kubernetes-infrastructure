@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.2",
+  "description": "Change node hostname",
+  "parameters": {
+
+  },
+  "runtimeConfig": {
+    "aws:runShellScript": {
+      "properties": [
+        {
+          "id": "0.aws:runShellScript",
+          "runCommand": [
+            "sudo su",
+            "hostnamectl set-hostname $(ec2metadata --local-hostname)"
+          ]
+        }
+      ]
+    }
+  }
+}
