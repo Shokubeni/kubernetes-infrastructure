@@ -1,7 +1,8 @@
 output "sustem_commands" {
   value = {
-    change_hostname    = "${aws_ssm_document.hostname.name}"
-    docker_install     = "${aws_ssm_document.docker.name}"
-    kubernetes_install = "${aws_ssm_document.kubernetes.name}"
+    node_runtime_install = "${aws_ssm_document.node_runtime.name}"
+    general_master_init  = "${aws_ssm_document.general_master.name}"
+    stacked_master_init  = "${aws_ssm_document.stacked_master.name}"
+    common_worker_init   = "${aws_ssm_document.common_worker.name}"
   }
 }

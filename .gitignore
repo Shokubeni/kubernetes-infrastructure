@@ -4,3 +4,4 @@
 environment/develop
 package-lock.json
 node_modules
+output

@@ -111,6 +111,7 @@ resource "aws_security_group" "balancer" {
     protocol    = "tcp"
     from_port   = 6443
     to_port     = 6443
+    cidr_blocks = ["0.0.0.0/0"]
     security_groups = [
       "${aws_security_group.master.id}",
       "${aws_security_group.worker.id}"

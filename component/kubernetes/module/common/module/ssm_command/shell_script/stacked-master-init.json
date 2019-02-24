@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "2.2",
+  "description": "Initialize stacked master node",
+  "parameters": {
+    "S3BucketName": {
+      "type": "String"
+    }
+  },
+  "mainSteps": [
+    {
+      "action": "aws:runShellScript",
+      "name": "Initialization",
+      "inputs": {
+        "runCommand": [
+          "sudo su",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/ca.crt /etc/kubernetes/pki/ca.crt",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/ca.key /etc/kubernetes/pki/ca.key",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/sa.key /etc/kubernetes/pki/sa.key",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/sa.pub /etc/kubernetes/pki/sa.pub",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/front-proxy-ca.crt /etc/kubernetes/pki/front-proxy-ca.crt",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/front-proxy-ca.key /etc/kubernetes/pki/front-proxy-ca.key",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/etcd/ca.crt /etc/kubernetes/pki/etcd/ca.crt",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/etcd/ca.key /etc/kubernetes/pki/etcd/ca.key",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/admin.conf /etc/kubernetes/admin.conf",
+          "aws s3 cp s3://{{ S3BucketName }}/commands/join-command ./join-command",
+          "mkdir -p $HOME/.kube",
+          "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
+          "chown $(id -u):$(id -g) $HOME/.kube/config",
+          "export KUBECONFIG=$HOME/.kube/config",
+          "$(cat ./join-command) --experimental-control-plane"
+        ]
+      }
+    }
+  ]
+}

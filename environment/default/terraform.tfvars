@@ -7,8 +7,8 @@ terragrunt = {
     config {
       encrypt        = true
       profile        = "cluster_operator"
-      bucket         = "smart-gears.cluster-state"
-      dynamodb_table = "smart-gears.cluster-locks"
+      bucket         = "smart-gears.terraform-state"
+      dynamodb_table = "smart-gears.terraform-locks"
       region         = "us-east-1"
       key            = "${path_relative_to_include()}/terraform.tfstate"
     }

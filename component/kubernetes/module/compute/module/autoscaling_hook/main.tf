@@ -1,8 +1,8 @@
 locals {
   lambda_function = "${
     contains(var.cluster_role, "controlplane")
-        ? "master_initialize"
-        : "worker_initialize"
+        ? "master-initialize"
+        : "worker-initialize"
   }"
   role_postfix    = "${
     contains(var.cluster_role, "controlplane")
@@ -25,28 +25,35 @@ locals {
 resource "aws_lambda_function" "lifecycle" {
   function_name                  = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}"
   source_code_hash               = "${data.archive_file.lambda_zip.output_base64sha256}"
-  filename                       = "${path.module}/${local.lambda_function}.zip"
+  handler                        = "build/${local.lambda_function}.handler"
+  filename                       = "${path.module}/lambda-functions.zip"
   role                           = "${var.lambda_role_arn}"
-  handler                        = "index.handler"
   runtime                        = "nodejs8.10"
   reserved_concurrent_executions = "${local.concurency}"
-  timeout                        = 90
+  timeout                        = 360
 
   environment {
     variables = {
-      CHANGE_HOSTNAME_COMMAND    = "${var.system_comands["change_hostname"]}"
-      KUBERNETES_INSTALL_COMMAND = "${var.system_comands["kubernetes_install"]}"
-      DOCKER_INSTALL_COMMAND     = "${var.system_comands["docker_install"]}"
-      SQS_QUEUE_URL              = "${aws_sqs_queue.lifecycle.id}"
+      NODE_RUNTIME_INSTALL_COMMAND = "${var.system_comands["node_runtime_install"]}"
+      GENERAL_MASTER_INIT_COMMAND  = "${var.system_comands["general_master_init"]}"
+      STACKED_MASTER_INIT_COMMAND  = "${var.system_comands["stacked_master_init"]}"
+      COMMON_WORKER_INIT_COMMAND   = "${var.system_comands["common_worker_init"]}"
+      MASTER_AUTOSCALING_GROUP     = "${var.cluster_config["label"]}-master_${var.cluster_id}"
+      WORKER_AUTOSCALING_GROUP     = "${var.cluster_config["label"]}-worker_${var.cluster_id}"
+      KUBERNETES_VERSION           = "${var.cluster_config["kubernetes"]}"
+      DOCKER_VERSION               = "${var.cluster_config["docker"]}"
+      LOAD_BALANCER_DNS            = "${var.load_balancer_dns}"
+      S3_BUCKED_NAME               = "${var.secure_bucket_name}"
+      CLUSTER_LABEL                = "${var.cluster_config["label"]}"
+      SQS_QUEUE_URL                = "${aws_sqs_queue.lifecycle.id}"
     }
   }
 }
 
 resource "aws_sqs_queue" "lifecycle" {
   name                       = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}"
-  message_retention_seconds  = 420
-  visibility_timeout_seconds = 90
-  delay_seconds              = 90
+  message_retention_seconds  = 600
+  visibility_timeout_seconds = 360
 
   tags = "${merge(
     map(
@@ -71,7 +78,7 @@ resource "aws_lambda_permission" "lifecycle" {
 }
 
 data "archive_file" "lambda_zip" {
-  source_dir  = "${path.module}/${local.lambda_function}"
-  output_path = "${path.module}/${local.lambda_function}.zip"
+  source_dir  = "${path.module}/lambda-functions"
+  output_path = "${path.module}/lambda-functions.zip"
   type        = "zip"
 }

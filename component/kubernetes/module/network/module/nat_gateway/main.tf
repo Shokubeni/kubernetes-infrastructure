@@ -4,7 +4,7 @@ locals {
 
 resource "aws_eip" "nat" {
   count = "${var.private_subnets_count * local.modificator}"
-  vpc = true
+  vpc   = true
 
   tags = "${merge(
     map(

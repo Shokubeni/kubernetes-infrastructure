@@ -4,7 +4,11 @@
     {
       "Action": [
         "autoscaling:CompleteLifecycleAction",
+        "autoscaling:describeAutoScalingGroups",
+        "autoscaling:RecordLifecycleActionHeartbeat",
         "ec2:DescribeInstances",
+        "ec2:createTags",
+        "ec2:describeTags",
         "ssm:SendCommand",
         "ssm:CancelCommand",
         "ssm:ListCommands",
@@ -32,7 +36,8 @@
       "Action": [
         "sqs:receiveMessage",
         "sqs:deleteMessage",
-        "sqs:GetQueueAttributes"
+        "sqs:GetQueueAttributes",
+        "sqs:changeMessageVisibility"
       ],
       "Effect": "Allow",
       "Resource": [

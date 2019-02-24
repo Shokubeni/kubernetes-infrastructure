@@ -47,7 +47,9 @@ module "master" {
 
   cluster_role       = ["controlplane"]
   private_subnet_ids = "${module.network.private_subnet_ids}"
+  load_balancer_dns  = "${module.balancer.balancer_dns}"
   load_balancer_id   = "${module.balancer.balancer_id}"
+  secure_bucket_name = "${module.common.bucket_id}"
   security_group_id  = "${module.security.master_security_group_id}"
   publish_role_arn   = "${module.security.publish_iam_role_arn}"
   lambda_role_arn    = "${module.security.lambda_iam_role_arn}"
@@ -66,6 +68,7 @@ module "worker" {
 
   cluster_role       = ["worker"]
   private_subnet_ids = "${module.network.private_subnet_ids}"
+  secure_bucket_name = "${module.common.bucket_id}"
   security_group_id  = "${module.security.worker_security_group_id}"
   publish_role_arn   = "${module.security.publish_iam_role_arn}"
   lambda_role_arn    = "${module.security.lambda_iam_role_arn}"

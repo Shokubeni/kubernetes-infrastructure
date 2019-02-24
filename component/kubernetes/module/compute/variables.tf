@@ -10,9 +10,18 @@ variable "security_group_id" {
   type = "string"
 }
 
+variable "load_balancer_dns" {
+  type = "string"
+  default = ""
+}
+
 variable "load_balancer_id" {
   type = "string"
   default = ""
+}
+
+variable "secure_bucket_name" {
+  type = "string"
 }
 
 variable "publish_role_arn" {
