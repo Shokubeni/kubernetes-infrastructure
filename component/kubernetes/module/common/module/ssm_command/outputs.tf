@@ -1,4 +1,4 @@
-output "sustem_commands" {
+output "system_commands" {
   value = {
     node_runtime_install = "${aws_ssm_document.node_runtime.name}"
     general_master_init  = "${aws_ssm_document.general_master.name}"

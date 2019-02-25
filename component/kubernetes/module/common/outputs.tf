@@ -1,5 +1,5 @@
 output "system_commands" {
-  value = "${module.ssm_command.sustem_commands}"
+  value = "${module.ssm_command.system_commands}"
 }
 
 output "cluster_id" {
