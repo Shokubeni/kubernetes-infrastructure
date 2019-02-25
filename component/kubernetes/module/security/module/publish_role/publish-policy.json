@@ -1,0 +1,15 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "sqs:*"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:sqs:*:*:${worker_queue}",
+        "arn:aws:sqs:*:*:${master_queue}"
+      ]
+    }
+  ]
+}

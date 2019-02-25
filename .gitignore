@@ -1,3 +1,7 @@
+.terragrunt-cache
 .terraform
 .idea
-local.*
+environment/develop
+package-lock.json
+node_modules
+output
