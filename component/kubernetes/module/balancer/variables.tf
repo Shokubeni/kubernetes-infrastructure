@@ -1,5 +1,9 @@
-variable "subnets_ids" {
+variable "public_subnet_ids" {
   type = "list"
+}
+
+variable "security_group_id" {
+  type = "string"
 }
 
 variable "cluster_config" {

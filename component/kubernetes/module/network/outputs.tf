@@ -6,10 +6,6 @@ output "internet_gateway_id" {
   value = "${module.internet_gateway.gateway_id}"
 }
 
-output "nat_gateway_ids" {
-  value = "${module.nat_gateway.gateway_ids}"
-}
-
 output "private_subnet_ids" {
   value = "${module.private_subnet.subnet_ids}"
 }

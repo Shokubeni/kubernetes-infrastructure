@@ -6,8 +6,7 @@
       "Principal": {
         "Service": "autoscaling.amazonaws.com"
       },
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect": "Allow"
     }
   ]
 }

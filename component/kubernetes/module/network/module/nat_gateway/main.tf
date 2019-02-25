@@ -1,6 +1,10 @@
+locals {
+  modificator = "${var.use_nat_gateways == "true" ? 1 : 0}"
+}
+
 resource "aws_eip" "nat" {
-  count = "${var.subnets_count}"
-  vpc = true
+  count = "${var.private_subnets_count * local.modificator}"
+  vpc   = true
 
   tags = "${merge(
     map(
@@ -11,9 +15,13 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_nat_gateway" "nat" {
-  count         = "${var.subnets_count}"
+  count         = "${var.private_subnets_count * local.modificator}"
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
-  subnet_id     = "${element(var.subnets_ids, count.index)}"
+  subnet_id     = "${
+    var.private_subnets_count >= var.private_subnets_count
+      ? element(var.public_subnets_ids, count.index)
+      : var.public_subnets_ids[0]
+  }"
 
   tags = "${merge(
     map(
@@ -24,13 +32,8 @@ resource "aws_nat_gateway" "nat" {
 }
 
 resource "aws_route_table" "nat" {
-  count  = "${var.subnets_count}"
+  count  = "${var.private_subnets_count * local.modificator}"
   vpc_id = "${var.virtual_cloud_id}"
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
-  }
 
   tags = "${merge(
     map(
@@ -40,8 +43,15 @@ resource "aws_route_table" "nat" {
   )}"
 }
 
+resource "aws_route" "nat" {
+  count                  = "${var.private_subnets_count * local.modificator}"
+  route_table_id         = "${element(aws_route_table.nat.*.id, count.index)}"
+  nat_gateway_id         = "${element(aws_nat_gateway.nat.*.id, count.index)}"
+  destination_cidr_block = "0.0.0.0/0"
+}
+
 resource "aws_route_table_association" "nat" {
-  count          = "${var.subnets_count}"
-  subnet_id      = "${element(var.subnets_ids, count.index)}"
+  count          = "${var.private_subnets_count * local.modificator}"
+  subnet_id      = "${element(var.private_subnets_ids, count.index)}"
   route_table_id = "${element(aws_route_table.nat.*.id, count.index)}"
 }

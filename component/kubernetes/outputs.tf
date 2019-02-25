@@ -15,5 +15,5 @@ output "worker_public_key" {
 }
 
 output "cluster_id" {
-  value = "${random_id.cluster.hex}"
+  value = "${module.common.cluster_id}"
 }
