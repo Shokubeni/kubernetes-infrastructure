@@ -81,3 +81,14 @@ module "worker" {
   cluster_config     = "${var.cluster_config}"
   cluster_id         = "${module.common.cluster_id}"
 }
+
+module "outputs" {
+  source = "./module/outputs"
+
+  secure_bucket_name = "${module.common.bucket_id}"
+  root_dir           = "${var.root_dir}"
+  dependencies       = [
+    "${module.master.autoscaling_group_id}",
+    "${module.worker.autoscaling_group_id}"
+  ]
+}

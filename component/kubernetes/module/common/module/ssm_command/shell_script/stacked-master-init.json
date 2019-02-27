@@ -21,7 +21,7 @@
           "aws s3 cp s3://{{ S3BucketName }}/certificates/front-proxy-ca.key /etc/kubernetes/pki/front-proxy-ca.key",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/etcd/ca.crt /etc/kubernetes/pki/etcd/ca.crt",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/etcd/ca.key /etc/kubernetes/pki/etcd/ca.key",
-          "aws s3 cp s3://{{ S3BucketName }}/certificates/admin.conf /etc/kubernetes/admin.conf",
+          "aws s3 cp s3://{{ S3BucketName }}/configs/kubernetes.conf /etc/kubernetes/admin.conf",
           "aws s3 cp s3://{{ S3BucketName }}/commands/join-command ./join-command",
           "mkdir -p $HOME/.kube",
           "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",

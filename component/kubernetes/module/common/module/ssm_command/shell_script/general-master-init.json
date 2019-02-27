@@ -31,16 +31,16 @@
           "chown $(id -u):$(id -g) $HOME/.kube/config",
           "export KUBECONFIG=$HOME/.kube/config",
           "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\\n')\"",
-          "aws s3 cp /etc/kubernetes/pki/ca.crt s3://{{ S3BucketName }}/certificates/ca.crt",
-          "aws s3 cp /etc/kubernetes/pki/ca.key s3://{{ S3BucketName }}/certificates/ca.key",
-          "aws s3 cp /etc/kubernetes/pki/sa.key s3://{{ S3BucketName }}/certificates/sa.key",
-          "aws s3 cp /etc/kubernetes/pki/sa.pub s3://{{ S3BucketName }}/certificates/sa.pub",
-          "aws s3 cp /etc/kubernetes/pki/front-proxy-ca.crt s3://{{ S3BucketName }}/certificates/front-proxy-ca.crt",
-          "aws s3 cp /etc/kubernetes/pki/front-proxy-ca.key s3://{{ S3BucketName }}/certificates/front-proxy-ca.key",
-          "aws s3 cp /etc/kubernetes/pki/etcd/ca.crt s3://{{ S3BucketName }}/certificates/etcd/ca.crt",
-          "aws s3 cp /etc/kubernetes/pki/etcd/ca.key s3://{{ S3BucketName }}/certificates/etcd/ca.key",
-          "aws s3 cp /etc/kubernetes/admin.conf s3://{{ S3BucketName }}/certificates/admin.conf",
-          "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command"
+          "aws s3 cp /etc/kubernetes/pki/ca.crt s3://{{ S3BucketName }}/certificates/ca.crt --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/pki/ca.key s3://{{ S3BucketName }}/certificates/ca.key --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/pki/sa.key s3://{{ S3BucketName }}/certificates/sa.key --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/pki/sa.pub s3://{{ S3BucketName }}/certificates/sa.pub --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/pki/front-proxy-ca.crt s3://{{ S3BucketName }}/certificates/front-proxy-ca.crt --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/pki/front-proxy-ca.key s3://{{ S3BucketName }}/certificates/front-proxy-ca.key --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/pki/etcd/ca.crt s3://{{ S3BucketName }}/certificates/etcd/ca.crt --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/pki/etcd/ca.key s3://{{ S3BucketName }}/certificates/etcd/ca.key --content-type \"text/plain\"",
+          "aws s3 cp /etc/kubernetes/admin.conf s3://{{ S3BucketName }}/configs/kubernetes.conf --content-type \"text/plain\"",
+          "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command --content-type \"text/plain\""
         ]
       }
     }
