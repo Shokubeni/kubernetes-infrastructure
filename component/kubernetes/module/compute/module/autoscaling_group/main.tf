@@ -42,6 +42,12 @@ resource "aws_autoscaling_group" "autoscaling" {
     id      = "${var.template_id}"
     version = "$Latest"
   }
+
+  tags = ["${
+    list(
+      map("key", "kubernetes.io/cluster/${var.cluster_id}", "value", "owned", "propagate_at_launch", false)
+    )
+  }"]
 }
 
 resource "aws_autoscaling_schedule" "autoscaling" {

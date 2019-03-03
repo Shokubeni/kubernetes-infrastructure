@@ -13,6 +13,11 @@
       "inputs": {
         "runCommand": [
           "sudo su",
+
+          "cat <<EOF | sudo tee /etc/default/kubelet",
+          "KUBELET_EXTRA_ARGS=--cloud-provider=aws",
+          "EOF",
+
           "aws s3 cp s3://{{ S3BucketName }}/certificates/ca.crt /etc/kubernetes/pki/ca.crt",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/ca.key /etc/kubernetes/pki/ca.key",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/sa.key /etc/kubernetes/pki/sa.key",
@@ -23,6 +28,7 @@
           "aws s3 cp s3://{{ S3BucketName }}/certificates/etcd/ca.key /etc/kubernetes/pki/etcd/ca.key",
           "aws s3 cp s3://{{ S3BucketName }}/configs/kubernetes.conf /etc/kubernetes/admin.conf",
           "aws s3 cp s3://{{ S3BucketName }}/commands/join-command ./join-command",
+
           "mkdir -p $HOME/.kube",
           "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
           "chown $(id -u):$(id -g) $HOME/.kube/config",
