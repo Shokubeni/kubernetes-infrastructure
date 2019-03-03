@@ -17,7 +17,7 @@ locals {
   concurency      = "${
     contains(var.cluster_role, "controlplane")
         ? 1
-        : 0
+        : 5
 
   }"
 }
