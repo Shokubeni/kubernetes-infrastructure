@@ -10,11 +10,25 @@ resource "aws_elb" "balancer" {
     instance_protocol = "tcp"
   }
 
+  listener {
+    lb_port            = 443
+    lb_protocol        = "tcp"
+    instance_port      = 443
+    instance_protocol  = "tcp"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "tcp"
+    instance_port     = 80
+    instance_protocol = "tcp"
+  }
+
   health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 5
     target              = "TCP:6443"
     interval            = 10
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
   }
 }

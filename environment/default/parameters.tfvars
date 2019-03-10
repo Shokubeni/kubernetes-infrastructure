@@ -41,7 +41,7 @@ master_launch_config = {
   max_price             = 0.05
   min_size              = 1
   max_size              = 3
-  desired_capacity      = 1
+  desired_capacity      = 2
 }
 
 master_volume_config = {
@@ -60,7 +60,7 @@ worker_launch_config = {
   spot_fleet            = true
   max_price             = 0.14
   min_size              = 1
-  max_size              = 2
+  max_size              = 5
   desired_capacity      = 1
 }
 

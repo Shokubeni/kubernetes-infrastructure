@@ -33,6 +33,7 @@ exports.handler = async (event, context) => {
         await manager_1.runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
             S3BucketName: [process.env.S3_BUCKED_NAME],
             BalancerDNS: [process.env.LOAD_BALANCER_DNS],
+            ClusterId: [process.env.CLUSTER_ID],
         });
     }
     await autoscaling_1.setInstanceTags(event, [
