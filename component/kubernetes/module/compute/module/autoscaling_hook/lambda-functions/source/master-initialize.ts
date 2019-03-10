@@ -18,6 +18,7 @@ declare var process : {
     DOCKER_VERSION: string,
     S3_BUCKED_NAME: string,
     SQS_QUEUE_URL: string,
+    CLUSTER_ID: string,
   },
 };
 
@@ -52,6 +53,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
     await runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
       S3BucketName: [process.env.S3_BUCKED_NAME],
       BalancerDNS: [process.env.LOAD_BALANCER_DNS],
+      ClusterId: [process.env.CLUSTER_ID],
     });
   }
 

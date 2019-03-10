@@ -37,3 +37,7 @@ variable "worker_launch_config" {
 variable "worker_volume_config" {
   type = "map"
 }
+
+variable "root_dir" {
+  type = "string"
+}

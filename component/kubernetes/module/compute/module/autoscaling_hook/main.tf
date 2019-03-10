@@ -17,7 +17,7 @@ locals {
   concurency      = "${
     contains(var.cluster_role, "controlplane")
         ? 1
-        : 0
+        : 5
 
   }"
 }
@@ -44,8 +44,8 @@ resource "aws_lambda_function" "lifecycle" {
       DOCKER_VERSION               = "${var.cluster_config["docker"]}"
       LOAD_BALANCER_DNS            = "${var.load_balancer_dns}"
       S3_BUCKED_NAME               = "${var.secure_bucket_name}"
-      CLUSTER_LABEL                = "${var.cluster_config["label"]}"
       SQS_QUEUE_URL                = "${aws_sqs_queue.lifecycle.id}"
+      CLUSTER_ID                   = "${var.cluster_id}"
     }
   }
 }

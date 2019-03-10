@@ -44,6 +44,6 @@ var NodeState;
 })(NodeState = exports.NodeState || (exports.NodeState = {}));
 var TagName;
 (function (TagName) {
-    TagName["NodeRole"] = "cluster/node-role";
-    TagName["NodeState"] = "cluster/node-state";
+    TagName["NodeRole"] = "smart-gears.io/cluster/role";
+    TagName["NodeState"] = "smart-gears.io/cluster/state";
 })(TagName = exports.TagName || (exports.TagName = {}));

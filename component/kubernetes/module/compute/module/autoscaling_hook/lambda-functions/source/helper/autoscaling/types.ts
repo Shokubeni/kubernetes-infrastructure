@@ -41,6 +41,6 @@ export enum NodeState {
 }
 
 export enum TagName {
-  NodeRole = 'cluster/node-role',
-  NodeState = 'cluster/node-state',
+  NodeRole = 'smart-gears.io/cluster/role',
+  NodeState = 'smart-gears.io/cluster/state',
 }
