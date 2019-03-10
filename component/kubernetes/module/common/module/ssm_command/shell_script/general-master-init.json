@@ -40,7 +40,8 @@
           "aws s3 cp /etc/kubernetes/pki/etcd/ca.crt s3://{{ S3BucketName }}/certificates/etcd/ca.crt",
           "aws s3 cp /etc/kubernetes/pki/etcd/ca.key s3://{{ S3BucketName }}/certificates/etcd/ca.key",
           "aws s3 cp /etc/kubernetes/admin.conf s3://{{ S3BucketName }}/certificates/admin.conf",
-          "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command"
+          "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command",
+          "rm ./join-command"
         ]
       }
     }

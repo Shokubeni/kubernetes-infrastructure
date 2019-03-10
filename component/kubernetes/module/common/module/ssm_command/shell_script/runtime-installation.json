@@ -31,6 +31,7 @@
           "echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' >> /etc/apt/sources.list.d/kubernetes.list",
           "apt-get update",
           "apt-get install -y kubelet kubeadm={{ KubernetesVersion }}* kubectl",
+          "apt-get install etcd-client",
           "apt-mark hold kubelet kubeadm kubectl"
         ]
       }

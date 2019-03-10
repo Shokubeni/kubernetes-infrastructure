@@ -14,7 +14,8 @@
         "runCommand": [
           "sudo su",
           "aws s3 cp s3://{{ S3BucketName }}/commands/join-command ./join-command",
-          "sudo $(cat ./join-command)"
+          "sudo $(cat ./join-command)",
+          "rm ./join-command"
         ]
       }
     }
