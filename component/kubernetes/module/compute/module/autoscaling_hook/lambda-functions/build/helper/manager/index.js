@@ -32,6 +32,7 @@ async function runCommand(event, command, params) {
                 isComplete = true;
                 break;
             default:
+                console.log(JSON.stringify(invocation));
                 throw new Error(`${DocumentName} can not be finished`);
         }
     }
