@@ -45,6 +45,7 @@ export async function runCommand(event: SQSEvent, command: string, params: Param
         isComplete = true;
         break;
       default:
+        console.log(JSON.stringify(invocation));
         throw new Error(`${DocumentName} can not be finished`);
     }
   }
