@@ -38,3 +38,14 @@ module "autoscaling_group" {
   cluster_config     = "${var.cluster_config}"
   cluster_id         = "${var.cluster_id}"
 }
+
+module "cloudwatch_event" {
+  source = "./module/cloudwatch_event"
+
+  cluster_role       = "${var.cluster_role}"
+  secure_bucket_name = "${var.secure_bucket_name}"
+  lambda_role_arn    = "${var.lambda_role_arn}"
+  system_comands     = "${var.system_comands}"
+  cluster_config     = "${var.cluster_config}"
+  cluster_id         = "${var.cluster_id}"
+}

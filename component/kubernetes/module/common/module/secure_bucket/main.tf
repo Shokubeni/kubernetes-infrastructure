@@ -12,9 +12,19 @@ resource "aws_s3_bucket" "bucket" {
   }
 
   lifecycle_rule {
-    id      = "command"
-    prefix  = "command/"
+    id      = "commands"
+    prefix  = "commands/"
     enabled = true
+
+    expiration {
+      days = 1
+    }
+  }
+
+  lifecycle_rule {
+    id      = "snapshots"
+    prefix  = "snapshots/"
+    enabled = false
 
     expiration {
       days = 1
