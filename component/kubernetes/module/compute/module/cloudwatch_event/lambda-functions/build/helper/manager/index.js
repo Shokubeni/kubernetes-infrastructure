@@ -4,10 +4,12 @@ const aws_sdk_1 = require("aws-sdk");
 const types_1 = require("./types");
 const systemManager = new aws_sdk_1.SSM();
 async function runCommand(event, command, params) {
-    const { EC2InstanceId } = JSON.parse(event.Records[0].body);
+    const instanceId = (typeof event === 'object')
+        ? JSON.parse(event.Records[0].body).EC2InstanceId
+        : event;
     const commandLaunch = await systemManager
         .sendCommand({
-        InstanceIds: [EC2InstanceId],
+        InstanceIds: [instanceId],
         DocumentName: command,
         Parameters: params,
     })
@@ -32,18 +34,19 @@ async function runCommand(event, command, params) {
                 isComplete = true;
                 break;
             default:
-                console.log(JSON.stringify(invocation));
                 throw new Error(`${DocumentName} can not be finished`);
         }
     }
 }
 exports.runCommand = runCommand;
 async function isInSystemManager(event) {
-    const { EC2InstanceId } = JSON.parse(event.Records[0].body);
+    const instanceId = (typeof event === 'object')
+        ? JSON.parse(event.Records[0].body).EC2InstanceId
+        : event;
     const result = await systemManager
         .describeInstanceInformation({
         InstanceInformationFilterList: [{
-                valueSet: [EC2InstanceId],
+                valueSet: [instanceId],
                 key: 'InstanceIds',
             }],
     })

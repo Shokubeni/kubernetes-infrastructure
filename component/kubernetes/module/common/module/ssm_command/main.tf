@@ -21,3 +21,9 @@ resource "aws_ssm_document" "common_worker" {
   content       = "${file("${path.module}/shell_script/common-worker-init.json")}"
   document_type = "Command"
 }
+
+resource "aws_ssm_document" "cluater_backup" {
+  name          = "${var.cluster_config["name"]}-ClusterEtcdBackup_${var.cluster_id}"
+  content       = "${file("${path.module}/shell_script/cluster-etcd-backup.json")}"
+  document_type = "Command"
+}

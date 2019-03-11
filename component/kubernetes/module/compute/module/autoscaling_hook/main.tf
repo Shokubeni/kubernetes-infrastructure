@@ -14,12 +14,6 @@ locals {
         ? "Master"
         : "Worker"
   }"
-  concurency      = "${
-    contains(var.cluster_role, "controlplane")
-        ? 1
-        : 5
-
-  }"
 }
 
 resource "aws_lambda_function" "lifecycle" {
@@ -29,8 +23,9 @@ resource "aws_lambda_function" "lifecycle" {
   filename                       = "${path.module}/lambda-functions.zip"
   role                           = "${var.lambda_role_arn}"
   runtime                        = "nodejs8.10"
-  reserved_concurrent_executions = "${local.concurency}"
-  timeout                        = 360
+  reserved_concurrent_executions = 5
+  timeout                        = 600
+  memory_size                    = 512
 
   environment {
     variables = {
@@ -40,6 +35,8 @@ resource "aws_lambda_function" "lifecycle" {
       COMMON_WORKER_INIT_COMMAND   = "${var.system_comands["common_worker_init"]}"
       MASTER_AUTOSCALING_GROUP     = "${var.cluster_config["label"]}-master_${var.cluster_id}"
       WORKER_AUTOSCALING_GROUP     = "${var.cluster_config["label"]}-worker_${var.cluster_id}"
+      TASK_REFRESH_TIMEOUT         = 30
+      TASK_EXECUTE_LIMIT           = 600
       KUBERNETES_VERSION           = "${var.cluster_config["kubernetes"]}"
       DOCKER_VERSION               = "${var.cluster_config["docker"]}"
       LOAD_BALANCER_DNS            = "${var.load_balancer_dns}"
@@ -53,7 +50,7 @@ resource "aws_lambda_function" "lifecycle" {
 resource "aws_sqs_queue" "lifecycle" {
   name                       = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}"
   message_retention_seconds  = 600
-  visibility_timeout_seconds = 360
+  visibility_timeout_seconds = 600
 
   tags = "${merge(
     map(

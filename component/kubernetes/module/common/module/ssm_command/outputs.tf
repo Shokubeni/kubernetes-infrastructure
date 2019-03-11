@@ -4,5 +4,6 @@ output "system_commands" {
     general_master_init  = "${aws_ssm_document.general_master.name}"
     stacked_master_init  = "${aws_ssm_document.stacked_master.name}"
     common_worker_init   = "${aws_ssm_document.common_worker.name}"
+    cluster_etcd_backup  = "${aws_ssm_document.cluater_backup.name}"
   }
 }

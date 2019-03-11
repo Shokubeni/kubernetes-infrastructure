@@ -56,5 +56,5 @@ resource "aws_autoscaling_schedule" "autoscaling" {
   desired_capacity       = "${local.desired_capacity}"
   max_size               = "${local.max_size}"
   min_size               = "${local.min_size}"
-  start_time             = "${timeadd(timestamp(), "10s")}"
+  start_time             = "${timeadd(timestamp(), "240s")}"
 }

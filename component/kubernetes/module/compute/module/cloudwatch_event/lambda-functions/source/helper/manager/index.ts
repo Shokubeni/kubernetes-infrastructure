@@ -1,5 +1,6 @@
 import { SQSEvent } from 'aws-lambda';
 import { SSM } from 'aws-sdk';
+import { InstanceId } from 'aws-sdk/clients/ec2';
 import {
   DescribeInstanceInformationRequest,
   GetCommandInvocationRequest,
@@ -12,11 +13,14 @@ import { CommandStatus } from './types';
 
 const systemManager = new SSM();
 
-export async function runCommand(event: SQSEvent, command: string, params: Parameters): Promise<void> {
-  const { EC2InstanceId } = JSON.parse(event.Records[0].body);
+export async function runCommand(event: SQSEvent|InstanceId, command: string, params: Parameters): Promise<void> {
+  const instanceId = (typeof event === 'object')
+    ? JSON.parse(event.Records[0].body).EC2InstanceId
+    : event;
+
   const commandLaunch = await systemManager
     .sendCommand({
-        InstanceIds: [EC2InstanceId],
+        InstanceIds: [instanceId],
         DocumentName: command,
         Parameters: params,
     } as SendCommandRequest)
@@ -45,18 +49,20 @@ export async function runCommand(event: SQSEvent, command: string, params: Param
         isComplete = true;
         break;
       default:
-        console.log(JSON.stringify(invocation));
         throw new Error(`${DocumentName} can not be finished`);
     }
   }
 }
 
-export async function isInSystemManager(event: SQSEvent): Promise<boolean> {
-  const { EC2InstanceId } = JSON.parse(event.Records[0].body);
+export async function isInSystemManager(event: SQSEvent|InstanceId): Promise<boolean> {
+  const instanceId = (typeof event === 'object')
+    ? JSON.parse(event.Records[0].body).EC2InstanceId
+    : event;
+
   const result = await systemManager
     .describeInstanceInformation({
         InstanceInformationFilterList: [{
-            valueSet: [EC2InstanceId],
+            valueSet: [instanceId],
             key: 'InstanceIds',
         }],
     } as DescribeInstanceInformationRequest)
