@@ -1,7 +1,11 @@
-output "autoscaling_group_id" {
-  value = "${module.autoscaling_group.group_id}"
+output "autoscaling" {
+  value = {
+    group_id = "${module.autoscaling_group.group_id}"
+  }
 }
 
-output "launch_template_id" {
-  value = "${module.launch_tempate.template_id}"
+output "launch" {
+  value = {
+    template_id = "${module.launch_tempate.template_id}"
+  }
 }

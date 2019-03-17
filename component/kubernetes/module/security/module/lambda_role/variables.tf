@@ -2,6 +2,10 @@ variable "cluster_config" {
   type = "map"
 }
 
-variable "cluster_id" {
+variable "master_queue" {
+  type = "string"
+}
+
+variable "worker_queue" {
   type = "string"
 }

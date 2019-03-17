@@ -6,7 +6,7 @@ variable "launch_config" {
   type = "map"
 }
 
-variable "subnet_ids" {
+variable "private_subnet_ids" {
   type = "list"
 }
 
@@ -22,14 +22,14 @@ variable "publish_role_arn" {
   type = "string"
 }
 
-variable "template_id" {
+variable "launch_template_id" {
+  type = "string"
+}
+
+variable "function_name" {
   type = "string"
 }
 
 variable "cluster_config" {
   type = "map"
-}
-
-variable "cluster_id" {
-  type = "string"
 }

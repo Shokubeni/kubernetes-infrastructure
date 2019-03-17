@@ -8,7 +8,7 @@ resource "aws_internet_gateway" "internet" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Internet Gateway",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
@@ -19,7 +19,7 @@ resource "aws_route_table" "internet" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Internet Table",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }

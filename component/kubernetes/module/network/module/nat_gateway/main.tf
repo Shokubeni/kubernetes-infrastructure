@@ -9,7 +9,7 @@ resource "aws_eip" "nat" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} NAT Elastic IP",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
@@ -26,7 +26,7 @@ resource "aws_nat_gateway" "nat" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} NAT Gateway",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
@@ -38,7 +38,7 @@ resource "aws_route_table" "nat" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} NAT Table",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }

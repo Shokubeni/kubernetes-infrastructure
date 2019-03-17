@@ -46,16 +46,14 @@ locals {
   }
 }
 
-data "aws_region" "defaul" {}
-
 resource "aws_iam_instance_profile" "launch" {
-  name = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}."
+  name = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}."
   role = "${var.node_role_id}"
 }
 
 resource "aws_launch_template" "launch" {
-  name                                 = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}"
-  image_id                             = "${local.zone_image[data.aws_region.defaul.name]}"
+  name                                 = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}"
+  image_id                             = "${local.zone_image[var.cluster_config["region"]]}"
   instance_type                        = "${var.launch_config["instance_type"]}"
   ebs_optimized                        = "${local.ebs_optimized}"
   instance_initiated_shutdown_behavior = "${local.shutdown_behavior}"
@@ -105,7 +103,7 @@ resource "aws_launch_template" "launch" {
     tags          = "${merge(
       map(
         "Name", "${var.cluster_config["name"]} ${local.role_name} Node",
-        "kubernetes.io/cluster/${var.cluster_id}", "owned"
+        "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
       )
     )}"
   }
@@ -115,7 +113,7 @@ resource "aws_launch_template" "launch" {
     tags          = "${merge(
       map(
         "Name", "${var.cluster_config["name"]} ${local.role_name} Node",
-        "kubernetes.io/cluster/${var.cluster_id}", "owned"
+        "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
       )
     )}"
   }
@@ -123,7 +121,7 @@ resource "aws_launch_template" "launch" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} ${local.role_name} Template",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }

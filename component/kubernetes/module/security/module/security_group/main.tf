@@ -1,5 +1,5 @@
 resource "aws_security_group" "master" {
-  name   = "${var.cluster_config["label"]}-master_${var.cluster_id}"
+  name   = "${var.cluster_config["label"]}-master_${var.cluster_config["id"]}"
   vpc_id = "${var.virtual_cloud_id}"
 
   ingress {
@@ -44,13 +44,13 @@ resource "aws_security_group" "master" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Master Node",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
 
 resource "aws_security_group" "worker" {
-  name   = "${var.cluster_config["label"]}-worker_${var.cluster_id}"
+  name   = "${var.cluster_config["label"]}-worker_${var.cluster_config["id"]}"
   vpc_id = "${var.virtual_cloud_id}"
 
   ingress {
@@ -81,13 +81,13 @@ resource "aws_security_group" "worker" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Worker Node",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
 
 resource "aws_security_group" "balancer" {
-  name   = "${var.cluster_config["label"]}-balancer_${var.cluster_id}"
+  name   = "${var.cluster_config["label"]}-balancer_${var.cluster_config["id"]}"
   vpc_id = "${var.virtual_cloud_id}"
 
   ingress {
@@ -128,7 +128,7 @@ resource "aws_security_group" "balancer" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Load Balancer",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }

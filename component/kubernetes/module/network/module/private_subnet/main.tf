@@ -7,7 +7,7 @@ resource "aws_subnet" "private" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Private Subnet",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
