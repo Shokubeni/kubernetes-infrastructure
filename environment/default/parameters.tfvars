@@ -7,10 +7,8 @@ provider_config = {
 }
 
 cluster_config = {
-  name       = "Kubernetes"
-  label      = "kubernetes"
-  kubernetes = "1.13.3"
-  docker     = "18.06.0"
+  name    = "Kubernetes"
+  label   = "kubernetes"
 }
 
 

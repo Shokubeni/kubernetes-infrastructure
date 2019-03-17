@@ -12,25 +12,20 @@ locals {
         ? "master"
         : "worker"
   }"
-  role_name        = "${
-    contains(var.cluster_role, "controlplane")
-        ? "Master"
-        : "Worker"
-  }"
 }
 
 resource "aws_autoscaling_group" "autoscaling" {
-  name                      = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}"
+  name                      = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}"
   max_size                  = "${local.max_size}"
   min_size                  = "${local.min_size}"
-  vpc_zone_identifier       = ["${var.subnet_ids}"]
+  vpc_zone_identifier       = ["${var.private_subnet_ids}"]
   load_balancers            = ["${var.load_balancer_id}"]
   health_check_type         = "${local.check_type}"
   force_delete              = false
   desired_capacity          = 1
 
   initial_lifecycle_hook {
-    name                    = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_id}"
+    name                    = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}"
     default_result          = "ABANDON"
     heartbeat_timeout       = 600
     lifecycle_transition    = "autoscaling:EC2_INSTANCE_LAUNCHING"
@@ -39,13 +34,13 @@ resource "aws_autoscaling_group" "autoscaling" {
   }
 
   launch_template = {
-    id      = "${var.template_id}"
+    id      = "${var.launch_template_id}"
     version = "$Latest"
   }
 
   tags = ["${
     list(
-      map("key", "kubernetes.io/cluster/${var.cluster_id}", "value", "owned", "propagate_at_launch", false)
+      map("key", "kubernetes.io/cluster/${var.cluster_config["id"]}", "value", "owned", "propagate_at_launch", false)
     )
   }"]
 }
@@ -57,4 +52,18 @@ resource "aws_autoscaling_schedule" "autoscaling" {
   max_size               = "${local.max_size}"
   min_size               = "${local.min_size}"
   start_time             = "${timeadd(timestamp(), "240s")}"
+}
+
+resource "aws_lambda_event_source_mapping" "lifecycle" {
+  event_source_arn  = "${var.publish_queue_arn}"
+  function_name     = "${var.function_name}"
+  enabled           = true
+  batch_size        = 1
+}
+
+resource "aws_lambda_permission" "lifecycle" {
+  source_arn     = "${var.publish_queue_arn}"
+  function_name  = "${var.function_name}"
+  action         = "lambda:InvokeFunction"
+  principal      = "sqs.amazonaws.com"
 }

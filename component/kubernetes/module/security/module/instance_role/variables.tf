@@ -2,6 +2,6 @@ variable "cluster_config" {
   type = "map"
 }
 
-variable "cluster_id" {
+variable "bucket_name" {
   type = "string"
 }

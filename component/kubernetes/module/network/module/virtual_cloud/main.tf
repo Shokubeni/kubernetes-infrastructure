@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Cluster VPC",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
@@ -18,7 +18,7 @@ resource "aws_default_route_table" "default" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Default Table",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
@@ -29,7 +29,7 @@ resource "aws_default_security_group" "default" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Default Group",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }
@@ -58,7 +58,7 @@ resource "aws_default_network_acl" "default" {
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Network ACL",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
     )
   )}"
 }

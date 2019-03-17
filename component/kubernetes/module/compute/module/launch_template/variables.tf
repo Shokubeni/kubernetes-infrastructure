@@ -22,7 +22,7 @@ variable "volume_config" {
   type = "map"
 }
 
-variable "subnet_ids" {
+variable "private_subnet_ids" {
   type = "list"
 }
 
@@ -32,8 +32,4 @@ variable "is_public_ip" {
 
 variable "cluster_config" {
   type = "map"
-}
-
-variable "cluster_id" {
-  type = "string"
 }

@@ -1,11 +1,19 @@
-variable "virtual_cloud_id" {
-  type = "string"
-}
-
 variable "cluster_config" {
   type = "map"
 }
 
-variable "cluster_id" {
-  type = "string"
+variable "secure_bucket" {
+  type = "map"
+}
+
+variable "master_queue" {
+  type = "map"
+}
+
+variable "worker_queue" {
+  type = "map"
+}
+
+variable "network_data" {
+  type = "map"
 }

@@ -2,12 +2,14 @@ data "template_file" "master" {
   template = "${file("${path.module}/master-policy.json")}"
 
   vars {
-    bucket_name   = "${var.cluster_config["label"]}.${var.cluster_id}"
+    region_name = "${var.cluster_config["region"]}"
+    account_id  = "${var.cluster_config["account"]}"
+    bucket_name = "${var.bucket_name}"
   }
 }
 
 resource "aws_iam_role" "master" {
-  name               = "${var.cluster_config["name"]}MasterNode_${var.cluster_id}"
+  name               = "${var.cluster_config["name"]}MasterNode_${var.cluster_config["id"]}"
   description        = "Enables resource access for cluster master node"
   assume_role_policy = "${file("${path.module}/assume-policy.json")}"
 }
@@ -27,12 +29,14 @@ data "template_file" "worker" {
   template = "${file("${path.module}/worker-policy.json")}"
 
   vars {
-    bucket_name  = "${var.cluster_config["label"]}.${var.cluster_id}"
+    region_name = "${var.cluster_config["region"]}"
+    account_id  = "${var.cluster_config["account"]}"
+    bucket_name = "${var.bucket_name}"
   }
 }
 
 resource "aws_iam_role" "worker" {
-  name               = "${var.cluster_config["name"]}WorkerNode_${var.cluster_id}"
+  name               = "${var.cluster_config["name"]}WorkerNode_${var.cluster_config["id"]}"
   description        = "Enables resource access for cluster worker node"
   assume_role_policy = "${file("${path.module}/assume-policy.json")}"
 }

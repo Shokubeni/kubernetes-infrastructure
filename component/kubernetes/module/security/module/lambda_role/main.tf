@@ -1,20 +1,64 @@
-data "template_file" "lambda" {
-  template = "${file("${path.module}/lambda-policy.json")}"
+data "template_file" "master_lifecycle" {
+  template = "${file("${path.module}/lifecycle-policy.json")}"
 
   vars {
-    worker_queue = "${var.cluster_config["label"]}-worker-lifecycle_${var.cluster_id}"
-    master_queue = "${var.cluster_config["label"]}-master-lifecycle_${var.cluster_id}"
+    account_id  = "${var.cluster_config["account"]}"
+    region_name = "${var.cluster_config["region"]}"
+    queue_name  = "${var.master_queue}"
   }
 }
 
-resource "aws_iam_role" "lambda" {
-  name               = "${var.cluster_config["name"]}LifecycleLambda_${var.cluster_id}"
-  description        = "Enables lambda functions to handle ASG instance hooks"
+resource "aws_iam_role" "master_lifecycle" {
+  name               = "${var.cluster_config["name"]}MasterLifecycle_${var.cluster_config["id"]}"
+  description        = "Enables lambda functions to handle ASG lifecycle hooks"
   assume_role_policy = "${file("${path.module}/assume-policy.json")}"
 }
 
-resource "aws_iam_role_policy" "lambda" {
+resource "aws_iam_role_policy" "master_lifecycle" {
   name   = "LifecycleLambdaInlinePolicy"
-  role   = "${aws_iam_role.lambda.id}"
-  policy = "${data.template_file.lambda.rendered}"
+  role   = "${aws_iam_role.master_lifecycle.id}"
+  policy = "${data.template_file.master_lifecycle.rendered}"
+}
+
+data "template_file" "worker_lifecycle" {
+  template = "${file("${path.module}/lifecycle-policy.json")}"
+
+  vars {
+    account_id  = "${var.cluster_config["account"]}"
+    region_name = "${var.cluster_config["region"]}"
+    queue_name  = "${var.worker_queue}"
+  }
+}
+
+resource "aws_iam_role" "worker_lifecycle" {
+  name               = "${var.cluster_config["name"]}WorkerLifecycle_${var.cluster_config["id"]}"
+  description        = "Enables lambda functions to handle ASG lifecycle hooks"
+  assume_role_policy = "${file("${path.module}/assume-policy.json")}"
+}
+
+resource "aws_iam_role_policy" "worker_lifecycle" {
+  name   = "LifecycleLambdaInlinePolicy"
+  role   = "${aws_iam_role.worker_lifecycle.id}"
+  policy = "${data.template_file.worker_lifecycle.rendered}"
+}
+
+data "template_file" "cloudwatch_event" {
+  template = "${file("${path.module}/backup-policy.json")}"
+
+  vars {
+    account_id  = "${var.cluster_config["account"]}"
+    region_name = "${var.cluster_config["region"]}"
+  }
+}
+
+resource "aws_iam_role" "cloudwatch_event" {
+  name               = "${var.cluster_config["name"]}CloudwatchEvent_${var.cluster_config["id"]}"
+  description        = "Enables lambda functions to handle Cloudwatch events"
+  assume_role_policy = "${file("${path.module}/assume-policy.json")}"
+}
+
+resource "aws_iam_role_policy" "cloudwatch_event" {
+  name   = "CloudwatchLambdaInlinePolicy"
+  role   = "${aws_iam_role.cloudwatch_event.id}"
+  policy = "${data.template_file.cloudwatch_event.rendered}"
 }

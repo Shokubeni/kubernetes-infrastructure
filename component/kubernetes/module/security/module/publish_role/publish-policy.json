@@ -6,10 +6,7 @@
         "sqs:*"
       ],
       "Effect": "Allow",
-      "Resource": [
-        "arn:aws:sqs:*:*:${worker_queue}",
-        "arn:aws:sqs:*:*:${master_queue}"
-      ]
+      "Resource": "*"
     }
   ]
 }

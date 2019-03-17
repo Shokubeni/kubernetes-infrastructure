@@ -21,74 +21,82 @@ module "network" {
   use_nat_gateways   = "${var.use_nat_gateways}"
   private_subnets    = "${var.private_subnets}"
   public_subnets     = "${var.public_subnets}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${module.common.cluster_id}"
+  cluster_config     = "${module.common.cluster_config}"
 }
 
 module "security" {
   source = "./module/security"
 
-  virtual_cloud_id   = "${module.network.virtual_cloud_id}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${module.common.cluster_id}"
+  cluster_config     = "${module.common.cluster_config}"
+  secure_bucket      = "${module.common.secure_bucket}"
+  master_queue       = "${module.common.master_queue}"
+  worker_queue       = "${module.common.worker_queue}"
+  network_data       = "${module.network.network_data}"
 }
 
 module "balancer" {
   source = "./module/balancer"
 
-  public_subnet_ids  = "${module.network.public_subnet_ids}"
-  security_group_id  = "${module.security.balancer_security_group_id}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${module.common.cluster_id}"
+  balancer_security  = "${module.security.balancer}"
+  cluster_config     = "${module.common.cluster_config}"
+  network_data       = "${module.network.network_data}"
+}
+
+module "lambda" {
+  source = "./module/lambda"
+
+  cluster_config     = "${module.common.cluster_config}"
+  system_commands    = "${module.common.system_command}"
+  secure_bucket      = "${module.common.secure_bucket}"
+  balancer_data      = "${module.balancer.balancer_data}"
+  master_queue       = "${module.common.master_queue}"
+  worker_queue       = "${module.common.worker_queue}"
+  cloudwatch_role    = "${module.security.cloudwatch_event}"
+  worker_role        = "${module.security.worker_lifecycle}"
+  master_role        = "${module.security.master_lifecycle}"
 }
 
 module "master" {
   source = "./module/compute"
 
   cluster_role       = ["controlplane"]
-  private_subnet_ids = "${module.network.private_subnet_ids}"
-  load_balancer_dns  = "${module.balancer.balancer_dns}"
-  load_balancer_id   = "${module.balancer.balancer_id}"
-  secure_bucket_name = "${module.common.bucket_id}"
-  security_group_id  = "${module.security.master_security_group_id}"
-  publish_role_arn   = "${module.security.publish_iam_role_arn}"
-  lambda_role_arn    = "${module.security.lambda_iam_role_arn}"
-  node_role_id       = "${module.security.master_iam_role_id}"
-  key_pair_id        = "${module.security.master_key_id}"
-  system_comands     = "${module.common.system_commands}"
+  cluster_config     = "${module.common.cluster_config}"
+  network_data       = "${module.network.network_data}"
+  balancer_data      = "${module.balancer.balancer_data}"
   launch_config      = "${var.master_launch_config}"
   volume_config      = "${var.master_volume_config}"
+  lifecycle_queue    = "${module.common.master_queue}"
+  lifecycle_function = "${module.lambda.master_lifecycle}"
+  publish_role       = "${module.security.master_publish}"
+  node_security      = "${module.security.master_node}"
   is_public_ip       = "${!var.use_nat_gateways}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${module.common.cluster_id}"
 }
 
 module "worker" {
   source = "./module/compute"
 
   cluster_role       = ["worker"]
-  private_subnet_ids = "${module.network.private_subnet_ids}"
-  secure_bucket_name = "${module.common.bucket_id}"
-  security_group_id  = "${module.security.worker_security_group_id}"
-  publish_role_arn   = "${module.security.publish_iam_role_arn}"
-  lambda_role_arn    = "${module.security.lambda_iam_role_arn}"
-  node_role_id       = "${module.security.worker_iam_role_id}"
-  key_pair_id        = "${module.security.worker_key_id}"
-  system_comands     = "${module.common.system_commands}"
+  cluster_config     = "${module.common.cluster_config}"
+  network_data       = "${module.network.network_data}"
+  balancer_data      = "${module.balancer.balancer_data}"
   launch_config      = "${var.worker_launch_config}"
   volume_config      = "${var.worker_volume_config}"
+  lifecycle_queue    = "${module.common.worker_queue}"
+  lifecycle_function = "${module.lambda.worker_lifecycle}"
+  publish_role       = "${module.security.worker_publish}"
+  node_security      = "${module.security.worker_node}"
   is_public_ip       = "${!var.use_nat_gateways}"
-  cluster_config     = "${var.cluster_config}"
-  cluster_id         = "${module.common.cluster_id}"
 }
 
-module "outputs" {
-  source = "./module/outputs"
+module "finalize" {
+  source = "./module/finalize"
 
-  secure_bucket_name = "${module.common.bucket_id}"
+  secure_bucket      = "${module.common.secure_bucket}"
+  cluster_config     = "${module.common.cluster_config}"
+  backup_function    = "${module.lambda.cluster_backup}"
   root_dir           = "${var.root_dir}"
   dependencies       = [
-    "${module.master.autoscaling_group_id}",
-    "${module.worker.autoscaling_group_id}"
+    "${module.master.autoscaling["group_id"]}",
+    "${module.worker.autoscaling["group_id"]}"
   ]
 }

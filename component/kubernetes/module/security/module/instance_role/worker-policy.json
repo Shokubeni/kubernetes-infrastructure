@@ -3,7 +3,13 @@
   "Statement": [
     {
       "Action": [
-        "ec2:Describe*",
+        "ec2:Describe*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
         "ecr:GetAuthorizationToken",
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
@@ -16,11 +22,13 @@
       "Resource": "*"
     },
     {
-      "Action": "s3:*",
+      "Action": [
+        "s3:*"
+      ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:s3:::${bucket_name}",
-        "arn:aws:s3:::${bucket_name}/*"
+        "arn:aws:s3:::${bucket_name}/*",
+        "arn:aws:s3:::${bucket_name}"
       ]
     }
   ]
