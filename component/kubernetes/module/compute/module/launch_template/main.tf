@@ -7,12 +7,6 @@ locals {
   delete_on_termination = "${lookup(var.volume_config, "delete_on_termination", true)}"
   volume_type           = "${lookup(var.volume_config, "volume_type", "gp2")}"
   volume_size           = "${lookup(var.volume_config, "volume_size", 10)}"
-  market_type           = "${
-    contains(keys(var.launch_config), "spot_fleet") &&
-    var.launch_config["spot_fleet"]
-        ? "spot"
-        : "ondemand"
-  }"
   role_postfix          = "${
     contains(var.cluster_role, "controlplane")
         ? "master"
@@ -54,21 +48,12 @@ resource "aws_iam_instance_profile" "launch" {
 resource "aws_launch_template" "launch" {
   name                                 = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}"
   image_id                             = "${local.zone_image[var.cluster_config["region"]]}"
-  instance_type                        = "${var.launch_config["instance_type"]}"
+  instance_type                        = "${element(split(",", var.launch_config["instance_types"]), 0)}"
   ebs_optimized                        = "${local.ebs_optimized}"
   instance_initiated_shutdown_behavior = "${local.shutdown_behavior}"
   disable_api_termination              = "${local.disable_termination}"
   key_name                             = "${var.key_pair_id}"
-
-  instance_market_options {
-    market_type = "${local.market_type}"
-
-    spot_options {
-      max_price                      = "${var.launch_config["max_price"]}"
-      instance_interruption_behavior = "${local.shutdown_behavior}"
-      spot_instance_type             = "one-time"
-    }
-  }
+  description                          = "${local.role_postfix} nodes launch"
 
   block_device_mappings {
     device_name = "/dev/sda1"

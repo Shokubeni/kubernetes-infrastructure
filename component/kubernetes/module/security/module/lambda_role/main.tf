@@ -43,7 +43,7 @@ resource "aws_iam_role_policy" "worker_lifecycle" {
 }
 
 data "template_file" "cloudwatch_event" {
-  template = "${file("${path.module}/backup-policy.json")}"
+  template = "${file("${path.module}/cloudwatch-policy.json")}"
 
   vars {
     account_id  = "${var.cluster_config["account"]}"

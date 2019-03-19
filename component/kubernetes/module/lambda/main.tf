@@ -12,13 +12,34 @@ resource "aws_lambda_function" "cluster_backup" {
   role                           = "${var.cloudwatch_role["arn"]}"
   runtime                        = "nodejs8.10"
   timeout                        = 600
-  memory_size                    = 512
+  memory_size                    = 256
   reserved_concurrent_executions = 1
 
   environment {
     variables = {
       MASTER_AUTOSCALING_GROUP = "${var.cluster_config["label"]}-master_${var.cluster_config["id"]}"
       ETCD_BACKUP_COMMAND      = "${var.system_commands["cluster_etcd_backup"]}"
+      S3_BUCKED_NAME           = "${var.secure_bucket["id"]}"
+      CLUSTER_ID               = "${var.cluster_config["id"]}"
+    }
+  }
+}
+
+resource "aws_lambda_function" "renew_token" {
+  function_name                  = "${var.cluster_config["label"]}-renew_token_${var.cluster_config["id"]}"
+  source_code_hash               = "${data.archive_file.lambda_zip.output_base64sha256}"
+  handler                        = "build/renew_token.handler"
+  filename                       = "${path.module}/functions.zip"
+  role                           = "${var.cloudwatch_role["arn"]}"
+  runtime                        = "nodejs8.10"
+  timeout                        = 600
+  memory_size                    = 256
+  reserved_concurrent_executions = 1
+
+  environment {
+    variables = {
+      MASTER_AUTOSCALING_GROUP = "${var.cluster_config["label"]}-master_${var.cluster_config["id"]}"
+      RENEW_TOKEN_COMMAND      = "${var.system_commands["renew_join_token"]}"
       S3_BUCKED_NAME           = "${var.secure_bucket["id"]}"
       CLUSTER_ID               = "${var.cluster_config["id"]}"
     }

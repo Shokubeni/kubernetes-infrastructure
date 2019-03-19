@@ -12,6 +12,7 @@ locals {
         ? "master"
         : "worker"
   }"
+  capasity         = "${lookup(var.launch_config, "spot_capasity", 100)}"
 }
 
 resource "aws_autoscaling_group" "autoscaling" {
@@ -33,9 +34,26 @@ resource "aws_autoscaling_group" "autoscaling" {
     role_arn                = "${var.publish_role_arn}"
   }
 
-  launch_template = {
-    id      = "${var.launch_template_id}"
-    version = "$Latest"
+  mixed_instances_policy {
+    launch_template {
+      launch_template_specification {
+        launch_template_id = "${var.launch_template_id}"
+        version = "$Latest"
+
+      }
+      override {
+        instance_type = "${element(split(",", var.launch_config["instance_types"]), 0)}"
+      }
+
+      override {
+        instance_type = "${element(split(",", var.launch_config["instance_types"]), 1)}"
+      }
+    }
+
+    instances_distribution {
+      on_demand_percentage_above_base_capacity = "${local.capasity}"
+      spot_max_price = "${var.launch_config["max_price"]}"
+    }
   }
 
   tags = ["${

@@ -15,5 +15,9 @@ output "common_worker_init" {
 }
 
 output "cluster_etcd_backup" {
-  value = "${aws_ssm_document.cluater_backup.name}"
+  value = "${aws_ssm_document.cluster_backup.name}"
+}
+
+output "renew_join_token" {
+  value = "${aws_ssm_document.renew_token.name}"
 }

@@ -17,6 +17,7 @@ declare var process : {
     DOCKER_VERSION: string,
     S3_BUCKED_NAME: string,
     SQS_QUEUE_URL: string,
+    CLUSTER_ID: string,
   },
 };
 
