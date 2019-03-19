@@ -94,6 +94,7 @@ module "finalize" {
   secure_bucket      = "${module.common.secure_bucket}"
   cluster_config     = "${module.common.cluster_config}"
   backup_function    = "${module.lambda.cluster_backup}"
+  renew_function     = "${module.lambda.renew_token}"
   root_dir           = "${var.root_dir}"
   dependencies       = [
     "${module.master.autoscaling["group_id"]}",

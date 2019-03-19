@@ -22,8 +22,14 @@ resource "aws_ssm_document" "common_worker" {
   document_type = "Command"
 }
 
-resource "aws_ssm_document" "cluater_backup" {
+resource "aws_ssm_document" "cluster_backup" {
   name          = "${var.cluster_config["name"]}-ClusterEtcdBackup_${var.cluster_id}"
   content       = "${file("${path.module}/shell_script/cluster-etcd-backup.json")}"
+  document_type = "Command"
+}
+
+resource "aws_ssm_document" "renew_token" {
+  name          = "${var.cluster_config["name"]}-RenewJoinToken_${var.cluster_id}"
+  content       = "${file("${path.module}/shell_script/renew-join-token.json")}"
   document_type = "Command"
 }

@@ -29,13 +29,13 @@ public_subnets = {
 //*                               Nodes                                *
 //**********************************************************************
 master_launch_config = {
+  instance_types        = "t3.medium,t2.medium"
   shutdown_behavior     = "terminate"
-  instance_type         = "t3.medium"
   cpu_credits           = "standard"
   disable_termination   = false
   ebs_optimized         = false
   monitoring            = false
-  spot_fleet            = true
+  spot_capasity         = 100
   max_price             = 0.05
   min_size              = 1
   max_size              = 3
@@ -49,13 +49,13 @@ master_volume_config = {
 }
 
 worker_launch_config = {
+  instance_types        = "r5.large,r4.large"
   shutdown_behavior     = "terminate"
-  instance_type         = "r5.large"
   cpu_credits           = "standard"
   disable_termination   = false
   ebs_optimized         = false
   monitoring            = false
-  spot_fleet            = true
+  spot_capasity         = 100
   max_price             = 0.14
   min_size              = 1
   max_size              = 5

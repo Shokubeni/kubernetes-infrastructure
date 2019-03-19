@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "2.2",
+  "description": "Renew join token",
+  "parameters": {
+    "S3BucketName": {
+      "type": "String"
+    }
+  },
+  "mainSteps": [
+    {
+      "action": "aws:runShellScript",
+      "name": "Backup",
+      "inputs": {
+        "runCommand": [
+          "sudo su",
+          "kubeadm token create --print-join-command > join-command",
+          "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command",
+          "rm ./join-command"
+        ]
+      }
+    }
+  ]
+}

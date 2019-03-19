@@ -5,6 +5,7 @@ output "system_command" {
     stacked_master_init  = "${module.ssm_command.stacked_master_init}"
     common_worker_init   = "${module.ssm_command.common_worker_init}"
     cluster_etcd_backup  = "${module.ssm_command.cluster_etcd_backup}"
+    renew_join_token     = "${module.ssm_command.renew_join_token}"
   }
 }
 

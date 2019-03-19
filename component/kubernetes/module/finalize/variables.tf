@@ -6,6 +6,10 @@ variable "backup_function" {
   type = "map"
 }
 
+variable "renew_function" {
+  type = "map"
+}
+
 variable "cluster_config" {
   type = "map"
 }

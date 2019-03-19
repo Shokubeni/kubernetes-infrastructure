@@ -18,3 +18,10 @@ output "cluster_backup" {
     arn = "${aws_lambda_function.cluster_backup.arn}"
   }
 }
+
+output "renew_token" {
+  value = {
+    id  = "${aws_lambda_function.renew_token.id}"
+    arn = "${aws_lambda_function.renew_token.arn}"
+  }
+}
