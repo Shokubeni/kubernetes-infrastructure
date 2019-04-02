@@ -1,11 +1,12 @@
 output "system_command" {
   value = {
-    node_runtime_install = "${module.ssm_command.node_runtime_install}"
-    general_master_init  = "${module.ssm_command.general_master_init}"
-    stacked_master_init  = "${module.ssm_command.stacked_master_init}"
-    common_worker_init   = "${module.ssm_command.common_worker_init}"
-    cluster_etcd_backup  = "${module.ssm_command.cluster_etcd_backup}"
-    renew_join_token     = "${module.ssm_command.renew_join_token}"
+    node_runtime_install   = "${module.ssm_command.node_runtime_install}"
+    general_master_init    = "${module.ssm_command.general_master_init}"
+    general_master_restore = "${module.ssm_command.general_master_restore}"
+    stacked_master_init    = "${module.ssm_command.stacked_master_init}"
+    common_worker_init     = "${module.ssm_command.common_worker_init}"
+    cluster_etcd_backup    = "${module.ssm_command.cluster_etcd_backup}"
+    renew_join_token       = "${module.ssm_command.renew_join_token}"
   }
 }
 
@@ -39,7 +40,9 @@ output "worker_queue" {
 
 output "secure_bucket" {
   value = {
-    id  = "${module.secure_bucket.bucket_id}"
-    arn = "${module.secure_bucket.bucket_arn}"
+    id     = "${module.secure_bucket.bucket_id}"
+    arn    = "${module.secure_bucket.bucket_arn}"
+    name   = "${module.secure_bucket.bucket_name}"
+    region = "${module.secure_bucket.bucket_region}"
   }
 }

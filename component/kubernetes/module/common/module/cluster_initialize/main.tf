@@ -1,7 +1,7 @@
 locals {
-  name       = "${lookup(var.cluster_config, "name", "SmartGears")}"
-  label      = "${lookup(var.cluster_config, "label", "smart-gears")}"
-  kubernetes = "1.13.3"
+  name       = "${var.cluster_name}"
+  label      = "${var.cluster_label}"
+  kubernetes = "1.14.0"
   docker     = "18.06.0"
 }
 

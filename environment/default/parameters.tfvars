@@ -1,41 +1,28 @@
 //**********************************************************************
-//*                              General                               *
-//**********************************************************************
-provider_config = {
-  profile = "cluster_operator"
-  region  = "us-east-1"
-}
-
-cluster_config = {
-  name    = "Kubernetes"
-  label   = "kubernetes"
-}
-
-
-//**********************************************************************
 //*                              Network                               *
 //**********************************************************************
 virtual_cloud_cidr = "172.16.0.0/16"
 use_nat_gateways = "true"
 private_subnets = {
   "172.16.0.0/20"  = "us-east-1b"
+  "172.16.16.0/20" = "us-east-1c"
 }
 public_subnets = {
-  "172.16.16.0/20" = "us-east-1b"
+  "172.16.32.0/20" = "us-east-1b"
+  "172.16.48.0/20" = "us-east-1c"
 }
-
 
 //**********************************************************************
 //*                               Nodes                                *
 //**********************************************************************
 master_launch_config = {
-  instance_types        = "t3.medium,t2.medium"
+  instance_types        = "t3.large,t2.large"
   shutdown_behavior     = "terminate"
   cpu_credits           = "standard"
   disable_termination   = false
   ebs_optimized         = false
   monitoring            = false
-  spot_capasity         = 100
+  on_demand_capasity    = 100
   max_price             = 0.05
   min_size              = 1
   max_size              = 3
@@ -55,7 +42,7 @@ worker_launch_config = {
   disable_termination   = false
   ebs_optimized         = false
   monitoring            = false
-  spot_capasity         = 100
+  on_demand_capasity    = 100
   max_price             = 0.14
   min_size              = 1
   max_size              = 5

@@ -38,6 +38,6 @@ variable "node_security" {
   type = "map"
 }
 
-variable "is_public_ip" {
+variable "use_nat_gateway" {
   type = "string"
 }

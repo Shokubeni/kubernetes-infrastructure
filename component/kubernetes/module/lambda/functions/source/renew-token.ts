@@ -5,6 +5,7 @@ declare var process : {
   env: {
     MASTER_AUTOSCALING_GROUP: string,
     RENEW_TOKEN_COMMAND: string,
+    S3_BUCKED_REGION: string,
     S3_BUCKED_NAME: string,
   },
 };
@@ -15,6 +16,7 @@ export const handler = async (): Promise<void> => {
 
     if (instanceId && await isInSystemManager(instanceId)) {
       await runCommand(instanceId, process.env.RENEW_TOKEN_COMMAND, {
+        S3BucketRegion: [process.env.S3_BUCKED_REGION],
         S3BucketName: [process.env.S3_BUCKED_NAME],
       });
     }

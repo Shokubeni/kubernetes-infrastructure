@@ -6,6 +6,10 @@ output "general_master_init" {
   value = "${aws_ssm_document.general_master.name}"
 }
 
+output "general_master_restore" {
+  value = "${aws_ssm_document.general_restore.name}"
+}
+
 output "stacked_master_init" {
   value = "${aws_ssm_document.stacked_master.name}"
 }
