@@ -3,14 +3,6 @@ resource "aws_security_group" "master" {
   vpc_id = "${var.virtual_cloud_id}"
 
   ingress {
-    description = "SSH client"
-    protocol    = "tcp"
-    from_port   = 22
-    to_port     = 22
-    self        = "true"
-  }
-
-  ingress {
     description = "Kubernetes API server"
     protocol    = "tcp"
     from_port   = 6443

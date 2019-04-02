@@ -1,3 +1,7 @@
-variable "cluster_config" {
-  type = "map"
+variable "cluster_name" {
+  type = "string"
+}
+
+variable "cluster_label" {
+  type = "string"
 }

@@ -1,7 +1,8 @@
 resource "aws_elb" "balancer" {
-  name               = "${var.cluster_config["label"]}-${var.cluster_config["id"]}"
-  subnets            = ["${split(",", var.network_data["private_subnet_ids"])}"]
-  security_groups    = ["${var.balancer_security["group_id"]}"]
+  name                      = "${var.cluster_config["label"]}-${var.cluster_config["id"]}"
+  subnets                   = ["${split(",", var.network_data["public_subnet_ids"])}"]
+  security_groups           = ["${var.balancer_security["group_id"]}"]
+  cross_zone_load_balancing = true
 
   listener {
     lb_port           = 6443

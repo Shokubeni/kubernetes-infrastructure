@@ -1,4 +1,5 @@
 locals {
+  capasity         = "${lookup(var.launch_config, "on_demand_capasity", 100)}"
   desired_capacity = "${lookup(var.launch_config, "desired_capacity", 1)}"
   max_size         = "${lookup(var.launch_config, "max_size", 1)}"
   min_size         = "${lookup(var.launch_config, "min_size", 1)}"
@@ -12,7 +13,12 @@ locals {
         ? "master"
         : "worker"
   }"
-  capasity         = "${lookup(var.launch_config, "spot_capasity", 100)}"
+
+  load_balancer     = "${
+    contains(var.cluster_role, "controlplane")
+        ? var.load_balancer_id
+        : ""
+  }"
 }
 
 resource "aws_autoscaling_group" "autoscaling" {
@@ -20,7 +26,7 @@ resource "aws_autoscaling_group" "autoscaling" {
   max_size                  = "${local.max_size}"
   min_size                  = "${local.min_size}"
   vpc_zone_identifier       = ["${var.private_subnet_ids}"]
-  load_balancers            = ["${var.load_balancer_id}"]
+  load_balancers            = ["${local.load_balancer}"]
   health_check_type         = "${local.check_type}"
   force_delete              = false
   desired_capacity          = 1
@@ -61,6 +67,10 @@ resource "aws_autoscaling_group" "autoscaling" {
       map("key", "kubernetes.io/cluster/${var.cluster_config["id"]}", "value", "owned", "propagate_at_launch", false)
     )
   }"]
+
+  lifecycle {
+    ignore_changes = ["*"]
+  }
 }
 
 resource "aws_autoscaling_schedule" "autoscaling" {
@@ -70,6 +80,10 @@ resource "aws_autoscaling_schedule" "autoscaling" {
   max_size               = "${local.max_size}"
   min_size               = "${local.min_size}"
   start_time             = "${timeadd(timestamp(), "240s")}"
+
+  lifecycle {
+    ignore_changes = ["*"]
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "lifecycle" {

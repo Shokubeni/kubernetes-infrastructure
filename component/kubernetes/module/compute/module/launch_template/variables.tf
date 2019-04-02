@@ -26,7 +26,7 @@ variable "private_subnet_ids" {
   type = "list"
 }
 
-variable "is_public_ip" {
+variable "use_nat_gateway" {
   type = "string"
 }
 

@@ -15,6 +15,7 @@ declare var process : {
     TASK_EXECUTE_LIMIT: string,
     KUBERNETES_VERSION: string,
     DOCKER_VERSION: string,
+    S3_BUCKET_REGION: string,
     S3_BUCKED_NAME: string,
     SQS_QUEUE_URL: string,
     CLUSTER_ID: string,
@@ -44,6 +45,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       });
 
       await runCommand(event, process.env.COMMON_WORKER_INIT_COMMAND, {
+        S3BucketRegion: [process.env.S3_BUCKET_REGION],
         S3BucketName: [process.env.S3_BUCKED_NAME],
       });
       await setInstanceTags(event, [

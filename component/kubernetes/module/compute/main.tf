@@ -1,3 +1,11 @@
+locals {
+  subnets = "${
+    var.use_nat_gateway == "true"
+        ? var.network_data["private_subnet_ids"]
+        : var.network_data["public_subnet_ids"]
+  }"
+}
+
 module "launch_tempate" {
   source = "./module/launch_template"
 
@@ -9,7 +17,7 @@ module "launch_tempate" {
   launch_config        = "${var.launch_config}"
   volume_config        = "${var.volume_config}"
   cluster_config       = "${var.cluster_config}"
-  is_public_ip         = "${var.is_public_ip}"
+  use_nat_gateway      = "${var.use_nat_gateway}"
 }
 
 module "autoscaling_group" {

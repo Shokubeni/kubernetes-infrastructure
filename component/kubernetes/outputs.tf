@@ -1,3 +1,3 @@
-output "Kubernetes" {
-  value = "Cluster successful created (id: ${module.common.cluster_config["id"]})"
+output "cluster_id" {
+  value = "${module.common.cluster_config["id"]}"
 }

@@ -1,9 +1,17 @@
-variable "provider_config" {
-  type = "map"
+variable "provider_profile" {
+  type = "string"
 }
 
-variable "cluster_config" {
-  type = "map"
+variable "provider_region" {
+  type = "string"
+}
+
+variable "cluster_name" {
+  type = "string"
+}
+
+variable "cluster_label" {
+  type = "string"
 }
 
 variable "virtual_cloud_cidr" {
