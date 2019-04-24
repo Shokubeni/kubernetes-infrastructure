@@ -1,9 +1,13 @@
-output "balancer_zone" {
-  value = "${module.balancer.balancer_data["zone"]}"
+output "cluster_config" {
+  value = "${module.common.cluster_config}"
 }
 
-output "balancer_dns" {
-  value = "${module.balancer.balancer_data["dns"]}"
+output "balancer_data" {
+  value = "${module.balancer.balancer_data}"
+}
+
+output "network_data" {
+  value = "${module.network.network_data}"
 }
 
 output "config_path" {

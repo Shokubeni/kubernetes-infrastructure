@@ -5,12 +5,12 @@ virtual_cloud_cidr = "172.16.0.0/16"
 use_nat_gateways = "true"
 is_main_cluster = "true"
 private_subnets = {
-  "172.16.0.0/20"  = "eu-west-1a"
-  "172.16.16.0/20" = "eu-west-1b"
+  "172.16.0.0/20"  = "us-east-1b"
+  "172.16.16.0/20" = "us-east-1c"
 }
 public_subnets = {
-  "172.16.32.0/20" = "eu-west-1a"
-  "172.16.48.0/20" = "eu-west-1b"
+  "172.16.32.0/20" = "us-east-1b"
+  "172.16.48.0/20" = "us-east-1c"
 }
 domain_config = {
   hosted_zone = "Z1IMWHN7BIT6US"
@@ -37,7 +37,7 @@ master_launch_config = {
 master_volume_config = {
   delete_on_termination = true
   volume_type           = "gp2"
-  volume_size           = 10
+  volume_size           = 15
 }
 
 worker_launch_config = {
@@ -57,5 +57,5 @@ worker_launch_config = {
 worker_volume_config = {
   delete_on_termination = true
   volume_type           = "gp2"
-  volume_size           = 10
+  volume_size           = 15
 }

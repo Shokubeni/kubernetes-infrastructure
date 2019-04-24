@@ -1,9 +1,5 @@
-variable "balancer_zone" {
-  type = "string"
-}
-
-variable "balancer_dns" {
-  type = "string"
+variable "balancer_data" {
+  type = "map"
 }
 
 variable "provider_profile" {

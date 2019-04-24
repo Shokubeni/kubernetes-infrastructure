@@ -8,7 +8,7 @@ resource "null_resource" "ingress" {
   }
 
   provisioner "local-exec" {
-    command = "kubectl --kubeconfig ${var.config_path} apply -f ${path.module}/workload/ingress-controller.yaml"
+    command = "kubectl --kubeconfig ${var.config_path} apply -f ${path.module}/template/ingress-controller.yaml"
   }
 }
 
@@ -18,6 +18,6 @@ resource "null_resource" "lego" {
   }
 
   provisioner "local-exec" {
-    command = "kubectl --kubeconfig ${var.config_path} apply -f ${path.module}/workload/kube-lego.yaml"
+    command = "kubectl --kubeconfig ${var.config_path} apply -f ${path.module}/template/cert-provisioner.yaml"
   }
 }

@@ -21,3 +21,7 @@ variable "domain_config" {
 variable "is_main_cluster" {
   type = "string"
 }
+
+variable "virtual_cloud_cidr" {
+  type = "string"
+}

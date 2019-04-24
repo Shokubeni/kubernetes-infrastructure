@@ -88,12 +88,11 @@ subjects:
 ---
 
 apiVersion: extensions/v1beta1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: kube-lego
   namespace: kube-lego
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
@@ -131,5 +130,11 @@ spec:
               port: 8080
             initialDelaySeconds: 5
             timeoutSeconds: 1
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
 
 ---

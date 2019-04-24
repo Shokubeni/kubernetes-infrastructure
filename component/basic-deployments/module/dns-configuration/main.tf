@@ -16,8 +16,8 @@ resource "aws_route53_record" "auth" {
 
   alias {
     evaluate_target_health = false
-    zone_id = "${var.balancer_zone}"
-    name = "${var.balancer_dns}"
+    zone_id = "${var.balancer_data["zone"]}"
+    name = "${var.balancer_data["dns"]}"
   }
 }
 
@@ -29,8 +29,8 @@ resource "aws_route53_record" "jira" {
 
   alias {
     evaluate_target_health = false
-    zone_id = "${var.balancer_zone}"
-    name = "${var.balancer_dns}"
+    zone_id = "${var.balancer_data["zone"]}"
+    name = "${var.balancer_data["dns"]}"
   }
 }
 
@@ -42,8 +42,8 @@ resource "aws_route53_record" "wiki" {
 
   alias {
     evaluate_target_health = false
-    zone_id = "${var.balancer_zone}"
-    name = "${var.balancer_dns}"
+    zone_id = "${var.balancer_data["zone"]}"
+    name = "${var.balancer_data["dns"]}"
   }
 }
 
@@ -55,8 +55,8 @@ resource "aws_route53_record" "git" {
 
   alias {
     evaluate_target_health = false
-    zone_id = "${var.balancer_zone}"
-    name = "${var.balancer_dns}"
+    zone_id = "${var.balancer_data["zone"]}"
+    name = "${var.balancer_data["dns"]}"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_route53_record" "build" {
 
   alias {
     evaluate_target_health = false
-    zone_id = "${var.balancer_zone}"
-    name = "${var.balancer_dns}"
+    zone_id = "${var.balancer_data["zone"]}"
+    name = "${var.balancer_data["dns"]}"
   }
 }
