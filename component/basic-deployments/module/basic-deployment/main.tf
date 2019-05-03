@@ -1,57 +1,57 @@
 module "ingress_controller_namespace" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/ingress-controller/namespace.yaml"
   config_path = "${var.config_path}"
 }
 
 module "ingress_controller_rbac" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/ingress-controller/rbac.yaml"
   config_path = "${var.config_path}"
 }
 
 module "ingress_controller_configmap" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/ingress-controller/configmap.yaml"
   config_path = "${var.config_path}"
 }
 
 module "ingress_controller_daemonset" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/ingress-controller/daemonset.yaml"
   config_path = "${var.config_path}"
 }
 
 module "ingress_controller_service" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/ingress-controller/service.yaml"
   config_path = "${var.config_path}"
-  delete_wait = "120s"
+  delay_time  = "120s"
 }
 
 /*  --------------------------------------------------------------------- */
 
 module "kube_lego_namespace" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/kube-lego/namespace.yaml"
   config_path = "${var.config_path}"
 }
 
 module "kube_lego_rbac" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/kube-lego/rbac.yaml"
   config_path = "${var.config_path}"
 }
 
 module "kube_lego_configmap" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/kube-lego/configmap.yaml"
   config_path = "${var.config_path}"
@@ -61,7 +61,7 @@ module "kube_lego_configmap" {
 }
 
 module "kube_lego_daemonset" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/kube-lego/daemonset.yaml"
   config_path = "${var.config_path}"

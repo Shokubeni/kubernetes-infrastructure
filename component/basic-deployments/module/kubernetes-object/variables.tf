@@ -1,6 +1,6 @@
 variable "config_path" {
   type = "string"
-  default = "false"
+  default = "null"
 }
 
 variable "file_path" {
@@ -12,7 +12,12 @@ variable "variables" {
   default = {}
 }
 
-variable "delete_wait" {
+variable "delay_time" {
   type = "string"
   default = "1s"
+}
+
+variable "depends_on" {
+  type = "list"
+  default = []
 }

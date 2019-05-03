@@ -52,14 +52,14 @@ resource "aws_efs_mount_target" "efs" {
 /* -------------------------------------------------------------------------- */
 
 module "elastic_filesystem_rbac" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/elastic-filesystem/rbac.yaml"
   config_path = "${var.config_path}"
 }
 
 module "elastic_filesystem_configmap" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/elastic-filesystem/configmap.yaml"
   config_path = "${var.config_path}"
@@ -72,7 +72,7 @@ module "elastic_filesystem_configmap" {
 }
 
 module "elastic_filesystem_daemonset" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/elastic-filesystem/daemonset.yaml"
   config_path = "${var.config_path}"
@@ -84,7 +84,7 @@ module "elastic_filesystem_daemonset" {
 }
 
 module "elastic_filesystem_storageclass" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/elastic-filesystem/storageclass.yaml"
   config_path = "${var.config_path}"
@@ -96,7 +96,7 @@ module "elastic_filesystem_storageclass" {
 /* -------------------------------------------------------------------------- */
 
 module "block-storage_storageclass" {
-  source = "../kubernetes-entity"
+  source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/block-storage/storageclass.yaml"
   config_path = "${var.config_path}"
