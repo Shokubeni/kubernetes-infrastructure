@@ -1,5 +1,5 @@
 locals {
-  public_subnets  = "${split(",", var.network_data["public_subnet_ids"])}"
+  public_subnets = "${split(",", var.network_data["public_subnet_ids"])}"
 }
 
 resource "aws_security_group" "efs" {
@@ -49,11 +49,21 @@ resource "aws_efs_mount_target" "efs" {
   security_groups = ["${aws_security_group.efs.id}"]
 }
 
-data "template_file" "efs" {
-  depends_on = ["aws_efs_mount_target.efs"]
-  template   = "${file("${path.module}/template/efs-provisioner.yaml")}"
+/* -------------------------------------------------------------------------- */
 
-  vars {
+module "elastic_filesystem_rbac" {
+  source = "../kubernetes-entity"
+
+  file_path   = "${path.module}/manifest/elastic-filesystem/rbac.yaml"
+  config_path = "${var.config_path}"
+}
+
+module "elastic_filesystem_configmap" {
+  source = "../kubernetes-entity"
+
+  file_path   = "${path.module}/manifest/elastic-filesystem/configmap.yaml"
+  config_path = "${var.config_path}"
+  variables   = {
     filesystem_dns = "${aws_efs_file_system.efs.dns_name}"
     filesystem_id  = "${aws_efs_file_system.efs.id}"
     domain_name    = "${var.domain_config["domain_name"]}"
@@ -61,13 +71,33 @@ data "template_file" "efs" {
   }
 }
 
-resource "null_resource" "efs" {
-  depends_on = ["aws_efs_mount_target.efs"]
-  triggers = {
-    manifest_sha1 = "${sha1("${data.template_file.efs.rendered}")}"
-  }
+module "elastic_filesystem_daemonset" {
+  source = "../kubernetes-entity"
 
-  provisioner "local-exec" {
-    command = "kubectl --kubeconfig ${var.config_path} apply -f -<<EOF\n${data.template_file.efs.rendered}\nEOF"
+  file_path   = "${path.module}/manifest/elastic-filesystem/daemonset.yaml"
+  config_path = "${var.config_path}"
+  variables   = {
+    filesystem_dns = "${aws_efs_file_system.efs.dns_name}"
+    filesystem_id  = "${aws_efs_file_system.efs.id}"
+    cluster_region = "${var.cluster_config["region"]}"
   }
+}
+
+module "elastic_filesystem_storageclass" {
+  source = "../kubernetes-entity"
+
+  file_path   = "${path.module}/manifest/elastic-filesystem/storageclass.yaml"
+  config_path = "${var.config_path}"
+  variables   = {
+    domain_name = "${var.domain_config["domain_name"]}"
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+
+module "block-storage_storageclass" {
+  source = "../kubernetes-entity"
+
+  file_path   = "${path.module}/manifest/block-storage/storageclass.yaml"
+  config_path = "${var.config_path}"
 }

@@ -20,6 +20,13 @@ output "worker_node" {
   }
 }
 
+output "volume_backup" {
+  value = {
+    id  = "${module.backup_role.backup_role_id}"
+    arn = "${module.backup_role.backup_role_arn}"
+  }
+}
+
 output "master_lifecycle" {
   value = {
     id  = "${module.lambda_role.master_lifecycle_id}"

@@ -1,64 +1,5 @@
 ---
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: efs-provisioner
-  namespace: kube-system
-data:
-  file.system.id: ${filesystem_id}
-  aws.region: ${cluster_region}
-  provisioner.name: ${domain_name}/aws-efs
-  dns.name: ${filesystem_dns}
-
----
-
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: efs-provisioner
-  namespace: kube-system
-
----
-
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: efs-provisioner-runner
-rules:
-  - apiGroups: [""]
-    resources: ["persistentvolumes"]
-    verbs: ["get", "list", "watch", "create", "delete"]
-  - apiGroups: [""]
-    resources: ["persistentvolumeclaims"]
-    verbs: ["get", "list", "watch", "update"]
-  - apiGroups: ["storage.k8s.io"]
-    resources: ["storageclasses"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["events"]
-    verbs: ["list", "watch", "create", "update", "patch"]
-  - apiGroups: [""]
-    resources: ["endpoints"]
-    verbs: ["get", "list", "watch", "create", "update", "patch"]
-
----
-
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: run-efs-provisioner
-subjects:
-  - kind: ServiceAccount
-    name: efs-provisioner
-    namespace: kube-system
-roleRef:
-  kind: ClusterRole
-  name: efs-provisioner-runner
-  apiGroup: rbac.authorization.k8s.io
-
----
-
 kind: DaemonSet
 apiVersion: extensions/v1beta1
 metadata:
@@ -110,13 +51,5 @@ spec:
           effect: NoSchedule
       nodeSelector:
         node-role.kubernetes.io/master: ""
-
----
-
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: aws-efs
-provisioner: ${domain_name}/aws-efs
 
 ---

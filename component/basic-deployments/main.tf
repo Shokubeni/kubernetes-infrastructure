@@ -22,10 +22,11 @@ locals {
   cluster_config = "${data.terraform_remote_state.kubernetes.cluster_config}"
   balancer_data  = "${data.terraform_remote_state.kubernetes.balancer_data}"
   network_data   = "${data.terraform_remote_state.kubernetes.network_data}"
+  backup_role    = "${data.terraform_remote_state.kubernetes.backup_role}"
   config_path    = "${data.terraform_remote_state.kubernetes.config_path}"
 }
 
-module "dns_config" {
+module "dns" {
   source = "./module/dns-configuration"
 
   balancer_data    = "${local.balancer_data}"
@@ -35,8 +36,8 @@ module "dns_config" {
   is_main_cluster  = "${var.is_main_cluster}"
 }
 
-module "efs" {
-  source = "./module/efs-provisioner"
+module "volume" {
+  source = "./module/volume-provision"
 
   virtual_cloud_cidr = "${var.virtual_cloud_cidr}"
   cluster_config     = "${local.cluster_config}"
@@ -45,8 +46,18 @@ module "efs" {
   config_path        = "${local.config_path}"
 }
 
-module "workloads" {
-  source = "./module/workload-config"
+module "basic" {
+  source = "./module/basic-deployment"
 
-  config_path = "${local.config_path}"
+  domain_config = "${var.domain_config}"
+  config_path   = "${local.config_path}"
+}
+
+module "monitoring" {
+  source = "./module/cluster-monitoring"
+
+  cluster_config = "${local.cluster_config}"
+  domain_config  = "${var.domain_config}"
+  config_path    = "${local.config_path}"
+  backup_role    = "${local.backup_role}"
 }

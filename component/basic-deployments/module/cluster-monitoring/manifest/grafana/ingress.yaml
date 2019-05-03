@@ -1,0 +1,25 @@
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: monitoring
+  name: grafana
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/tls-acme: "true"
+spec:
+  tls:
+    - secretName: grafana-ingress
+      hosts:
+        - metrics.${domain_name}
+  rules:
+    - host: 'metrics.${domain_name}'
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: grafana
+              servicePort: 3000
+
+---

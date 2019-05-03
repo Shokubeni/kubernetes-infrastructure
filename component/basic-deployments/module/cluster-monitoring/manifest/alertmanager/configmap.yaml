@@ -1,0 +1,45 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: monitoring
+  name: alertmanager
+data:
+  config.yml: |-
+    global:
+      resolve_timeout: 5m
+      slack_api_url: "<your_slack_hook>"
+
+    templates:
+    - '/etc/alertmanager-templates/*.tmpl'
+    route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 10s
+      group_interval: 1m
+      repeat_interval: 5m  
+      receiver: default 
+      routes:
+      - match:
+          team: devops
+        receiver: devops
+        continue: true 
+      - match: 
+          team: dev
+        receiver: dev
+        continue: true
+
+    receivers:
+    - name: 'default'
+
+    - name: 'devops'
+      slack_configs:
+      - channel: '#k8-alerts'
+        send_resolved: true
+
+    - name: 'dev'
+      slack_configs:
+      - channel: '#k8-alerts'
+        send_resolved: true
+
+---

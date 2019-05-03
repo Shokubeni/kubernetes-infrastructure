@@ -5,6 +5,12 @@ module "security_group" {
   cluster_config   = "${var.cluster_config}"
 }
 
+module "backup_role" {
+  source = "./module/backup_role"
+
+  cluster_config   = "${var.cluster_config}"
+}
+
 module "instance_role" {
   source = "./module/instance_role"
 
