@@ -179,6 +179,20 @@ module "grafana_prometheus_source" {
   ]
 }
 
+module "grafana_general_config" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/grafana/configmap/grafana-configmap.yaml"
+  config_path = "${var.config_path}"
+  variables   = {
+    from_adress = "metrics@${var.domain_config["domain_name"]}"
+    server_url  = "https://metrics.${var.domain_config["domain_name"]}"
+  }
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
 module "grafana_volume" {
   source = "../kubernetes-object"
 
@@ -214,6 +228,11 @@ module "grafana_secret" {
 
   file_path   = "${path.module}/manifest/grafana/secret.yaml"
   config_path = "${var.config_path}"
+  variables   = {
+    smtp_host = "${base64encode("${var.smtp_config["host"]}:${var.smtp_config["port"]}")}"
+    smtp_user = "${base64encode("${var.smtp_config["metrics_user"]}")}"
+    smtp_pass = "${base64encode("${var.smtp_config["metrics_pass"]}")}"
+  }
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
   ]
@@ -249,6 +268,13 @@ module "alertmanager_configmap" {
 
   file_path   = "${path.module}/manifest/alertmanager/configmap.yaml"
   config_path = "${var.config_path}"
+  variables   = {
+    from_adress = "alerts@${var.domain_config["domain_name"]}"
+    smtp_host   = "${base64encode("${var.smtp_config["host"]}:${var.smtp_config["port"]}")}"
+    smtp_user   = "${base64encode("${var.smtp_config["alerts_user"]}")}"
+    smtp_pass   = "${base64encode("${var.smtp_config["alerts_pass"]}")}"
+    slack_hook  = "${var.slack_hook}"
+  }
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
   ]

@@ -32,8 +32,31 @@ spec:
               cpu: 200m
               memory: 200Mi
           env:
+            - name: GF_SERVER_ROOT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: grafana-config
+                    key: server-root-url
             - name: GF_AUTH_BASIC_ENABLED
-              value: "true"
+              valueFrom:
+                configMapKeyRef:
+                  name: grafana-config
+                  key: auth-basic-enabled
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: grafana-config
+                  key: auth-anonymous-enabled
+            - name: GF_SMTP_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: grafana-config
+                  key: smtp-enabled
+            - name: GF_SMTP_FROM_ADRESS
+                valueFrom:
+                  configMapKeyRef:
+                    name: grafana-config
+                    key: smtp-from-adress
             - name: GF_SECURITY_ADMIN_USER
               valueFrom:
                 secretKeyRef:
@@ -44,8 +67,21 @@ spec:
                 secretKeyRef:
                   name: grafana-admin
                   key: password
-            - name: GF_AUTH_ANONYMOUS_ENABLED
-              value: "false"
+            - name: GF_SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: host
+            - name: GF_SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: user
+            - name: GF_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: pass
           volumeMounts:
             - name: grafana-data
               mountPath: /var/lib/grafana

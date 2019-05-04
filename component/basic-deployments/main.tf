@@ -60,4 +60,12 @@ module "monitoring" {
   domain_config  = "${var.domain_config}"
   config_path    = "${local.config_path}"
   backup_role    = "${local.backup_role}"
+  smtp_config    = {
+    host         = "${var.smtp_host}"
+    port         = "${var.smtp_port}"
+    metrics_user = "${var.smtp_metrics_user}"
+    metrics_pass = "${var.smtp_metrics_pass}"
+    alerts_user  = "${var.smtp_alerts_user}"
+    alerts_pass  = "${var.smtp_alerts_pass}"
+  }
 }

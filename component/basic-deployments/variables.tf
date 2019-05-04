@@ -25,3 +25,31 @@ variable "is_main_cluster" {
 variable "virtual_cloud_cidr" {
   type = "string"
 }
+
+variable "smtp_host" {
+  type = "string"
+}
+
+variable "smtp_port" {
+  type = "string"
+}
+
+variable "smtp_alerts_user" {
+  type = "string"
+}
+
+variable "smtp_alerts_pass" {
+  type = "string"
+}
+
+variable "smtp_metrics_user" {
+  type = "string"
+}
+
+variable "smtp_metrics_pass" {
+  type = "string"
+}
+
+variable "slack_hook" {
+  type = "string"
+}

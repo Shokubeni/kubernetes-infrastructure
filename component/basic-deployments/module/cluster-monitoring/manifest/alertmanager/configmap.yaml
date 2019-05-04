@@ -8,8 +8,12 @@ metadata:
 data:
   config.yml: |-
     global:
+      smtp_smarthost: ${smtp_host}
+      smtp_auth_username: ${smtp_user}
+      smtp_auth_password: ${smtp_pass}
+      smtp_from: ${from_adress}
       resolve_timeout: 5m
-      slack_api_url: "<your_slack_hook>"
+      slack_api_url: ${slack_hook}
 
     templates:
     - '/etc/alertmanager-templates/*.tmpl'
@@ -34,12 +38,12 @@ data:
 
     - name: 'devops'
       slack_configs:
-      - channel: '#k8-alerts'
+      - channel: '#environment-alerts'
         send_resolved: true
 
     - name: 'dev'
       slack_configs:
-      - channel: '#k8-alerts'
+      - channel: '#environment-alerts'
         send_resolved: true
 
 ---

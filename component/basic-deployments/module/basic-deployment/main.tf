@@ -10,6 +10,9 @@ module "ingress_controller_rbac" {
 
   file_path   = "${path.module}/manifest/ingress-controller/rbac.yaml"
   config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.ingress_controller_namespace.task_id}"
+  ]
 }
 
 module "ingress_controller_configmap" {
@@ -17,6 +20,9 @@ module "ingress_controller_configmap" {
 
   file_path   = "${path.module}/manifest/ingress-controller/configmap.yaml"
   config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.ingress_controller_namespace.task_id}"
+  ]
 }
 
 module "ingress_controller_daemonset" {
@@ -24,6 +30,9 @@ module "ingress_controller_daemonset" {
 
   file_path   = "${path.module}/manifest/ingress-controller/daemonset.yaml"
   config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.ingress_controller_namespace.task_id}"
+  ]
 }
 
 module "ingress_controller_service" {
@@ -32,6 +41,9 @@ module "ingress_controller_service" {
   file_path   = "${path.module}/manifest/ingress-controller/service.yaml"
   config_path = "${var.config_path}"
   delay_time  = "120s"
+  depends_on  = [
+    "${module.ingress_controller_namespace.task_id}"
+  ]
 }
 
 /*  --------------------------------------------------------------------- */
@@ -48,6 +60,9 @@ module "kube_lego_rbac" {
 
   file_path   = "${path.module}/manifest/kube-lego/rbac.yaml"
   config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.kube_lego_namespace.task_id}"
+  ]
 }
 
 module "kube_lego_configmap" {
@@ -58,6 +73,9 @@ module "kube_lego_configmap" {
   variables   = {
     domain_name = "${var.domain_config["domain_name"]}"
   }
+  depends_on  = [
+    "${module.kube_lego_namespace.task_id}"
+  ]
 }
 
 module "kube_lego_daemonset" {
@@ -65,4 +83,7 @@ module "kube_lego_daemonset" {
 
   file_path   = "${path.module}/manifest/kube-lego/daemonset.yaml"
   config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.kube_lego_namespace.task_id}"
+  ]
 }

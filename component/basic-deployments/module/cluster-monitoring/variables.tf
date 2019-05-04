@@ -13,3 +13,11 @@ variable "config_path" {
 variable "backup_role" {
   type = "map"
 }
+
+variable "smtp_config" {
+  type = "map"
+}
+
+variable "slack_hook" {
+  type = "string"
+}
