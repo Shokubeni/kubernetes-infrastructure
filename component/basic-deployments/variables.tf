@@ -50,6 +50,10 @@ variable "smtp_metrics_pass" {
   type = "string"
 }
 
+variable "slack_channel" {
+  type = "string"
+}
+
 variable "slack_hook" {
   type = "string"
 }

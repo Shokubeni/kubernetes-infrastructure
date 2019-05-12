@@ -60,6 +60,8 @@ module "monitoring" {
   domain_config  = "${var.domain_config}"
   config_path    = "${local.config_path}"
   backup_role    = "${local.backup_role}"
+  slack_channel  = "${var.slack_channel}"
+  slack_hook     = "${var.slack_hook}"
   smtp_config    = {
     host         = "${var.smtp_host}"
     port         = "${var.smtp_port}"

@@ -18,14 +18,10 @@ data "template_file" "kubernetes_object" {
 }
 
 resource "null_resource" "kubernetes_object" {
-  depends_on = ["data.template_file.kubernetes_object"]
+  depends_on = ["null_resource.dependency_getter"]
 
   triggers {
-    build_number = "${
-      length(values(var.variables)) > 0
-        ? "${sha256("${data.template_file.kubernetes_object.rendered}")}"
-        : "${sha256(file("${var.file_path}"))}"
-    }"
+    build_number = "${sha256(file("${var.file_path}"))}:${sha256(join(",", values(var.variables)))}"
   }
 
   provisioner "local-exec" {

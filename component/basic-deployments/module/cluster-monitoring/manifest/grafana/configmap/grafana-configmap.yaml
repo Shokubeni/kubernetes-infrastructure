@@ -7,8 +7,10 @@ metadata:
   name: grafana-config
 data:
   server-root-url: ${server_url}
-  smtp-from-adress: ${from_adress}
+  server-domain: ${domain_name}
+  smtp-from-address: ${from_adress}
   smtp-enabled: "true"
+  auth-anonymous-org-name: ${cluster_name}
   auth-anonymous-enabled: "false"
   auth-basic-enabled: "true"
 

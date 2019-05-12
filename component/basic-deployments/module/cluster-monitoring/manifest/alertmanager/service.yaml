@@ -7,7 +7,6 @@ metadata:
   name: alertmanager
   annotations:
     prometheus.io/scrape: 'true'
-    prometheus.io/path: '/metrics'
 spec:
   ports:
     - targetPort: 9093

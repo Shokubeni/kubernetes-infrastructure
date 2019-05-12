@@ -18,6 +18,10 @@ variable "smtp_config" {
   type = "map"
 }
 
+variable "slack_channel" {
+  type = "string"
+}
+
 variable "slack_hook" {
   type = "string"
 }

@@ -409,7 +409,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(container_fs_usage_bytes{id=\"/\",kubernetes_io_hostname=~\"^$Node$\",container_name!=\"POD\"}) / sum(container_fs_limit_bytes{id=\"/\",kubernetes_io_hostname=~\"^$Node$\",container_name!=\"POD\"}) * 100",
+              "expr": "(sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"}) - sum(node_filesystem_avail_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"})) / sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"}) * 100",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
@@ -839,7 +839,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum (container_fs_usage_bytes{id=\"/\",kubernetes_io_hostname=~\"^$Node$\",container_name!=\"POD\"})",
+              "expr": "sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"}) - sum(node_filesystem_avail_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"})",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
@@ -925,7 +925,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum (container_fs_limit_bytes{id=\"/\",kubernetes_io_hostname=~\"^$Node$\",container_name!=\"POD\"})",
+              "expr": "sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"})",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
@@ -1899,7 +1899,7 @@ data:
         ]
       },
       "timezone": "browser",
-      "title": "Kubernetes Monitoring",
+      "title": "Kubernetes Cluster Monitoring",
       "uid": "-2kz1jfik",
       "version": 1
     }
@@ -3818,7 +3818,7 @@ data:
           "tableColumn": "__name__",
           "targets": [
             {
-              "expr": "kube_pod_container_status_restarts_total{pod_template_hash=\"\",pod=\"$Pod\", container=\"$container\"} ",
+              "expr": "sum(kube_pod_container_status_restarts_total{pod_template_hash=\"\",pod=\"$Pod\", container=\"$container\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "refId": "A",
@@ -3899,7 +3899,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "kube_pod_container_status_running{pod_template_hash=\"\",namespace=\"$namespace\", pod=\"$Pod\",container=\"$container\"}",
+              "expr": "sum(kube_pod_container_status_running{pod_template_hash=\"\",namespace=\"$namespace\", pod=\"$Pod\",container=\"$container\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",

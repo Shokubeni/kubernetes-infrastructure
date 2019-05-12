@@ -8,8 +8,6 @@ metadata:
   labels:
     app: node-exporter
 spec:
-  updateStrategy:
-    type: OnDelete
   selector:
     matchLabels:
       app: node-exporter
@@ -18,22 +16,90 @@ spec:
       labels:
         app: node-exporter
     spec:
-      priorityClassName: system-node-critical
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                  - "worker"
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                  - ""
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
       containers:
         - name: node-exporter
-          image: prom/node-exporter:v0.16.0
+          image: quay.io/prometheus/node-exporter:v0.18.0
           args:
-            - --path.procfs=/host/proc
-            - --path.sysfs=/host/sys
+            - "--collector.filesystem.ignored-mount-points=\"^/(sys|proc|host|etc)($|/)\""
+            - "--collector.diskstats.ignored-devices=\"^(ram|loop|fd)\\d+$\""
+            - "--path.procfs=/host/proc"
+            - "--path.sysfs=/host/sys"
+            - "--path.rootfs=/rootfs"
+            - "--collector.diskstats"
+            - "--collector.filesystem"
+            - "--no-collector.conntrack"
+            - "--no-collector.cpu"
+            - "--no-collector.filefd"
+            - "--no-collector.loadavg"
+            - "--no-collector.meminfo"
+            - "--no-collector.netdev"
+            - "--no-collector.netstat"
+            - "--no-collector.ntp"
+            - "--no-collector.sockstat"
+            - "--no-collector.stat"
+            - "--no-collector.textfile"
+            - "--no-collector.time"
+            - "--no-collector.uname"
+            - "--no-collector.vmstat"
+            - "--no-collector.arp"
+            - "--no-collector.bcache"
+            - "--no-collector.bonding"
+            - "--no-collector.buddyinfo"
+            - "--no-collector.drbd"
+            - "--no-collector.edac"
+            - "--no-collector.entropy"
+            - "--no-collector.hwmon"
+            - "--no-collector.infiniband"
+            - "--no-collector.interrupts"
+            - "--no-collector.ipvs"
+            - "--no-collector.ksmd"
+            - "--no-collector.logind"
+            - "--no-collector.mdadm"
+            - "--no-collector.meminfo_numa"
+            - "--no-collector.mountstats"
+            - "--no-collector.nfs"
+            - "--no-collector.nfsd"
+            - "--no-collector.qdisc"
+            - "--no-collector.runit"
+            - "--no-collector.supervisord"
+            - "--no-collector.systemd"
+            - "--no-collector.tcpstat"
+            - "--no-collector.timex"
+            - "--no-collector.wifi"
+            - "--no-collector.xfs"
+            - "--no-collector.zfs"
           ports:
             - containerPort: 9100
-              hostPort: 9100
+          securityContext:
+            privileged: true
+            runAsUser: 0
           volumeMounts:
             - name: proc
               mountPath: /host/proc
               readOnly: true
             - name: sys
               mountPath: /host/sys
+              readOnly: true
+            - name: root
+              mountPath: /rootfs
               readOnly: true
           resources:
             requests:
@@ -42,7 +108,6 @@ spec:
             limits:
               memory: 250Mi
               cpu: 10m
-      hostNetwork: true
       hostPID: true
       volumes:
         - name: proc
@@ -51,5 +116,8 @@ spec:
         - name: sys
           hostPath:
             path: /sys
+        - name: root
+          hostPath:
+            path: /
 
 ---

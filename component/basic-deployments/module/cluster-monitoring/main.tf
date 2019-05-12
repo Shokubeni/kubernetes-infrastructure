@@ -185,8 +185,10 @@ module "grafana_general_config" {
   file_path   = "${path.module}/manifest/grafana/configmap/grafana-configmap.yaml"
   config_path = "${var.config_path}"
   variables   = {
-    from_adress = "metrics@${var.domain_config["domain_name"]}"
-    server_url  = "https://metrics.${var.domain_config["domain_name"]}"
+    from_adress  = "metrics@${var.domain_config["domain_name"]}"
+    server_url   = "https://metrics.${var.domain_config["domain_name"]}"
+    domain_name  = "${var.domain_config["domain_name"]}"
+    cluster_name = "${var.cluster_config["name"]}"
   }
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
@@ -269,11 +271,12 @@ module "alertmanager_configmap" {
   file_path   = "${path.module}/manifest/alertmanager/configmap.yaml"
   config_path = "${var.config_path}"
   variables   = {
-    from_adress = "alerts@${var.domain_config["domain_name"]}"
-    smtp_host   = "${base64encode("${var.smtp_config["host"]}:${var.smtp_config["port"]}")}"
-    smtp_user   = "${base64encode("${var.smtp_config["alerts_user"]}")}"
-    smtp_pass   = "${base64encode("${var.smtp_config["alerts_pass"]}")}"
-    slack_hook  = "${var.slack_hook}"
+    from_adress   = "alerts@${var.domain_config["domain_name"]}"
+    smtp_host     = "${var.smtp_config["host"]}:${var.smtp_config["port"]}"
+    smtp_user     = "${var.smtp_config["alerts_user"]}"
+    smtp_pass     = "${var.smtp_config["alerts_pass"]}"
+    slack_channel = "${var.slack_channel}"
+    slack_hook    = "${var.slack_hook}"
   }
   depends_on  = [
     "${module.monitoring_namespace.task_id}"

@@ -8,10 +8,11 @@ metadata:
   annotations:
     prometheus.io/scrape: "true"
 spec:
-  clusterIP: None
   ports:
-    - targetPort: 9100
+    - name: metrics
       port: 9100
+      protocol: TCP
+      targetPort: 9100
   selector:
     app: node-exporter
 
