@@ -1,3 +1,22 @@
+module "cluster_autoscaler_rbac" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/cluster-autoscaler/rbac.yaml"
+  config_path = "${var.config_path}"
+}
+
+module "ingress_controller_deployment" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/cluster-autoscaler/deployment.yaml"
+  config_path = "${var.config_path}"
+  variables   = {
+    cluster_id = "${var.cluster_config["id"]}"
+  }
+}
+
+/*  --------------------------------------------------------------------- */
+
 module "ingress_controller_namespace" {
   source = "../kubernetes-object"
 

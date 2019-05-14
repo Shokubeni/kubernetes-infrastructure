@@ -49,8 +49,9 @@ module "volume" {
 module "basic" {
   source = "./module/basic-deployment"
 
-  domain_config = "${var.domain_config}"
-  config_path   = "${local.config_path}"
+  domain_config  = "${var.domain_config}"
+  cluster_config = "${local.cluster_config}"
+  config_path    = "${local.config_path}"
 }
 
 module "monitoring" {

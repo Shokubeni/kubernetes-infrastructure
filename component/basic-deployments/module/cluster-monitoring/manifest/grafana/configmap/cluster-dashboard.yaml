@@ -409,7 +409,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "(sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"}) - sum(node_filesystem_avail_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"})) / sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"}) * 100",
+              "expr": "(sum(node_filesystem_size_bytes{fstype=\"ext4\",hostname=~\"^$Node$\",mountpoint=~\"^(/|/var/lib/kubelet/pods.*)$\"}) - sum(node_filesystem_avail_bytes{fstype=\"ext4\",hostname=~\"^$Node$\",mountpoint=~\"^(/|/var/lib/kubelet/pods.*)$\"})) / sum(node_filesystem_size_bytes{fstype=\"ext4\",hostname=~\"^$Node$\",mountpoint=~\"^(/|/var/lib/kubelet/pods.*)$\"}) * 100",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
@@ -839,7 +839,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"}) - sum(node_filesystem_avail_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"})",
+              "expr": "sum(node_filesystem_size_bytes{fstype=\"ext4\",hostname=~\"^$Node$\",mountpoint=~\"^(/|/var/lib/kubelet/pods.*)$\"}) - sum(node_filesystem_avail_bytes{fstype=\"ext4\",hostname=~\"^$Node$\",mountpoint=~\"^(/|/var/lib/kubelet/pods.*)$\"})",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
@@ -925,7 +925,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(node_filesystem_size_bytes{fstype="ext4",hostname=~\"^$Node$\",mountpoint=~"^(/|/var/lib/kubelet/pods.*)$"})",
+              "expr": "sum(node_filesystem_size_bytes{fstype=\"ext4\",hostname=~\"^$Node$\",mountpoint=~\"^(/|/var/lib/kubelet/pods.*)$\"})",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,

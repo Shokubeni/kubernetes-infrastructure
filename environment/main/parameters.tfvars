@@ -28,7 +28,7 @@ master_launch_config = {
   ebs_optimized         = false
   monitoring            = false
   on_demand_capasity    = 0
-  max_price             = 0.05
+  max_price             = 0.08
   min_size              = 1
   max_size              = 3
   desired_capacity      = 2
@@ -41,14 +41,14 @@ master_volume_config = {
 }
 
 worker_launch_config = {
-  instance_types        = "r5.large,r4.large"
+  instance_types        = "t3a.xlarge,t3.xlarge"
   shutdown_behavior     = "terminate"
   cpu_credits           = "standard"
   disable_termination   = false
   ebs_optimized         = false
   monitoring            = false
   on_demand_capasity    = 0
-  max_price             = 0.14
+  max_price             = 0.10
   min_size              = 1
   max_size              = 5
   desired_capacity      = 1

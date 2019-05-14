@@ -64,7 +64,8 @@ resource "aws_autoscaling_group" "autoscaling" {
 
   tags = ["${
     list(
-      map("key", "kubernetes.io/cluster/${var.cluster_config["id"]}", "value", "owned", "propagate_at_launch", false)
+      map("key", "kubernetes.io/cluster/${var.cluster_config["id"]}", "value", "owned", "propagate_at_launch", false),
+      map("key", "kubernetes.io/cluster/autoscaler", "value", "enabled", "propagate_at_launch", false)
     )
   }"]
 
