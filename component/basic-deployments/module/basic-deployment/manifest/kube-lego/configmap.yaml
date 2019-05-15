@@ -5,7 +5,7 @@ metadata:
   name: kube-lego
   namespace: kube-lego
 data:
-  lego.url: "https://acme-v01.api.letsencrypt.org/directory"
+  lego.url: "https://${acme_stage}"
   lego.email: "admin@${domain_name}"
 kind: ConfigMap
 

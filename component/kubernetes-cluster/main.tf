@@ -11,8 +11,9 @@ provider "aws" {
 module "common" {
   source = "./module/common"
 
-  cluster_label = "${var.cluster_label}"
-  cluster_name  = "${var.cluster_name}"
+  deployment_type = "${var.deployment_type}"
+  cluster_label   = "${var.cluster_label}"
+  cluster_name    = "${var.cluster_name}"
 }
 
 module "network" {

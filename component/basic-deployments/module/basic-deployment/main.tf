@@ -91,6 +91,11 @@ module "kube_lego_configmap" {
   config_path = "${var.config_path}"
   variables   = {
     domain_name = "${var.domain_config["domain_name"]}"
+    acme_stage  = "${
+        var.cluster_config["type"] == "development"
+            ? "acme-v01.api.letsencrypt.org/directory"
+            : "acme-staging-v02.api.letsencrypt.org/directory"
+        }"
   }
   depends_on  = [
     "${module.kube_lego_namespace.task_id}"

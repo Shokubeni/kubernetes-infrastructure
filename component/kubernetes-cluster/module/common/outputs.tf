@@ -19,6 +19,7 @@ output "cluster_config" {
     docker     = "${module.cluster_initialize.docker_version}"
     account    = "${module.cluster_initialize.account_id}"
     region     = "${module.cluster_initialize.region_name}"
+    type       = "${var.deployment_type}"
   }
 }
 

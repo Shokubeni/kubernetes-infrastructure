@@ -8,6 +8,7 @@ terragrunt = {
       optional_var_files = ["${get_tfvars_dir()}/${find_in_parent_folders("parameters.tfvars", "ignore")}"],
       commands = ["${get_terraform_commands_that_need_vars()}"]
       arguments = [
+        "-var", "deployment_type=${get_env("TF_VAR_DEPLOYMENT_TYPE", "development")}",
         "-var", "backend_bucket=${get_env("TF_VAR_CLUSTER_LABEL", "smart-gears")}.${get_env("TF_VAR_STATE_BUCKET", "terraform-state")}",
         "-var", "backend_region=${get_env("TF_VAR_AWS_REGION", "eu-west-1")}",
         "-var", "provider_profile=${get_env("TF_VAR_AWS_PROFILE", "cluster_operator")}",

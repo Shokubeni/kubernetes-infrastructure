@@ -30,6 +30,10 @@ variable "public_subnets" {
   type = "map"
 }
 
+variable "deployment_type" {
+  type = "string"
+}
+
 variable "master_launch_config" {
   type = "map"
 }
