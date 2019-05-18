@@ -41,9 +41,8 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             yield autoscaling_1.completeLifecycle(event, types_1.LifecycleResult.Continue);
         }
         else {
-            const snapshotName = yield s3_1.getLastSnapshot(process.env.S3_BUCKED_NAME);
+            const snapshotName = yield s3_1.getLastSnapshot(process.env.S3_BACKUP_BUCKET);
             yield autoscaling_1.completeLifecycle(event, types_1.LifecycleResult.Continue);
-            console.log('--- snapshot', snapshotName);
             if (!snapshotName) {
                 yield manager_1.runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
                     S3BucketRegion: [process.env.S3_BUCKET_REGION],

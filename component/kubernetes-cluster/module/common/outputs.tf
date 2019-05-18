@@ -39,6 +39,15 @@ output "worker_queue" {
   }
 }
 
+output "backup_bucket" {
+  value = {
+    id     = "${module.backup_bucket.bucket_id}"
+    arn    = "${module.backup_bucket.bucket_arn}"
+    name   = "${module.backup_bucket.bucket_name}"
+    region = "${module.backup_bucket.bucket_region}"
+  }
+}
+
 output "secure_bucket" {
   value = {
     id     = "${module.secure_bucket.bucket_id}"

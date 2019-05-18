@@ -1,39 +1,3 @@
-resource "aws_backup_vault" "monitoring" {
-  name = "${var.cluster_config["label"]}-monitoring_${var.cluster_config["id"]}"
-}
-
-resource "aws_backup_plan" "monitoring" {
-  name = "${var.cluster_config["label"]}-monitoring_${var.cluster_config["id"]}"
-
-  rule {
-    target_vault_name = "${aws_backup_vault.monitoring.name}"
-    rule_name         = "DailyBackups"
-    schedule          = "cron(0 0 ? * * *)"
-
-    lifecycle {
-      delete_after = 7
-    }
-  }
-}
-
-resource "aws_backup_selection" "monitoring" {
-  name         = "services"
-  plan_id      = "${aws_backup_plan.monitoring.id}"
-  iam_role_arn = "${var.backup_role["arn"]}"
-
-  selection_tag {
-    type  = "STRINGEQUALS"
-    key   = "kubernetes.io/cluster/${var.cluster_config["id"]}"
-    value = "owned"
-  }
-
-  selection_tag {
-    type  = "STRINGEQUALS"
-    key   = "kubernetes.io/created-for/pvc/namespace"
-    value = "monitoring"
-  }
-}
-
 module "monitoring_namespace" {
   source = "../kubernetes-object"
 

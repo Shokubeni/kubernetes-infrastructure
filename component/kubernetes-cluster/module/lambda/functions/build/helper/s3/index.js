@@ -15,7 +15,7 @@ function getLastSnapshot(bucketName) {
         const snapshots = yield bucket
             .listObjects({
             Bucket: bucketName,
-            Prefix: 'snapshots/',
+            Prefix: 'backups/',
         })
             .promise();
         if (snapshots.Contents && (snapshots.Contents.length > 0)) {
@@ -26,7 +26,7 @@ function getLastSnapshot(bucketName) {
             })
                 .pop();
             if (snapshot) {
-                return snapshot.Key || null;
+                return snapshot.Key ? snapshot.Key.split('/')[1] : null;
             }
         }
         return null;

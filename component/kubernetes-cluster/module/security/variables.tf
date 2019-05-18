@@ -2,6 +2,10 @@ variable "cluster_config" {
   type = "map"
 }
 
+variable "backup_bucket" {
+  type = "map"
+}
+
 variable "secure_bucket" {
   type = "map"
 }

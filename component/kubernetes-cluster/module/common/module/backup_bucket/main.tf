@@ -1,9 +1,8 @@
-resource "aws_s3_bucket" "bucket" {
-  bucket        = "${var.cluster_label}.cluster-data.${var.cluster_id}"
+resource "aws_s3_bucket" "backup" {
+  bucket        = "${var.cluster_label}.backup-data.${var.cluster_id}"
   region        = "${var.bucket_region}"
   acl           = "private"
   force_destroy = true
-
 
   server_side_encryption_configuration {
     rule {
@@ -13,20 +12,10 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
-  lifecycle_rule {
-    id      = "commands"
-    prefix  = "commands/"
-    enabled = true
-
-    expiration {
-      days = 1
-    }
-  }
-
   tags = "${merge(
     map(
       "kubernetes.io/cluster/${var.cluster_id}", "owned",
-      "Name", "${var.cluster_name} Cluster Bucket"
+      "Name", "${var.cluster_name} Backup Bucket"
     )
   )}"
 }

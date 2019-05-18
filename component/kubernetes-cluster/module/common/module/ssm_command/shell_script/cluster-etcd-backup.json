@@ -1,14 +1,6 @@
 {
   "schemaVersion": "2.2",
   "description": "Backup etcd database",
-  "parameters": {
-    "S3BucketRegion": {
-      "type": "String"
-    },
-    "S3BucketName": {
-      "type": "String"
-    }
-  },
   "mainSteps": [
     {
       "action": "aws:runShellScript",
@@ -16,10 +8,8 @@
       "inputs": {
         "runCommand": [
           "sudo su",
-          "ETCD_BACKUP_DATE=$(date +\"%y-%m-%d_%T\")",
-          "ETCDCTL_API=3 etcdctl  --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt --key /etc/kubernetes/pki/etcd/healthcheck-client.key snapshot save ./snapshot_$ETCD_BACKUP_DATE.db",
-          "aws s3 cp ./snapshot_$ETCD_BACKUP_DATE.db s3://{{ S3BucketName }}/snapshots/snapshot_$ETCD_BACKUP_DATE.db --region {{ S3BucketRegion }}",
-          "rm ./snapshot_$ETCD_BACKUP_DATE.db"
+          "ETCD_BACKUP_DATE=$(date +\"%d.%m.%y-%H.%M.%S\")",
+          "velero backup create $ETCD_BACKUP_DATE --wait --kubeconfig /etc/kubernetes/admin.conf"
         ]
       }
     }

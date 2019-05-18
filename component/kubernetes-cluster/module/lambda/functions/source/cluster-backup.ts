@@ -1,12 +1,10 @@
-import { getMasterNodeId, isMasterNodeExists } from './helper/autoscaling';
-import { isInSystemManager, runCommand } from './helper/manager';
+import {getMasterNodeId, isMasterNodeExists} from './helper/autoscaling';
+import {isInSystemManager, runCommand} from './helper/manager';
 
 declare var process : {
   env: {
     MASTER_AUTOSCALING_GROUP: string,
     ETCD_BACKUP_COMMAND: string,
-    S3_BUCKET_REGION: string,
-    S3_BUCKED_NAME: string,
     CLUSTER_ID: string,
   },
 };
@@ -16,10 +14,7 @@ export const handler = async (): Promise<void> => {
     const instanceId = await getMasterNodeId(process.env.MASTER_AUTOSCALING_GROUP);
 
     if (instanceId && await isInSystemManager(instanceId)) {
-      await runCommand(instanceId, process.env.ETCD_BACKUP_COMMAND, {
-        S3BucketRegion: [process.env.S3_BUCKET_REGION],
-        S3BucketName: [process.env.S3_BUCKED_NAME],
-      });
+      await runCommand(instanceId, process.env.ETCD_BACKUP_COMMAND);
     }
   }
 };

@@ -34,7 +34,7 @@ resource "null_resource" "kubernetes_object" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "kubectl ${local.config_argument} delete -f ${var.file_path} && sleep ${var.delay_time}"
+    command = "kubectl ${local.config_argument} delete -f ${var.file_path} 2>&1 || true && sleep ${var.delay_time}"
   }
 }
 

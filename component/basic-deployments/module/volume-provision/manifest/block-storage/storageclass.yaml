@@ -5,8 +5,8 @@ kind: StorageClass
 metadata:
   name: aws-ebs
 provisioner: kubernetes.io/aws-ebs
-reclaimPolicy: Retain
 parameters:
+  encrypted: "true"
   type: gp2
 
 ---

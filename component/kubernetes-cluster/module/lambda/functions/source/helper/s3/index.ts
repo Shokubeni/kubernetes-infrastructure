@@ -6,7 +6,7 @@ export async function getLastSnapshot(bucketName: string): Promise<string|null> 
   const snapshots = await bucket
      .listObjects({
        Bucket: bucketName,
-       Prefix: 'snapshots/',
+       Prefix: 'backups/',
      } as ListObjectsRequest)
      .promise();
 
@@ -19,7 +19,7 @@ export async function getLastSnapshot(bucketName: string): Promise<string|null> 
       .pop();
 
     if (snapshot) {
-      return snapshot.Key || null;
+      return snapshot.Key ? snapshot.Key.split('/')[1] : null;
     }
   }
 

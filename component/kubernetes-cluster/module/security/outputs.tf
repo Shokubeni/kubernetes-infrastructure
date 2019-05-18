@@ -11,19 +11,12 @@ output "master_node" {
 
 output "worker_node" {
   value = {
-    group_id    = "${module.security_group.worker_group_id}"
-    role_id     = "${module.instance_role.worker_role_id}"
-    role_arn    = "${module.instance_role.worker_role_arn}"
+    group_id = "${module.security_group.worker_group_id}"
+    role_id = "${module.instance_role.worker_role_id}"
+    role_arn = "${module.instance_role.worker_role_arn}"
     private_key = "${module.tls_key_pair.worker_private_key}"
-    public_key  = "${module.tls_key_pair.worker_public_key}"
-    key_id      = "${module.tls_key_pair.worker_key_id}"
-  }
-}
-
-output "volume_backup" {
-  value = {
-    id  = "${module.backup_role.backup_role_id}"
-    arn = "${module.backup_role.backup_role_arn}"
+    public_key = "${module.tls_key_pair.worker_public_key}"
+    key_id = "${module.tls_key_pair.worker_key_id}"
   }
 }
 
@@ -59,6 +52,13 @@ output "worker_publish" {
   value = {
     id  = "${module.publish_role.worker_publish_id}"
     arn = "${module.publish_role.worker_publish_arn}"
+  }
+}
+
+output "backup_user" {
+  value = {
+    id  = "${module.backup_user.backup_user_id}"
+    arn = "${module.backup_user.backup_user_arn}"
   }
 }
 

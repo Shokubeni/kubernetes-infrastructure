@@ -19,6 +19,7 @@ declare var process : {
     KUBERNETES_VERSION: string,
     LOAD_BALANCER_DNS: string,
     DOCKER_VERSION: string,
+    S3_BACKUP_BUCKET: string,
     S3_BUCKET_REGION: string,
     S3_BUCKED_NAME: string,
     SQS_QUEUE_URL: string,
@@ -58,9 +59,8 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       await completeLifecycle(event, LifecycleResult.Continue);
 
     } else {
-      const snapshotName = await getLastSnapshot(process.env.S3_BUCKED_NAME);
+      const snapshotName = await getLastSnapshot(process.env.S3_BACKUP_BUCKET);
       await completeLifecycle(event, LifecycleResult.Continue);
-      console.log('--- snapshot', snapshotName);
 
       if (!snapshotName) {
         await runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {

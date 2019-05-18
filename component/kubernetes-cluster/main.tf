@@ -30,10 +30,19 @@ module "security" {
   source = "./module/security"
 
   cluster_config     = "${module.common.cluster_config}"
+  backup_bucket      = "${module.common.backup_bucket}"
   secure_bucket      = "${module.common.secure_bucket}"
   master_queue       = "${module.common.master_queue}"
   worker_queue       = "${module.common.worker_queue}"
   network_data       = "${module.network.network_data}"
+}
+
+module "workload" {
+  source = "./module/workload"
+
+  backup_bucket      = "${module.common.backup_bucket}"
+  secure_bucket      = "${module.common.secure_bucket}"
+  backup_user        = "${module.security.backup_user}"
 }
 
 module "balancer" {
@@ -50,6 +59,7 @@ module "lambda" {
   cluster_config     = "${module.common.cluster_config}"
   system_commands    = "${module.common.system_command}"
   secure_bucket      = "${module.common.secure_bucket}"
+  backup_bucket      = "${module.common.backup_bucket}"
   balancer_data      = "${module.balancer.balancer_data}"
   master_queue       = "${module.common.master_queue}"
   worker_queue       = "${module.common.worker_queue}"

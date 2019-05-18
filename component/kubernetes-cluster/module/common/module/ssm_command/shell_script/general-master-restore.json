@@ -32,22 +32,34 @@
           "aws s3 cp s3://{{ S3BucketName }}/configs/kubeadm.conf ./kubeadm-config.yaml --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/{{ SnapshotName }} ./{{ SnapshotName }} --region {{ S3BucketRegion }}",
 
-          "rm -rf /var/lib/etcd",
-          "mkdir -p /var/lib/etcd",
-          "ETCDCTL_API=3 etcdctl snapshot restore ./{{ SnapshotName }}",
-          "mv default.etcd/member/ /var/lib/etcd/",
-          "rm ./{{ SnapshotName }}",
-          "rm -rf default.etcd",
-
           "kubeadm init --ignore-preflight-errors=DirAvailable--var-lib-etcd --config=kubeadm-config.yaml",
           "mkdir -p $HOME/.kube",
           "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
           "chown $(id -u):$(id -g) $HOME/.kube/config",
           "export KUBECONFIG=$HOME/.kube/config",
+          "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\\n')\"",
 
           "kubeadm token create --print-join-command > join-command",
           "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command --region {{ S3BucketRegion }} --content-type \"text/plain\"",
-          "rm ./join-command"
+          "rm ./join-command",
+
+          "wget https://github.com/heptio/velero/releases/download/v1.0.0-rc.1/velero-v1.0.0-rc.1-linux-amd64.tar.gz -O velero.tar.gz",
+          "mkdir velero",
+          "tar -xvf velero.tar.gz -C ./velero",
+          "cp velero/velero-v1.0.0-rc.1-linux-amd64/velero /usr/local/bin",
+          "rm velero.tar.gz",
+          "rm -rf velero",
+          "aws s3 cp s3://{{ S3BucketName }}/workload/backup.yaml ./backup-workload.yaml --region {{ S3BucketRegion }}",
+          "kubectl apply -f ./backup-workload.yaml",
+          "rm ./backup-workload.yaml",
+          "sleep 60",
+
+          "velero backup download {{ SnapshotName }}",
+          "mkdir backup",
+          "tar -xvf {{ SnapshotName }}-data.tar.gz -C ./backup",
+          "kubectl apply -f backup/resources/nodes/*",
+          "rm -rf backup",
+          "until velero restore create --from-backup={{ SnapshotName }}; do echo 'restoring'; done"
         ]
       }
     }

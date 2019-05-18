@@ -13,7 +13,3 @@ output "network_data" {
 output "config_path" {
   value = "${module.finalize.config_path}"
 }
-
-output "backup_role" {
-  value = "${module.security.volume_backup}"
-}

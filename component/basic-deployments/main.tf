@@ -22,7 +22,6 @@ locals {
   cluster_config = "${data.terraform_remote_state.kubernetes.cluster_config}"
   balancer_data  = "${data.terraform_remote_state.kubernetes.balancer_data}"
   network_data   = "${data.terraform_remote_state.kubernetes.network_data}"
-  backup_role    = "${data.terraform_remote_state.kubernetes.backup_role}"
   config_path    = "${data.terraform_remote_state.kubernetes.config_path}"
 }
 
@@ -60,7 +59,6 @@ module "monitoring" {
   cluster_config = "${local.cluster_config}"
   domain_config  = "${var.domain_config}"
   config_path    = "${local.config_path}"
-  backup_role    = "${local.backup_role}"
   slack_channel  = "${var.slack_channel}"
   slack_hook     = "${var.slack_hook}"
   smtp_config    = {

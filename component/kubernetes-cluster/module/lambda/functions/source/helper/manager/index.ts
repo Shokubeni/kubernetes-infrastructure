@@ -13,7 +13,7 @@ import { CommandStatus } from './types';
 
 const systemManager = new SSM();
 
-export async function runCommand(event: SQSEvent|InstanceId, command: string, params: Parameters): Promise<void> {
+export async function runCommand(event: SQSEvent|InstanceId, command: string, params?: Parameters): Promise<void> {
   const instanceId = (typeof event === 'object')
     ? JSON.parse(event.Records[0].body).EC2InstanceId
     : event;

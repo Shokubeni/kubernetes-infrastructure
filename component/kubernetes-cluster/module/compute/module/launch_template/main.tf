@@ -62,6 +62,7 @@ resource "aws_launch_template" "launch" {
       delete_on_termination = "${local.delete_on_termination}"
       volume_type           = "${local.volume_type}"
       volume_size           = "${local.volume_size}"
+      encrypted             = "true"
     }
   }
 

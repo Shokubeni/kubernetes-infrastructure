@@ -10,7 +10,7 @@ resource "aws_lambda_function" "cluster_backup" {
   handler                        = "build/cluster-backup.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = "${var.cloudwatch_role["arn"]}"
-  runtime                        = "nodejs8.10"
+  runtime                        = "nodejs10.x"
   timeout                        = 600
   memory_size                    = 256
   reserved_concurrent_executions = 1
@@ -19,8 +19,6 @@ resource "aws_lambda_function" "cluster_backup" {
     variables = {
       MASTER_AUTOSCALING_GROUP = "${var.cluster_config["label"]}-master_${var.cluster_config["id"]}"
       ETCD_BACKUP_COMMAND      = "${var.system_commands["cluster_etcd_backup"]}"
-      S3_BUCKET_REGION         = "${var.secure_bucket["region"]}"
-      S3_BUCKED_NAME           = "${var.secure_bucket["id"]}"
       CLUSTER_ID               = "${var.cluster_config["id"]}"
     }
   }
@@ -32,7 +30,7 @@ resource "aws_lambda_function" "renew_token" {
   handler                        = "build/renew_token.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = "${var.cloudwatch_role["arn"]}"
-  runtime                        = "nodejs8.10"
+  runtime                        = "nodejs10.x"
   timeout                        = 600
   memory_size                    = 256
   reserved_concurrent_executions = 1
@@ -54,7 +52,7 @@ resource "aws_lambda_function" "master_lifecycle" {
   handler                        = "build/master-initialize.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = "${var.master_role["arn"]}"
-  runtime                        = "nodejs8.10"
+  runtime                        = "nodejs10.x"
   timeout                        = 600
   memory_size                    = 512
   reserved_concurrent_executions = 5
@@ -70,6 +68,7 @@ resource "aws_lambda_function" "master_lifecycle" {
       KUBERNETES_VERSION             = "${var.cluster_config["kubernetes"]}"
       DOCKER_VERSION                 = "${var.cluster_config["docker"]}"
       LOAD_BALANCER_DNS              = "${var.balancer_data["dns"]}"
+      S3_BACKUP_BUCKET               = "${var.backup_bucket["id"]}"
       S3_BUCKET_REGION               = "${var.secure_bucket["region"]}"
       S3_BUCKED_NAME                 = "${var.secure_bucket["id"]}"
       SQS_QUEUE_URL                  = "${var.master_queue["id"]}"
@@ -86,7 +85,7 @@ resource "aws_lambda_function" "worker_lifecycle" {
   handler                        = "build/worker-initialize.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = "${var.worker_role["arn"]}"
-  runtime                        = "nodejs8.10"
+  runtime                        = "nodejs10.x"
   timeout                        = 600
   memory_size                    = 512
   reserved_concurrent_executions = 5

@@ -5,10 +5,11 @@ module "security_group" {
   cluster_config   = "${var.cluster_config}"
 }
 
-module "backup_role" {
-  source = "./module/backup_role"
+module "backup_user" {
+  source = "./module/backup_user"
 
   cluster_config   = "${var.cluster_config}"
+  bucket_name      = "${var.backup_bucket["id"]}"
 }
 
 module "instance_role" {
