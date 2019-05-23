@@ -2,7 +2,7 @@
 //*                              Network                               *
 //**********************************************************************
 virtual_cloud_cidr = "172.16.0.0/16"
-use_nat_gateways = "true"
+nat_instance_type = "t3.micro"
 is_main_cluster = "true"
 private_subnets = {
   "172.16.0.0/20"  = "us-east-1b"

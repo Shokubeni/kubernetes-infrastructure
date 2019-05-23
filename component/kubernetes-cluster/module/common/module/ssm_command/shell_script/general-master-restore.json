@@ -32,7 +32,7 @@
           "aws s3 cp s3://{{ S3BucketName }}/configs/kubeadm.conf ./kubeadm-config.yaml --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/{{ SnapshotName }} ./{{ SnapshotName }} --region {{ S3BucketRegion }}",
 
-          "kubeadm init --ignore-preflight-errors=DirAvailable--var-lib-etcd --config=kubeadm-config.yaml",
+          "kubeadm init --config=kubeadm-config.yaml",
           "mkdir -p $HOME/.kube",
           "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
           "chown $(id -u):$(id -g) $HOME/.kube/config",

@@ -39,8 +39,8 @@ var NodeRole;
 })(NodeRole = exports.NodeRole || (exports.NodeRole = {}));
 var NodeState;
 (function (NodeState) {
-    NodeState["RuntimeInstalled"] = "runtime-installed";
-    NodeState["NodeInitialized"] = "node-initialized";
+    NodeState["InitProcessing"] = "init:processing";
+    NodeState["InitFinished"] = "init:finished";
 })(NodeState = exports.NodeState || (exports.NodeState = {}));
 var TagName;
 (function (TagName) {

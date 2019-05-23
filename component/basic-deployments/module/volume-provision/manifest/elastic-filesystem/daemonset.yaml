@@ -15,6 +15,13 @@ spec:
       containers:
         - name: efs-provisioner
           image: quay.io/external_storage/efs-provisioner:latest
+          resources:
+            limits:
+              cpu: 50m
+              memory: 256Mi
+            requests:
+              cpu: 25m
+              memory: 128Mi
           env:
             - name: FILE_SYSTEM_ID
               valueFrom:

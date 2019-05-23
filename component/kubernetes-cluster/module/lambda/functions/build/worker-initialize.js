@@ -36,7 +36,7 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
                 S3BucketName: [process.env.S3_BUCKED_NAME],
             });
             yield autoscaling_1.setInstanceTags(event, [
-                { Key: types_1.TagName.NodeState, Value: types_1.NodeState.NodeInitialized },
+                { Key: types_1.TagName.NodeState, Value: types_1.NodeState.InitFinished },
                 { Key: types_1.TagName.NodeRole, Value: types_1.NodeRole.WorkerNode },
             ]);
             yield autoscaling_1.completeLifecycle(event, types_1.LifecycleResult.Continue);

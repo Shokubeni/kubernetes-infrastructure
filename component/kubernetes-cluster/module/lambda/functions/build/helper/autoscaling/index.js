@@ -94,7 +94,7 @@ function isMasterNodeExists(groupName) {
                     if (tags.length > 0) {
                         const result = tags.some((tag) => {
                             return tag.Key === types_1.TagName.NodeState &&
-                                tag.Value === types_1.NodeState.NodeInitialized;
+                                tag.Value === types_1.NodeState.InitFinished;
                         });
                         if (result) {
                             return true;
@@ -107,6 +107,45 @@ function isMasterNodeExists(groupName) {
     });
 }
 exports.isMasterNodeExists = isMasterNodeExists;
+function isMasterConcurrency(groupName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield autoScalingGroup
+            .describeAutoScalingGroups({
+            AutoScalingGroupNames: [groupName],
+        })
+            .promise();
+        const { Instances } = result.AutoScalingGroups[0];
+        if (Instances) {
+            const checkTypes = [
+                types_1.LifecycleState.Pending, types_1.LifecycleState.PendingWait, types_1.LifecycleState.PendingProceed,
+            ];
+            const inProgressInstances = Instances
+                .filter((instance) => {
+                const isInProgress = checkTypes.includes(instance.LifecycleState);
+                const isHealthy = instance.HealthStatus === types_1.HealthStatus.Healthy;
+                return isInProgress && isHealthy;
+            });
+            if (inProgressInstances.length > 0) {
+                for (let i = 0; i < inProgressInstances.length; i = i + 1) {
+                    const tags = yield getInstanceTags(inProgressInstances[i].InstanceId, [{
+                            Values: [types_1.TagName.NodeState], Name: 'key',
+                        }]);
+                    if (tags.length > 0) {
+                        const isTagsExists = tags.some((tag) => {
+                            return tag.Key === types_1.TagName.NodeState &&
+                                tag.Value === types_1.NodeState.InitProcessing;
+                        });
+                        if (isTagsExists) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    });
+}
+exports.isMasterConcurrency = isMasterConcurrency;
 function getMasterNodeId(groupName) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield autoScalingGroup
@@ -130,7 +169,7 @@ function getMasterNodeId(groupName) {
                     if (tags.length > 0) {
                         const isTagsExists = tags.some((tag) => {
                             return tag.Key === types_1.TagName.NodeState &&
-                                tag.Value === types_1.NodeState.NodeInitialized;
+                                tag.Value === types_1.NodeState.InitFinished;
                         });
                         if (isTagsExists) {
                             return instances[i].InstanceId;

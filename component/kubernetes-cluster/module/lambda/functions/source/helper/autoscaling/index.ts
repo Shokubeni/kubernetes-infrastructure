@@ -109,10 +109,53 @@ export async function isMasterNodeExists(groupName: string): Promise<boolean> {
         if (tags.length > 0) {
           const result = tags.some((tag) => {
             return tag.Key === TagName.NodeState &&
-              tag.Value === NodeState.NodeInitialized;
+              tag.Value === NodeState.InitFinished;
           });
 
           if (result) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
+export async function isMasterConcurrency(groupName: string): Promise<boolean> {
+  const result = await autoScalingGroup
+    .describeAutoScalingGroups({
+      AutoScalingGroupNames: [groupName],
+    } as AutoScalingGroupNamesType)
+    .promise();
+
+  const { Instances } = result.AutoScalingGroups[0];
+  if (Instances) {
+    const checkTypes = [
+      LifecycleState.Pending, LifecycleState.PendingWait, LifecycleState.PendingProceed,
+    ];
+
+    const inProgressInstances = Instances
+      .filter((instance) => {
+        const isInProgress = checkTypes.includes(instance.LifecycleState as LifecycleState);
+        const isHealthy = instance.HealthStatus === HealthStatus.Healthy;
+        return isInProgress && isHealthy;
+      });
+
+    if (inProgressInstances.length > 0) {
+      for (let i = 0; i < inProgressInstances.length; i = i + 1) {
+        const tags = await getInstanceTags(inProgressInstances[i].InstanceId, [{
+          Values: [TagName.NodeState], Name: 'key',
+        }]);
+
+        if (tags.length > 0) {
+          const isTagsExists = tags.some((tag) => {
+            return tag.Key === TagName.NodeState &&
+              tag.Value === NodeState.InitProcessing;
+          });
+
+          if (isTagsExists) {
             return true;
           }
         }
@@ -148,7 +191,7 @@ export async function getMasterNodeId(groupName: string): Promise<InstanceId|nul
         if (tags.length > 0) {
           const isTagsExists = tags.some((tag) => {
             return tag.Key === TagName.NodeState &&
-              tag.Value === NodeState.NodeInitialized;
+              tag.Value === NodeState.InitFinished;
           });
 
           if (isTagsExists) {

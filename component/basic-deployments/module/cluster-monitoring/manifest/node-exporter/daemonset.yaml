@@ -103,11 +103,11 @@ spec:
               readOnly: true
           resources:
             requests:
-              memory: 150Mi
-              cpu: 10m
+              memory: 128Mi
+              cpu: 25m
             limits:
-              memory: 250Mi
-              cpu: 10m
+              memory: 256Mi
+              cpu: 50m
       hostPID: true
       volumes:
         - name: proc

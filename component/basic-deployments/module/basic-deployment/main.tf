@@ -5,10 +5,10 @@ module "cluster_autoscaler_rbac" {
   config_path = "${var.config_path}"
 }
 
-module "ingress_controller_deployment" {
+module "cluster_autoscaler_daemonset" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/cluster-autoscaler/deployment.yaml"
+  file_path   = "${path.module}/manifest/cluster-autoscaler/daemonset.yaml"
   config_path = "${var.config_path}"
   variables   = {
     cluster_id = "${var.cluster_config["id"]}"

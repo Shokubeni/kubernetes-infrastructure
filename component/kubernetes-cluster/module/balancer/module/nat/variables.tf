@@ -1,13 +1,9 @@
-variable "balancer_security" {
-  type = "map"
-}
-
-variable "nat_node_security" {
-  type = "map"
-}
-
 variable "nat_instance_type" {
   type = "string"
+}
+
+variable "nat_security" {
+  type = "map"
 }
 
 variable "cluster_config" {

@@ -35,12 +35,12 @@ spec:
       - name: addon-resizer
         image: k8s.gcr.io/addon-resizer:1.8.3
         resources:
-          limits:
-            cpu: 150m
-            memory: 50Mi
           requests:
-            cpu: 150m
-            memory: 50Mi
+            memory: 128Mi
+            cpu: 25m
+          limits:
+            memory: 256Mi
+            cpu: 50m
         env:
           - name: MY_POD_NAME
             valueFrom:

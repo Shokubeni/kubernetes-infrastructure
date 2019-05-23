@@ -80,7 +80,7 @@ resource "aws_launch_template" "launch" {
 
   network_interfaces {
     security_groups             = ["${var.security_group_id}"]
-    associate_public_ip_address = "${var.use_nat_gateway}"
+    associate_public_ip_address = "false"
     delete_on_termination       = true
   }
 

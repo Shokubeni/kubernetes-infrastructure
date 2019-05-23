@@ -196,6 +196,40 @@ resource "aws_security_group" "balancer" {
   )}"
 }
 
+resource "aws_security_group" "nat" {
+  name   = "${var.cluster_config["label"]}-nat_${var.cluster_config["id"]}"
+  vpc_id = "${var.virtual_cloud_id}"
+
+  ingress {
+    description = "Cluster nodes TCP traffic"
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    security_groups = [
+      "${aws_security_group.master.id}",
+      "${aws_security_group.worker.id}"
+    ]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    ignore_changes = ["*"]
+  }
+
+  tags = "${merge(
+    map(
+      "Name", "${var.cluster_config["name"]} NAT Instance",
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
+    )
+  )}"
+}
+
 resource "aws_security_group_rule" "master_http_from_balancer" {
   description              = "HTTP traffic"
   type                     = "ingress"

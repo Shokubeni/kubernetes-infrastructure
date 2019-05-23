@@ -37,7 +37,3 @@ variable "publish_role" {
 variable "node_security" {
   type = "map"
 }
-
-variable "use_nat_gateway" {
-  type = "string"
-}

@@ -1,14 +1,13 @@
 ---
 
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: cluster-autoscaler
   namespace: kube-system
   labels:
     app: cluster-autoscaler
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: cluster-autoscaler
@@ -23,11 +22,11 @@ spec:
           name: cluster-autoscaler
           resources:
             limits:
-              cpu: 100m
-              memory: 300Mi
+              cpu: 50m
+              memory: 256Mi
             requests:
-              cpu: 100m
-              memory: 300Mi
+              cpu: 25m
+              memory: 128Mi
           command:
             - ./cluster-autoscaler
             - --v=4

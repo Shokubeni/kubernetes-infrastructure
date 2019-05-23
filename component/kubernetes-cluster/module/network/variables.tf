@@ -2,7 +2,7 @@ variable "virtual_cloud_cidr" {
   type = "string"
 }
 
-variable "use_nat_gateways" {
+variable "nat_instance_type" {
   type = "string"
 }
 

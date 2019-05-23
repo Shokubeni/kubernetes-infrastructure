@@ -26,10 +26,6 @@ variable "private_subnet_ids" {
   type = "list"
 }
 
-variable "use_nat_gateway" {
-  type = "string"
-}
-
 variable "cluster_config" {
   type = "map"
 }

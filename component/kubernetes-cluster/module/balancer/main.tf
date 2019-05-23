@@ -1,35 +1,18 @@
-resource "aws_elb" "balancer" {
-  name                      = "${var.cluster_config["label"]}-${var.cluster_config["id"]}"
-  subnets                   = ["${split(",", var.network_data["public_subnet_ids"])}"]
-  security_groups           = ["${var.balancer_security["group_id"]}"]
-  cross_zone_load_balancing = true
+module "load_balancer" {
+  source = "./module/balancer"
 
-  listener {
-    lb_port           = 6443
-    lb_protocol       = "tcp"
-    instance_port     = 6443
-    instance_protocol = "tcp"
-  }
+  balancer_security = "${var.balancer_security}"
+  cluster_config    = "${var.cluster_config}"
+  network_data      = "${var.network_data}"
+}
 
-  listener {
-    lb_port            = 443
-    lb_protocol        = "tcp"
-    instance_port      = 32443
-    instance_protocol  = "tcp"
-  }
+module "nat_instance" {
+  source = "./module/nat"
 
-  listener {
-    lb_port           = 80
-    lb_protocol       = "tcp"
-    instance_port     = 32080
-    instance_protocol = "tcp"
-  }
-
-  health_check {
-    target              = "TCP:6443"
-    interval            = 10
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 5
-  }
+  nat_instance_type = "${var.nat_instance_type}"
+  cluster_config    = "${var.cluster_config}"
+  private_subnets   = "${var.private_subnets}"
+  public_subnets    = "${var.public_subnets}"
+  nat_security      = "${var.nat_node_security}"
+  network_data      = "${var.network_data}"
 }

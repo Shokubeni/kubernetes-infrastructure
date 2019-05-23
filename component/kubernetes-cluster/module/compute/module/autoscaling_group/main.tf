@@ -29,7 +29,7 @@ resource "aws_autoscaling_group" "autoscaling" {
   load_balancers            = ["${local.load_balancer}"]
   health_check_type         = "${local.check_type}"
   force_delete              = false
-  desired_capacity          = 1
+  desired_capacity          = "${local.desired_capacity}"
 
   initial_lifecycle_hook {
     name                    = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}"
@@ -74,14 +74,14 @@ resource "aws_autoscaling_group" "autoscaling" {
   }
 }
 
-resource "aws_autoscaling_schedule" "autoscaling" {
-  autoscaling_group_name = "${aws_autoscaling_group.autoscaling.name}"
-  scheduled_action_name  = "after-group-init"
-  desired_capacity       = "${local.desired_capacity}"
-  max_size               = "${local.max_size}"
-  min_size               = "${local.min_size}"
-  start_time             = "${timeadd(timestamp(), "240s")}"
-}
+//resource "aws_autoscaling_schedule" "autoscaling" {
+//  autoscaling_group_name = "${aws_autoscaling_group.autoscaling.name}"
+//  scheduled_action_name  = "after-group-init"
+//  desired_capacity       = "${local.desired_capacity}"
+//  max_size               = "${local.max_size}"
+//  min_size               = "${local.min_size}"
+//  start_time             = "${timeadd(timestamp(), "240s")}"
+//}
 
 resource "aws_lambda_event_source_mapping" "lifecycle" {
   event_source_arn  = "${var.publish_queue_arn}"

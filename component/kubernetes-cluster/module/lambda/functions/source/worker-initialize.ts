@@ -49,7 +49,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
         S3BucketName: [process.env.S3_BUCKED_NAME],
       });
       await setInstanceTags(event, [
-        { Key: TagName.NodeState, Value: NodeState.NodeInitialized },
+        { Key: TagName.NodeState, Value: NodeState.InitFinished },
         { Key: TagName.NodeRole, Value: NodeRole.WorkerNode },
       ]);
 

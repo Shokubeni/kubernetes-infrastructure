@@ -11,12 +11,21 @@ output "master_node" {
 
 output "worker_node" {
   value = {
-    group_id = "${module.security_group.worker_group_id}"
-    role_id = "${module.instance_role.worker_role_id}"
-    role_arn = "${module.instance_role.worker_role_arn}"
+    group_id    = "${module.security_group.worker_group_id}"
+    role_id     = "${module.instance_role.worker_role_id}"
+    role_arn    = "${module.instance_role.worker_role_arn}"
     private_key = "${module.tls_key_pair.worker_private_key}"
-    public_key = "${module.tls_key_pair.worker_public_key}"
-    key_id = "${module.tls_key_pair.worker_key_id}"
+    public_key  = "${module.tls_key_pair.worker_public_key}"
+    key_id      = "${module.tls_key_pair.worker_key_id}"
+  }
+}
+
+output "nat_node" {
+  value = {
+    group_id    = "${module.security_group.nat_group_id}"
+    private_key = "${module.tls_key_pair.nat_private_key}"
+    public_key  = "${module.tls_key_pair.nat_public_key}"
+    key_id      = "${module.tls_key_pair.nat_key_id}"
   }
 }
 

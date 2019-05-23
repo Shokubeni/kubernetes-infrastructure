@@ -82,5 +82,11 @@ spec:
         - name: prometheus-source
           configMap:
             name: prometheus-source
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
 
 ---

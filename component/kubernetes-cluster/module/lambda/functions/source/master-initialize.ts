@@ -1,6 +1,12 @@
 import { SQSEvent, Context } from 'aws-lambda';
 
-import { completeLifecycle, isMasterNodeExists, refreshLifecycle, setInstanceTags } from './helper/autoscaling';
+import {
+  completeLifecycle,
+  isMasterConcurrency,
+  isMasterNodeExists,
+  refreshLifecycle,
+  setInstanceTags,
+} from './helper/autoscaling';
 import { LifecycleEvent, LifecycleResult, NodeRole, NodeState, TagName } from './helper/autoscaling/types';
 import { deleteQueueTask, refreshQueueTask } from './helper/queue';
 import { runCommand, isInSystemManager } from './helper/manager';
@@ -44,6 +50,16 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       return context.fail(HandlerMessages.TaskHandlingDelayed);
     }
 
+    if (await isMasterConcurrency(process.env.MASTER_AUTOSCALING_GROUP)) {
+      await refreshQueueTask(event, process.env.SQS_QUEUE_URL, refreshTimeout);
+      return context.fail(HandlerMessages.TaskHandlingDelayed);
+    }
+
+    await setInstanceTags(event, [
+      { Key: TagName.NodeState, Value: NodeState.InitProcessing },
+      { Key: TagName.NodeRole, Value: NodeRole.MaterNode },
+    ]);
+
     await refreshQueueTask(event, process.env.SQS_QUEUE_URL, executeLimit);
     await runCommand(event, process.env.NODE_RUNTIME_INSTALL_COMMAND, {
       KubernetesVersion: [process.env.KUBERNETES_VERSION],
@@ -80,7 +96,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
     }
 
     await setInstanceTags(event, [
-      { Key: TagName.NodeState, Value: NodeState.NodeInitialized },
+      { Key: TagName.NodeState, Value: NodeState.InitFinished },
       { Key: TagName.NodeRole, Value: NodeRole.MaterNode },
     ]);
 

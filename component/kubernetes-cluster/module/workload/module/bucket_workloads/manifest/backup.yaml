@@ -267,7 +267,13 @@ items:
           ports:
           - containerPort: 8085
             name: metrics
-          resources: {}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
           volumeMounts:
           - mountPath: /plugins
             name: plugins

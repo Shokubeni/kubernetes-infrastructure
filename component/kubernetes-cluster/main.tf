@@ -20,7 +20,7 @@ module "network" {
   source = "./module/network"
 
   virtual_cloud_cidr = "${var.virtual_cloud_cidr}"
-  use_nat_gateways   = "${var.use_nat_gateways}"
+  nat_instance_type  = "${var.nat_instance_type}"
   private_subnets    = "${var.private_subnets}"
   public_subnets     = "${var.public_subnets}"
   cluster_config     = "${module.common.cluster_config}"
@@ -49,8 +49,12 @@ module "balancer" {
   source = "./module/balancer"
 
   balancer_security  = "${module.security.balancer}"
+  nat_node_security  = "${module.security.nat_node}"
   cluster_config     = "${module.common.cluster_config}"
+  private_subnets    = "${var.private_subnets}"
+  public_subnets     = "${var.public_subnets}"
   network_data       = "${module.network.network_data}"
+  nat_instance_type  = "${var.nat_instance_type}"
 }
 
 module "lambda" {
@@ -81,7 +85,6 @@ module "master" {
   lifecycle_function = "${module.lambda.master_lifecycle}"
   publish_role       = "${module.security.master_publish}"
   node_security      = "${module.security.master_node}"
-  use_nat_gateway    = "${var.use_nat_gateways}"
 }
 
 module "worker" {
@@ -97,7 +100,6 @@ module "worker" {
   lifecycle_function = "${module.lambda.worker_lifecycle}"
   publish_role       = "${module.security.worker_publish}"
   node_security      = "${module.security.worker_node}"
-  use_nat_gateway    = "${var.use_nat_gateways}"
 }
 
 module "finalize" {

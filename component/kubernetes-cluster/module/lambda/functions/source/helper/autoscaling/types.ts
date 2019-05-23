@@ -36,8 +36,8 @@ export enum NodeRole {
 }
 
 export enum NodeState {
-  RuntimeInstalled = 'runtime-installed',
-  NodeInitialized = 'node-initialized',
+  InitProcessing = 'init:processing',
+  InitFinished = 'init:finished',
 }
 
 export enum TagName {

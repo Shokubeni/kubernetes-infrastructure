@@ -4,6 +4,10 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
+  lifecycle {
+    ignore_changes = ["*"]
+  }
+
   tags = "${merge(
     map(
       "Name", "${var.cluster_config["name"]} Cluster VPC",
@@ -14,6 +18,10 @@ resource "aws_vpc" "main" {
 
 resource "aws_default_route_table" "default" {
   default_route_table_id = "${aws_vpc.main.default_route_table_id}"
+
+  lifecycle {
+    ignore_changes = ["*"]
+  }
 
   tags = "${merge(
     map(
@@ -40,6 +48,10 @@ resource "aws_default_security_group" "default" {
     from_port   = 0
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    ignore_changes = ["*"]
   }
 
   tags = "${merge(
@@ -69,6 +81,10 @@ resource "aws_default_network_acl" "default" {
     cidr_block = "0.0.0.0/0"
     from_port  = 0
     to_port    = 0
+  }
+
+  lifecycle {
+    ignore_changes = ["*"]
   }
 
   tags = "${merge(

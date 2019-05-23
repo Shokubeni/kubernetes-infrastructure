@@ -1,7 +1,13 @@
 output "balancer_data" {
   value = {
-    zone = "${aws_elb.balancer.zone_id}"
-    dns  = "${aws_elb.balancer.dns_name}"
-    id   = "${aws_elb.balancer.name}"
+    zone = "${module.load_balancer.zone_id}"
+    dns  = "${module.load_balancer.dns_name}"
+    id   = "${module.load_balancer.id}"
+  }
+}
+
+output "nat_data" {
+  value = {
+    ids = "${join(",", module.nat_instance.nat_nodes_ids)}"
   }
 }

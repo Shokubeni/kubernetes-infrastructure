@@ -35,19 +35,6 @@ module "public_subnet" {
 module "internet_gateway" {
   source = "./module/internet_gateway"
 
-  use_nat_gateways      = "${var.use_nat_gateways}"
-  virtual_cloud_id      = "${module.virtual_cloud.cloud_id}"
-  public_subnets_count  = "${length(local.public_subnets_cidrs)}"
-  public_subnets_ids    = "${module.public_subnet.subnet_ids}"
-  private_subnets_count = "${length(local.private_subnets_cidrs)}"
-  private_subnets_ids   = "${module.private_subnet.subnet_ids}"
-  cluster_config        = "${var.cluster_config}"
-}
-
-module "nat_gateway" {
-  source = "./module/nat_gateway"
-
-  use_nat_gateways      = "${var.use_nat_gateways}"
   virtual_cloud_id      = "${module.virtual_cloud.cloud_id}"
   public_subnets_count  = "${length(local.public_subnets_cidrs)}"
   public_subnets_ids    = "${module.public_subnet.subnet_ids}"
