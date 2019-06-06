@@ -54,6 +54,14 @@ variable "slack_channel" {
   type = "string"
 }
 
+variable "kube_config" {
+  type = "string"
+}
+
+variable "admin_role" {
+  type = "string"
+}
+
 variable "slack_hook" {
   type = "string"
 }

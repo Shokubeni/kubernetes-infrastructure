@@ -71,6 +71,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       await runCommand(event, process.env.STACKED_MASTER_INIT_COMMAND, {
         S3BucketRegion: [process.env.S3_BUCKET_REGION],
         S3BucketName: [process.env.S3_BUCKED_NAME],
+        ClusterId: [process.env.CLUSTER_ID],
       });
       await completeLifecycle(event, LifecycleResult.Continue);
 
@@ -90,6 +91,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
         await runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
           S3BucketRegion: [process.env.S3_BUCKET_REGION],
           S3BucketName: [process.env.S3_BUCKED_NAME],
+          ClusterId: [process.env.CLUSTER_ID],
           SnapshotName: [snapshotName],
         });
       }

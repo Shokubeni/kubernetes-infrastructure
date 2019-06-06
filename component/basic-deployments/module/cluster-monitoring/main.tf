@@ -7,50 +7,38 @@ module "monitoring_namespace" {
 
 /* ------------------------------------------------------------------------- */
 
-module "prometheus_rbac" {
+module "alertmanager_configmap" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/prometheus/rbac.yaml"
+  file_path   = "${path.module}/manifest/alertmanager/configmap.yaml"
+  config_path = "${var.config_path}"
+  variables   = {
+    from_adress   = "alerts@${var.domain_config["domain_name"]}"
+    smtp_host     = "${var.smtp_config["host"]}:${var.smtp_config["port"]}"
+    smtp_user     = "${var.smtp_config["alerts_user"]}"
+    smtp_pass     = "${var.smtp_config["alerts_pass"]}"
+    slack_channel = "${var.slack_channel}"
+    slack_hook    = "${var.slack_hook}"
+  }
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+module "alertmanager_deployment" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/alertmanager/deployment.yaml"
   config_path = "${var.config_path}"
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
   ]
 }
 
-module "prometheus_configmap" {
+module "alertmanager_service" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/prometheus/configmap.yaml"
-  config_path = "${var.config_path}"
-  depends_on  = [
-    "${module.monitoring_namespace.task_id}"
-  ]
-}
-
-module "prometheus_volume" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/prometheus/volume.yaml"
-  config_path = "${var.config_path}"
-  depends_on  = [
-    "${module.monitoring_namespace.task_id}"
-  ]
-}
-
-module "prometheus_deployment" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/prometheus/deployment.yaml"
-  config_path = "${var.config_path}"
-  depends_on  = [
-    "${module.monitoring_namespace.task_id}"
-  ]
-}
-
-module "prometheus_service" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/prometheus/service.yaml"
+  file_path   = "${path.module}/manifest/alertmanager/service.yaml"
   config_path = "${var.config_path}"
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
@@ -105,6 +93,58 @@ module "kube_state_service" {
   source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/kube-state/service.yaml"
+  config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+/* ------------------------------------------------------------------------- */
+
+module "prometheus_rbac" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/prometheus/rbac.yaml"
+  config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+module "prometheus_configmap" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/prometheus/configmap.yaml"
+  config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+module "prometheus_volume" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/prometheus/volume.yaml"
+  config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+module "prometheus_deployment" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/prometheus/deployment.yaml"
+  config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+module "prometheus_service" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/prometheus/service.yaml"
   config_path = "${var.config_path}"
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
@@ -222,46 +262,6 @@ module "grafana_ingress" {
   variables   = {
     domain_name = "${var.domain_config["domain_name"]}"
   }
-  depends_on  = [
-    "${module.monitoring_namespace.task_id}"
-  ]
-}
-
-/* ------------------------------------------------------------------------- */
-
-module "alertmanager_configmap" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/alertmanager/configmap.yaml"
-  config_path = "${var.config_path}"
-  variables   = {
-    from_adress   = "alerts@${var.domain_config["domain_name"]}"
-    smtp_host     = "${var.smtp_config["host"]}:${var.smtp_config["port"]}"
-    smtp_user     = "${var.smtp_config["alerts_user"]}"
-    smtp_pass     = "${var.smtp_config["alerts_pass"]}"
-    slack_channel = "${var.slack_channel}"
-    slack_hook    = "${var.slack_hook}"
-  }
-  depends_on  = [
-    "${module.monitoring_namespace.task_id}"
-  ]
-}
-
-module "alertmanager_deployment" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/alertmanager/deployment.yaml"
-  config_path = "${var.config_path}"
-  depends_on  = [
-    "${module.monitoring_namespace.task_id}"
-  ]
-}
-
-module "alertmanager_service" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/alertmanager/service.yaml"
-  config_path = "${var.config_path}"
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
   ]

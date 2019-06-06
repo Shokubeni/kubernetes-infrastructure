@@ -9,3 +9,11 @@ variable "master_queue" {
 variable "worker_queue" {
   type = "string"
 }
+
+variable "backup_bucket" {
+  type = "string"
+}
+
+variable "bucket_name" {
+  type = "string"
+}

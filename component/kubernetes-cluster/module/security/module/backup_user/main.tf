@@ -2,7 +2,7 @@ data "template_file" "backup" {
   template = "${file("${path.module}/backup-policy.json")}"
 
   vars {
-    bucket_name = "${var.bucket_name}"
+    backup_bucket = "${var.bucket_name}"
   }
 }
 

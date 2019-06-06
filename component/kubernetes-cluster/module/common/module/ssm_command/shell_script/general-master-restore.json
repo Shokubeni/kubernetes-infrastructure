@@ -10,6 +10,9 @@
     },
     "SnapshotName": {
       "type": "String"
+    },
+    "ClusterId": {
+      "type": "String"
     }
   },
   "mainSteps": [
@@ -31,6 +34,15 @@
           "aws s3 cp s3://{{ S3BucketName }}/configs/kubernetes.conf /etc/kubernetes/admin.conf --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/configs/kubeadm.conf ./kubeadm-config.yaml --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/{{ SnapshotName }} ./{{ SnapshotName }} --region {{ S3BucketRegion }}",
+
+          "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.12.7/2019-03-27/bin/linux/amd64/aws-iam-authenticator",
+          "chmod +x ./aws-iam-authenticator",
+          "mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$HOME/bin:$PATH",
+          "mkdir -p /etc/kubernetes/aws-iam-authenticator",
+          "mkdir /var/aws-iam-authenticator",
+          "aws s3 cp s3://{{ S3BucketName }}/configs/authenticator.conf /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml --region {{ S3BucketRegion }}",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/authenticator-cert.pem /var/aws-iam-authenticator/cert.pem --region {{ S3BucketRegion }}",
+          "aws s3 cp s3://{{ S3BucketName }}/certificates/authenticator-key.pem /var/aws-iam-authenticator/key.pem --region {{ S3BucketRegion }}",
 
           "kubeadm init --config=kubeadm-config.yaml",
           "mkdir -p $HOME/.kube",

@@ -20,19 +20,12 @@
         "s3:DeleteObject",
         "s3:PutObject",
         "s3:AbortMultipartUpload",
-        "s3:ListMultipartUploadParts"
-      ],
-      "Resource": [
-        "arn:aws:s3:::${bucket_name}/*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
+        "s3:ListMultipartUploadParts",
         "s3:ListBucket"
       ],
       "Resource": [
-        "arn:aws:s3:::${bucket_name}"
+        "arn:aws:s3:::${backup_bucket}/*",
+        "arn:aws:s3:::${backup_bucket}"
       ]
     }
   ]

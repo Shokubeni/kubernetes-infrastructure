@@ -22,7 +22,11 @@ locals {
   cluster_config = "${data.terraform_remote_state.kubernetes.cluster_config}"
   balancer_data  = "${data.terraform_remote_state.kubernetes.balancer_data}"
   network_data   = "${data.terraform_remote_state.kubernetes.network_data}"
-  config_path    = "${data.terraform_remote_state.kubernetes.config_path}"
+  config_path    = "${
+    var.kube_config != "false"
+      ? var.kube_config
+      : data.terraform_remote_state.kubernetes.config_path
+  }"
 }
 
 module "dns" {
@@ -48,9 +52,10 @@ module "volume" {
 module "basic" {
   source = "./module/basic-deployment"
 
-  domain_config  = "${var.domain_config}"
   cluster_config = "${local.cluster_config}"
+  domain_config  = "${var.domain_config}"
   config_path    = "${local.config_path}"
+  admin_role     = "${var.admin_role}"
 }
 
 module "monitoring" {

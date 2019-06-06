@@ -2,9 +2,7 @@ data "template_file" "master" {
   template = "${file("${path.module}/master-policy.json")}"
 
   vars {
-    region_name = "${var.cluster_config["region"]}"
-    account_id  = "${var.cluster_config["account"]}"
-    bucket_name = "${var.bucket_name}"
+    cluster_bucket = "${var.bucket_name}"
   }
 }
 
@@ -29,9 +27,7 @@ data "template_file" "worker" {
   template = "${file("${path.module}/worker-policy.json")}"
 
   vars {
-    region_name = "${var.cluster_config["region"]}"
-    account_id  = "${var.cluster_config["account"]}"
-    bucket_name = "${var.bucket_name}"
+    cluster_bucket = "${var.bucket_name}"
   }
 }
 

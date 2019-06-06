@@ -32,4 +32,11 @@ resource "aws_elb" "balancer" {
     healthy_threshold   = 2
     unhealthy_threshold = 5
   }
+
+  tags = "${merge(
+    map(
+      "Name", "${var.cluster_config["name"]} Load Balancer",
+      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
+    )
+  )}"
 }

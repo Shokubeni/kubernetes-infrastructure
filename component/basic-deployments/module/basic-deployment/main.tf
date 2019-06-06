@@ -1,18 +1,38 @@
 module "cluster_autoscaler_rbac" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/cluster-autoscaler/rbac.yaml"
+  file_path   = "${path.module}/manifest/autoscaler/rbac.yaml"
   config_path = "${var.config_path}"
 }
 
 module "cluster_autoscaler_daemonset" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/cluster-autoscaler/daemonset.yaml"
+  file_path   = "${path.module}/manifest/autoscaler/daemonset.yaml"
   config_path = "${var.config_path}"
   variables   = {
     cluster_id = "${var.cluster_config["id"]}"
   }
+}
+
+/* ------------------------------------------------------------------------- */
+
+module "authenticator_configmap" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/authenticator/configmap.yaml"
+  config_path = "${var.config_path}"
+  variables = {
+    cluster_id = "${var.cluster_config["id"]}"
+    admin_role = "${var.admin_role}"
+  }
+}
+
+module "authenticator_daemonset" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/authenticator/daemonset.yaml"
+  config_path = "${var.config_path}"
 }
 
 /*  --------------------------------------------------------------------- */
@@ -92,7 +112,7 @@ module "kube_lego_configmap" {
   variables   = {
     domain_name = "${var.domain_config["domain_name"]}"
     acme_stage  = "${
-        var.cluster_config["type"] == "development"
+        var.cluster_config["type"] == "production"
             ? "acme-v01.api.letsencrypt.org/directory"
             : "acme-staging-v02.api.letsencrypt.org/directory"
         }"

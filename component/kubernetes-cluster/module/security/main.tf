@@ -25,6 +25,8 @@ module "lambda_role" {
   cluster_config   = "${var.cluster_config}"
   master_queue     = "${var.master_queue["name"]}"
   worker_queue     = "${var.worker_queue["name"]}"
+  backup_bucket    = "${var.backup_bucket["id"]}"
+  bucket_name      = "${var.secure_bucket["id"]}"
 }
 
 module "publish_role" {

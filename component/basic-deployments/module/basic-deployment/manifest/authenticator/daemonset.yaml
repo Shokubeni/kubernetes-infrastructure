@@ -1,0 +1,67 @@
+---
+
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: aws-iam-authenticator
+  namespace: kube-system
+  labels:
+    app: aws-iam-authenticator
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ""
+      labels:
+        app: aws-iam-authenticator
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+        - key: CriticalAddonsOnly
+          operator: Exists
+      containers:
+        - name: aws-iam-authenticator
+          image: quay.io/edwin/aws-iam-authenticator:latest
+          imagePullPolicy: Always
+          args:
+            - aws-iam-authenticator
+            - server
+            - --config=/etc/aws-iam-authenticator/config.yaml
+            - --state-dir=/var/aws-iam-authenticator
+            - --kubeconfig-pregenerated=true
+            - --generate-kubeconfig=/etc/kubernetes/aws-iam-authenticator/kubeconfig
+            - --reload-enabled
+            - --reload-period=60
+          resources:
+            requests:
+              memory: 20Mi
+              cpu: 10m
+            limits:
+              memory: 20Mi
+              cpu: 100m
+          volumeMounts:
+            - name: config
+              mountPath: /etc/aws-iam-authenticator/
+            - name: state
+              mountPath: /var/aws-iam-authenticator/
+              readOnly: true
+            - name: output
+              mountPath: /etc/kubernetes/aws-iam-authenticator/
+      volumes:
+        - name: config
+          configMap:
+            name: aws-iam-authenticator
+        - name: output
+          hostPath:
+            path: /etc/kubernetes/aws-iam-authenticator/
+        - name: state
+          hostPath:
+            path: /var/aws-iam-authenticator/
+
+---

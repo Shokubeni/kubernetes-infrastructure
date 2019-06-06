@@ -11,6 +11,7 @@ terragrunt = {
         "-var", "deployment_type=${get_env("TF_VAR_DEPLOYMENT_TYPE", "development")}",
         "-var", "backend_bucket=${get_env("TF_VAR_CLUSTER_LABEL", "smart-gears")}.${get_env("TF_VAR_STATE_BUCKET", "terraform-state")}",
         "-var", "backend_region=${get_env("TF_VAR_AWS_REGION", "eu-west-1")}",
+        "-var", "admin_role=${get_env("TF_VAR_AWS_ROLE", "false")}",
         "-var", "provider_profile=${get_env("TF_VAR_AWS_PROFILE", "cluster_operator")}",
         "-var", "provider_region=${get_env("TF_VAR_AWS_REGION", "eu-west-1")}",
         "-var", "cluster_label=${get_env("TF_VAR_CLUSTER_LABEL", "smart-gears")}",
@@ -23,6 +24,7 @@ terragrunt = {
         "-var", "smtp_port=${get_env("TF_VAR_SMTP_PORT", "false")}",
         "-var", "slack_channel=${get_env("TF_VAR_SLACK_CHANNEL", "false")}",
         "-var", "slack_hook=${get_env("TF_VAR_SLACK_ALERTS_URL", "false")}",
+        "-var", "kube_config=${get_env("TF_VAR_KUBE_CONFIG", "false")}",
         "-var", "root_dir=${get_tfvars_dir()}/../../..",
       ]
     }

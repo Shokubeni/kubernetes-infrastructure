@@ -2,9 +2,12 @@ data "template_file" "master_lifecycle" {
   template = "${file("${path.module}/lifecycle-policy.json")}"
 
   vars {
-    account_id  = "${var.cluster_config["account"]}"
-    region_name = "${var.cluster_config["region"]}"
-    queue_name  = "${var.master_queue}"
+    account_id     = "${var.cluster_config["account"]}"
+    cluster_id     = "${var.cluster_config["id"]}"
+    backup_bucket  = "${var.backup_bucket}"
+    cluster_bucket = "${var.bucket_name}"
+    group_name     = "${var.cluster_config["label"]}-master_${var.cluster_config["id"]}"
+    queue_name     = "${var.master_queue}"
   }
 }
 
@@ -24,9 +27,11 @@ data "template_file" "worker_lifecycle" {
   template = "${file("${path.module}/lifecycle-policy.json")}"
 
   vars {
-    account_id  = "${var.cluster_config["account"]}"
-    region_name = "${var.cluster_config["region"]}"
-    queue_name  = "${var.worker_queue}"
+    account_id     = "${var.cluster_config["account"]}"
+    cluster_id     = "${var.cluster_config["id"]}"
+    backup_bucket  = "${var.backup_bucket}"
+    cluster_bucket = "${var.bucket_name}"
+    queue_name     = "${var.worker_queue}"
   }
 }
 
@@ -44,11 +49,6 @@ resource "aws_iam_role_policy" "worker_lifecycle" {
 
 data "template_file" "cloudwatch_event" {
   template = "${file("${path.module}/cloudwatch-policy.json")}"
-
-  vars {
-    account_id  = "${var.cluster_config["account"]}"
-    region_name = "${var.cluster_config["region"]}"
-  }
 }
 
 resource "aws_iam_role" "cloudwatch_event" {

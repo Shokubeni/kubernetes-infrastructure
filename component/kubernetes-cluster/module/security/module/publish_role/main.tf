@@ -2,9 +2,8 @@ data "template_file" "master_publish" {
   template = "${file("${path.module}/publish-policy.json")}"
 
   vars {
-    account_id  = "${var.cluster_config["account"]}"
-    region_name = "${var.cluster_config["region"]}"
-    queue_name  = "${var.master_queue}"
+    account_id = "${var.cluster_config["account"]}"
+    queue_name = "${var.master_queue}"
   }
 }
 
@@ -24,9 +23,8 @@ data "template_file" "worker_publish" {
   template = "${file("${path.module}/publish-policy.json")}"
 
   vars {
-    account_id  = "${var.cluster_config["account"]}"
-    region_name = "${var.cluster_config["region"]}"
-    queue_name  = "${var.worker_queue}"
+    account_id = "${var.cluster_config["account"]}"
+    queue_name = "${var.worker_queue}"
   }
 }
 

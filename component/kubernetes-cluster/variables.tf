@@ -50,6 +50,10 @@ variable "worker_volume_config" {
   type = "map"
 }
 
+variable "admin_role" {
+  type = "string"
+}
+
 variable "root_dir" {
   type = "string"
 }
