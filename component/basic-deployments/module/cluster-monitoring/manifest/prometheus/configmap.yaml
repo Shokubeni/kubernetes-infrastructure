@@ -134,6 +134,25 @@ data:
           static_configs:
             - targets: ['alertmanager:9093']
     scrape_configs:
+    - job_name: 'linkerd'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names: ['linkerd']
+
+      relabel_configs:
+      - source_labels:
+        - __meta_kubernetes_pod_container_name
+        action: keep
+        regex: ^prometheus$
+
+      honor_labels: true
+      metrics_path: '/federate'
+
+      params:
+        'match[]':
+          - '{job="linkerd-proxy"}'
+          - '{job="linkerd-controller"}'
 
     - job_name: kubernetes-cadvisers
       scrape_interval: 10s

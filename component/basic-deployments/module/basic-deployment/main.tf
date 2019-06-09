@@ -86,22 +86,11 @@ module "ingress_controller_service" {
 }
 
 /*  --------------------------------------------------------------------- */
-
-module "kube_lego_namespace" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/kube-lego/namespace.yaml"
-  config_path = "${var.config_path}"
-}
-
 module "kube_lego_rbac" {
   source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/kube-lego/rbac.yaml"
   config_path = "${var.config_path}"
-  depends_on  = [
-    "${module.kube_lego_namespace.task_id}"
-  ]
 }
 
 module "kube_lego_configmap" {
@@ -117,9 +106,6 @@ module "kube_lego_configmap" {
             : "acme-staging-v02.api.letsencrypt.org/directory"
         }"
   }
-  depends_on  = [
-    "${module.kube_lego_namespace.task_id}"
-  ]
 }
 
 module "kube_lego_daemonset" {
@@ -127,7 +113,4 @@ module "kube_lego_daemonset" {
 
   file_path   = "${path.module}/manifest/kube-lego/daemonset.yaml"
   config_path = "${var.config_path}"
-  depends_on  = [
-    "${module.kube_lego_namespace.task_id}"
-  ]
 }

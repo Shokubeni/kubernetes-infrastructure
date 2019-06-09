@@ -173,10 +173,30 @@ module "grafana_ingress_dashboard" {
   ]
 }
 
-module "grafana_prometheus_source" {
+module "linkerd_dashboard_1" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/grafana/configmap/prometheus-source.yaml"
+  file_path   = "${path.module}/manifest/grafana/configmap/linkerd-dashboard_1.yaml"
+  config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+module "linkerd_dashboard_2" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/grafana/configmap/linkerd-dashboard_2.yaml"
+  config_path = "${var.config_path}"
+  depends_on  = [
+    "${module.monitoring_namespace.task_id}"
+  ]
+}
+
+module "linkerd_dashboard_3" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/grafana/configmap/linkerd-dashboard_3.yaml"
   config_path = "${var.config_path}"
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
@@ -239,16 +259,6 @@ module "grafana_secret" {
     smtp_user = "${base64encode("${var.smtp_config["metrics_user"]}")}"
     smtp_pass = "${base64encode("${var.smtp_config["metrics_pass"]}")}"
   }
-  depends_on  = [
-    "${module.monitoring_namespace.task_id}"
-  ]
-}
-
-module "grafana_job" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/grafana/job.yaml"
-  config_path = "${var.config_path}"
   depends_on  = [
     "${module.monitoring_namespace.task_id}"
   ]

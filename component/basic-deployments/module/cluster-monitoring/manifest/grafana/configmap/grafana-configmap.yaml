@@ -3,15 +3,89 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: grafana-ini
   namespace: monitoring
-  name: grafana-config
 data:
-  server-root-url: ${server_url}
-  server-domain: ${domain_name}
-  smtp-from-address: ${from_adress}
-  smtp-enabled: "true"
-  auth-anonymous-org-name: ${cluster_name}
-  auth-anonymous-enabled: "false"
-  auth-basic-enabled: "true"
+  grafana.ini: |
+    [server]
+    root_url = ${server_url}
+    domain = ${domain_name}
+    [smtp]
+    from_address = ${from_adress}
+    enabled = true
+    [auth.basic]
+    enabled = false
+    [auth.anonymous]
+    enabled = false
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: monitoring
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+    - access: proxy
+      isDefault: true
+      name: prometheus
+      type: prometheus
+      url: http://prometheus:9090
+      version: 1
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-providers
+  namespace: monitoring
+data:
+  dashboardproviders.yaml: |
+    apiVersion: 1
+    providers:
+    - disableDeletion: true
+      editable: false
+      folder: "Ingress"
+      name: ingress
+      options:
+        path: /var/lib/grafana/dashboards/ingress
+      orgId: 1
+      type: file
+    - disableDeletion: true
+      editable: false
+      folder: "Cluster"
+      name: cluster
+      options:
+        path: /var/lib/grafana/dashboards/cluster
+      orgId: 1
+      type: file
+    - disableDeletion: true
+      editable: false
+      folder: "Linkerd"
+      name: linkerd-first
+      options:
+        path: /var/lib/grafana/dashboards/linkerd-first
+      orgId: 1
+      type: file
+    - disableDeletion: true
+      editable: false
+      folder: "Linkerd"
+      name: linkerd-second
+      options:
+        path: /var/lib/grafana/dashboards/linkerd-second
+      orgId: 1
+      type: file
+    - disableDeletion: true
+      editable: false
+      folder: "Linkerd"
+      name: linkerd-second
+      options:
+        path: /var/lib/grafana/dashboards/linkerd-third
+      orgId: 1
+      type: file
 
 ---

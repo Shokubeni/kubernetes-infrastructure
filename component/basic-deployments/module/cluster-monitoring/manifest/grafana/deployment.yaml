@@ -34,41 +34,6 @@ spec:
               cpu: 200m
               memory: 256Mi
           env:
-            - name: GF_SERVER_ROOT_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: grafana-config
-                  key: server-root-url
-            - name: GF_SERVER_DOMAIN
-              valueFrom:
-                configMapKeyRef:
-                  name: grafana-config
-                  key: server-domain
-            - name: GF_AUTH_BASIC_ENABLED
-              valueFrom:
-                configMapKeyRef:
-                  name: grafana-config
-                  key: auth-basic-enabled
-            - name: GF_AUTH_ANONYMOUS_ORG_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: grafana-config
-                  key: auth-anonymous-org-name
-            - name: GF_AUTH_ANONYMOUS_ENABLED
-              valueFrom:
-                configMapKeyRef:
-                  name: grafana-config
-                  key: auth-anonymous-enabled
-            - name: GF_SMTP_ENABLED
-              valueFrom:
-                configMapKeyRef:
-                  name: grafana-config
-                  key: smtp-enabled
-            - name: GF_SMTP_FROM_ADDRESS
-              valueFrom:
-                configMapKeyRef:
-                  name: grafana-config
-                  key: smtp-from-address
             - name: GF_SECURITY_ADMIN_USER
               valueFrom:
                 secretKeyRef:
@@ -95,9 +60,49 @@ spec:
                   name: grafana-smtp
                   key: pass
           volumeMounts:
+            - name: config-ini
+              mountPath: "/etc/grafana/"
+            - name: cluster-dashboard
+              mountPath: "/var/lib/grafana/dashboards/cluster"
+            - name: ingress-dashboard
+              mountPath: "/var/lib/grafana/dashboards/ingress"
+            - name: linkerd-dashboard-first
+              mountPath: "/var/lib/grafana/dashboards/linkerd-first"
+            - name: linkerd-dashboard-second
+              mountPath: "/var/lib/grafana/dashboards/linkerd-second"
+            - name: linkerd-dashboard-third
+              mountPath: "/var/lib/grafana/dashboards/linkerd-third"
+            - name: datasources
+              mountPath: "/etc/grafana/provisioning/datasources/"
+            - name: providers
+              mountPath: "/etc/grafana/provisioning/dashboards/"
             - name: grafana-data
               mountPath: /var/lib/grafana
       volumes:
+        - name: config-ini
+          configMap:
+            name: grafana-ini
+        - name: datasources
+          configMap:
+            name: grafana-datasources
+        - name: providers
+          configMap:
+            name: grafana-providers
+        - name: cluster-dashboard
+          configMap:
+            name: cluster-dashboard
+        - name: ingress-dashboard
+          configMap:
+            name: ingress-dashboard
+        - name: linkerd-dashboard-first
+          configMap:
+            name: linkerd-dashboard-first
+        - name: linkerd-dashboard-second
+          configMap:
+            name: linkerd-dashboard-second
+        - name: linkerd-dashboard-third
+          configMap:
+            name: linkerd-dashboard-third
         - name: grafana-data
           persistentVolumeClaim:
             claimName: grafana-data

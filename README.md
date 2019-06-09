@@ -20,3 +20,23 @@ way [standartized by AWS](https://aws.amazon.com/blogs/security/a-new-and-standa
 cd environment/general
 terragrunt apply-all
 ```
+## Environment
+```sh
+TF_VAR_AWS_ROLE          = <string>`aws role arn`
+TF_VAR_AWS_REGION        = <string>`aws region id`
+TF_VAR_AWS_PROFILE       = <string>`profile name`
+TF_VAR_CLUSTER_NAME      = <string>[SmartGears]
+TF_VAR_CLUSTER_LABEL     = <string>[smart-gears]
+TF_VAR_STATE_BUCKET      = <string>`state bucket name`
+TF_VAR_DYNAMO_LOCK       = <string>`state lock name`
+TF_VAR_SMTP_HOST         = <string>[email-smtp.us-east-1.amazonaws.com]
+TF_VAR_SMTP_PORT         = <number>[587]
+TF_VAR_SMTP_METRICS_USER = <string>`smtp user name`
+TF_VAR_SMTP_METRICS_PASS = <string>`smtp user password`
+TF_VAR_SMTP_ALERTS_USER  = <string>`smtp user name`
+TF_VAR_SMTP_ALERTS_PASS  = <string>`smtp user password`
+TF_VAR_SLACK_ALERTS_URL  = <url>`slack alerts webhook`
+TF_VAR_SLACK_CHANNEL     = <string>`slack alerts chanel`
+TF_VAR_DEPLOYMENT_TYPE   = <string>(production || development)
+TF_VAR_KUBE_CONFIG       = <bool>`use user or generated config`
+```
