@@ -1,20 +1,14 @@
-import { TagsList } from 'aws-sdk/clients/cloudtrail';
-import { AutoScaling, EC2 } from 'aws-sdk';
-import { SQSEvent } from 'aws-lambda';
+import {TagsList} from 'aws-sdk/clients/cloudtrail';
+import {AutoScaling, EC2} from 'aws-sdk';
+import {SQSEvent} from 'aws-lambda';
 import {
-  RecordLifecycleActionHeartbeatType,
+  AutoScalingGroupNamesType,
   CompleteLifecycleActionType,
-  AutoScalingGroupNamesType, Instances,
+  RecordLifecycleActionHeartbeatType,
 } from 'aws-sdk/clients/autoscaling';
-import {
-  DescribeTagsRequest,
-  CreateTagsRequest,
-  TagDescriptionList,
-  FilterList,
-  InstanceId,
-} from 'aws-sdk/clients/ec2';
+import {CreateTagsRequest, DescribeTagsRequest, FilterList, InstanceId, TagDescriptionList,} from 'aws-sdk/clients/ec2';
 
-import { HealthStatus, LifecycleState, NodeState, TagName, LifecycleResult } from './types';
+import {HealthStatus, LifecycleResult, LifecycleState, NodeState, TagName} from './types';
 
 const autoScalingGroup = new AutoScaling();
 const ec2 = new EC2();
@@ -123,6 +117,48 @@ export async function isMasterNodeExists(groupName: string): Promise<boolean> {
   return false;
 }
 
+export async function isQueueControlReturn(event: SQSEvent|InstanceId, groupName: string): Promise<boolean> {
+  const instanceId = (typeof event === 'object')
+    ? JSON.parse(event.Records[0].body).EC2InstanceId
+    : event;
+
+  const result = await autoScalingGroup
+    .describeAutoScalingGroups({
+      AutoScalingGroupNames: [groupName],
+    } as AutoScalingGroupNamesType)
+    .promise();
+
+  const { Instances } = result.AutoScalingGroups[0];
+  if (Instances) {
+    const checkTypes = [
+      LifecycleState.Pending,
+      LifecycleState.PendingWait,
+      LifecycleState.PendingProceed,
+      LifecycleState.InService,
+    ];
+
+    const inProgressInstances = Instances
+      .filter((instance) => {
+        const isInProgress = checkTypes.includes(instance.LifecycleState as LifecycleState);
+        const isHealthy = instance.HealthStatus === HealthStatus.Healthy;
+        return isInProgress && isHealthy;
+      });
+
+    const currentInstanceTags = await getInstanceTags(instanceId, [{
+      Values: [TagName.NodeState], Name: 'key',
+    }]);
+
+    const isInitializeAwait = currentInstanceTags.some((tag) => {
+      return tag.Key === TagName.NodeState &&
+        tag.Value !== NodeState.InitAwaiting;
+    });
+
+    return (inProgressInstances.length > 1) && (currentInstanceTags.length === 0 || isInitializeAwait);
+  }
+
+  return false;
+}
+
 export async function isMasterConcurrency(groupName: string): Promise<boolean> {
   const result = await autoScalingGroup
     .describeAutoScalingGroups({
@@ -133,7 +169,10 @@ export async function isMasterConcurrency(groupName: string): Promise<boolean> {
   const { Instances } = result.AutoScalingGroups[0];
   if (Instances) {
     const checkTypes = [
-      LifecycleState.Pending, LifecycleState.PendingWait, LifecycleState.PendingProceed,
+      LifecycleState.Pending,
+      LifecycleState.PendingWait,
+      LifecycleState.PendingProceed,
+      LifecycleState.InService,
     ];
 
     const inProgressInstances = Instances

@@ -22,7 +22,7 @@ spec:
         fsGroup: 9090
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.9.2
+          image: prom/prometheus:v2.10.0
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"

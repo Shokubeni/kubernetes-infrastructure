@@ -38,7 +38,7 @@ spec:
         runAsUser: 0
       containers:
         - name: node-exporter
-          image: quay.io/prometheus/node-exporter:v0.18.0
+          image: quay.io/prometheus/node-exporter:v0.18.1
           args:
             - "--collector.filesystem.ignored-mount-points=\"^/(sys|proc|host|etc)($|/)\""
             - "--collector.diskstats.ignored-devices=\"^(ram|loop|fd)\\d+$\""

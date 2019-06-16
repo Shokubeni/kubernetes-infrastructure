@@ -209,10 +209,13 @@ module "grafana_general_config" {
   file_path   = "${path.module}/manifest/grafana/configmap/grafana-configmap.yaml"
   config_path = "${var.config_path}"
   variables   = {
-    from_adress  = "metrics@${var.domain_config["domain_name"]}"
-    server_url   = "https://metrics.${var.domain_config["domain_name"]}"
-    domain_name  = "${var.domain_config["domain_name"]}"
-    cluster_name = "${var.cluster_config["name"]}"
+    from_adress       = "metrics@${var.domain_config["domain_name"]}"
+    server_url        = "https://metrics.${var.domain_config["domain_name"]}"
+    domain_name       = "${var.domain_config["domain_name"]}"
+    cluster_name      = "${var.cluster_config["name"]}"
+    okta_url          = "${var.okta_url}"
+    grafana_client_id = "${var.grafana_client_id}"
+    grafana_secret    = "${var.grafana_secret}"
   }
   depends_on  = [
     "${module.monitoring_namespace.task_id}"

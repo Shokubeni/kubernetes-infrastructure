@@ -34,16 +34,6 @@ spec:
               cpu: 200m
               memory: 256Mi
           env:
-            - name: GF_SECURITY_ADMIN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-admin
-                  key: username
-            - name: GF_SECURITY_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-admin
-                  key: password
             - name: GF_SMTP_HOST
               valueFrom:
                 secretKeyRef:

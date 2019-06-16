@@ -37,6 +37,7 @@ export enum NodeRole {
 
 export enum NodeState {
   InitProcessing = 'init:processing',
+  InitAwaiting  = 'init:awaiting',
   InitFinished = 'init:finished',
 }
 

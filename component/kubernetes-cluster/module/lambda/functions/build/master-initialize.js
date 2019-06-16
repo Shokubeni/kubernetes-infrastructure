@@ -27,6 +27,15 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             yield queue_1.refreshQueueTask(event, process.env.SQS_QUEUE_URL, refreshTimeout);
             return context.fail(messages_1.HandlerMessages.TaskHandlingDelayed);
         }
+        if (yield autoscaling_1.isQueueControlReturn(event, process.env.MASTER_AUTOSCALING_GROUP)) {
+            const controlTimeout = Math.ceil(Math.random() * 30);
+            yield autoscaling_1.setInstanceTags(event, [
+                { Key: types_1.TagName.NodeState, Value: types_1.NodeState.InitAwaiting },
+                { Key: types_1.TagName.NodeRole, Value: types_1.NodeRole.MaterNode },
+            ]);
+            yield queue_1.refreshQueueTask(event, process.env.SQS_QUEUE_URL, controlTimeout);
+            return context.fail(messages_1.HandlerMessages.TaskHandlingDelayed);
+        }
         if (yield autoscaling_1.isMasterConcurrency(process.env.MASTER_AUTOSCALING_GROUP)) {
             yield queue_1.refreshQueueTask(event, process.env.SQS_QUEUE_URL, refreshTimeout);
             return context.fail(messages_1.HandlerMessages.TaskHandlingDelayed);

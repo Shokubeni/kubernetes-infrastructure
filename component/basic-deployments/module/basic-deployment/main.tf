@@ -108,9 +108,9 @@ module "kube_lego_configmap" {
   }
 }
 
-module "kube_lego_daemonset" {
+module "kube_lego_deployment" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/kube-lego/daemonset.yaml"
+  file_path   = "${path.module}/manifest/kube-lego/deployment.yaml"
   config_path = "${var.config_path}"
 }

@@ -4,6 +4,7 @@ import {
   completeLifecycle,
   isMasterConcurrency,
   isMasterNodeExists,
+  isQueueControlReturn,
   refreshLifecycle,
   setInstanceTags,
 } from './helper/autoscaling';
@@ -47,6 +48,17 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
 
     if (!await isInSystemManager(event)) {
       await refreshQueueTask(event, process.env.SQS_QUEUE_URL, refreshTimeout);
+      return context.fail(HandlerMessages.TaskHandlingDelayed);
+    }
+
+    if (await isQueueControlReturn(event, process.env.MASTER_AUTOSCALING_GROUP)) {
+      const controlTimeout = Math.ceil(Math.random() * 30);
+
+      await setInstanceTags(event, [
+        { Key: TagName.NodeState, Value: NodeState.InitAwaiting },
+        { Key: TagName.NodeRole, Value: NodeRole.MaterNode },
+      ]);
+      await refreshQueueTask(event, process.env.SQS_QUEUE_URL, controlTimeout);
       return context.fail(HandlerMessages.TaskHandlingDelayed);
     }
 

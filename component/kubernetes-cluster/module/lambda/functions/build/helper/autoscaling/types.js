@@ -40,6 +40,7 @@ var NodeRole;
 var NodeState;
 (function (NodeState) {
     NodeState["InitProcessing"] = "init:processing";
+    NodeState["InitAwaiting"] = "init:awaiting";
     NodeState["InitFinished"] = "init:finished";
 })(NodeState = exports.NodeState || (exports.NodeState = {}));
 var TagName;

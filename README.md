@@ -21,7 +21,11 @@ cd environment/general
 terragrunt apply-all
 ```
 ## Environment
+These environment variables must be configured before you start installation.
 ```sh
+TF_VAR_OKTA_URL          = <string>`corporate okta url address`
+TF_VAR_GRAFANA_CLIENT_ID = <string>`okta application client ID`
+TF_VAR_GRAFANA_SECRET    = <string>`okta application secret`
 TF_VAR_AWS_ROLE          = <string>`aws role arn`
 TF_VAR_AWS_REGION        = <string>`aws region id`
 TF_VAR_AWS_PROFILE       = <string>`profile name`
@@ -38,5 +42,5 @@ TF_VAR_SMTP_ALERTS_PASS  = <string>`smtp user password`
 TF_VAR_SLACK_ALERTS_URL  = <url>`slack alerts webhook`
 TF_VAR_SLACK_CHANNEL     = <string>`slack alerts chanel`
 TF_VAR_DEPLOYMENT_TYPE   = <string>(production || development)
-TF_VAR_KUBE_CONFIG       = <bool>`use user or generated config`
+TF_VAR_KUBE_CONFIG       = <string>`path to kubernetes config`
 ```

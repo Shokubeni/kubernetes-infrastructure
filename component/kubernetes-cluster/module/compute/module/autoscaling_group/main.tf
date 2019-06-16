@@ -80,7 +80,7 @@ resource "aws_autoscaling_schedule" "autoscaling" {
   desired_capacity       = "${local.desired_capacity}"
   max_size               = "${local.max_size}"
   min_size               = "${local.min_size}"
-  start_time             = "${timeadd(timestamp(), "240s")}"
+  start_time             = "${timeadd(timestamp(), "30s")}"
 }
 
 resource "aws_lambda_event_source_mapping" "lifecycle" {

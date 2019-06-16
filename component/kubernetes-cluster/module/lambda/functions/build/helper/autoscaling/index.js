@@ -107,6 +107,43 @@ function isMasterNodeExists(groupName) {
     });
 }
 exports.isMasterNodeExists = isMasterNodeExists;
+function isQueueControlReturn(event, groupName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const instanceId = (typeof event === 'object')
+            ? JSON.parse(event.Records[0].body).EC2InstanceId
+            : event;
+        const result = yield autoScalingGroup
+            .describeAutoScalingGroups({
+            AutoScalingGroupNames: [groupName],
+        })
+            .promise();
+        const { Instances } = result.AutoScalingGroups[0];
+        if (Instances) {
+            const checkTypes = [
+                types_1.LifecycleState.Pending,
+                types_1.LifecycleState.PendingWait,
+                types_1.LifecycleState.PendingProceed,
+                types_1.LifecycleState.InService,
+            ];
+            const inProgressInstances = Instances
+                .filter((instance) => {
+                const isInProgress = checkTypes.includes(instance.LifecycleState);
+                const isHealthy = instance.HealthStatus === types_1.HealthStatus.Healthy;
+                return isInProgress && isHealthy;
+            });
+            const currentInstanceTags = yield getInstanceTags(instanceId, [{
+                    Values: [types_1.TagName.NodeState], Name: 'key',
+                }]);
+            const isInitializeAwait = currentInstanceTags.some((tag) => {
+                return tag.Key === types_1.TagName.NodeState &&
+                    tag.Value !== types_1.NodeState.InitAwaiting;
+            });
+            return (inProgressInstances.length > 1) && (currentInstanceTags.length === 0 || isInitializeAwait);
+        }
+        return false;
+    });
+}
+exports.isQueueControlReturn = isQueueControlReturn;
 function isMasterConcurrency(groupName) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield autoScalingGroup
@@ -117,7 +154,10 @@ function isMasterConcurrency(groupName) {
         const { Instances } = result.AutoScalingGroups[0];
         if (Instances) {
             const checkTypes = [
-                types_1.LifecycleState.Pending, types_1.LifecycleState.PendingWait, types_1.LifecycleState.PendingProceed,
+                types_1.LifecycleState.Pending,
+                types_1.LifecycleState.PendingWait,
+                types_1.LifecycleState.PendingProceed,
+                types_1.LifecycleState.InService,
             ];
             const inProgressInstances = Instances
                 .filter((instance) => {

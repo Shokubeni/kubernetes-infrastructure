@@ -21,3 +21,15 @@ variable "slack_channel" {
 variable "slack_hook" {
   type = "string"
 }
+
+variable "okta_url" {
+  type = "string"
+}
+
+variable "grafana_client_id" {
+  type = "string"
+}
+
+variable "grafana_secret" {
+  type = "string"
+}

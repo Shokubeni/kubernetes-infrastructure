@@ -61,12 +61,15 @@ module "basic" {
 module "monitoring" {
   source = "./module/cluster-monitoring"
 
-  cluster_config = "${local.cluster_config}"
-  domain_config  = "${var.domain_config}"
-  config_path    = "${local.config_path}"
-  slack_channel  = "${var.slack_channel}"
-  slack_hook     = "${var.slack_hook}"
-  smtp_config    = {
+  cluster_config    = "${local.cluster_config}"
+  domain_config     = "${var.domain_config}"
+  config_path       = "${local.config_path}"
+  slack_channel     = "${var.slack_channel}"
+  slack_hook        = "${var.slack_hook}"
+  grafana_client_id = "${var.grafana_client_id}"
+  grafana_secret    = "${var.grafana_secret}"
+  okta_url          = "${var.okta_url}"
+  smtp_config       = {
     host         = "${var.smtp_host}"
     port         = "${var.smtp_port}"
     metrics_user = "${var.smtp_metrics_user}"

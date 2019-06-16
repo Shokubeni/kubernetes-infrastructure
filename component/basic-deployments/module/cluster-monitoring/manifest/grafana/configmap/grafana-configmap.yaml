@@ -7,6 +7,15 @@ metadata:
   namespace: monitoring
 data:
   grafana.ini: |
+    [auth.generic_oauth]
+    name = Okta
+    enabled = true
+    scopes = openid profile email
+    client_id = ${grafana_client_id}
+    client_secret = ${grafana_secret}
+    auth_url = ${okta_url}/oauth2/v1/authorize
+    token_url = ${okta_url}/oauth2/v1/token
+    api_url = ${okta_url}/oauth2/v1/userinfo
     [server]
     root_url = ${server_url}
     domain = ${domain_name}
@@ -17,6 +26,8 @@ data:
     enabled = false
     [auth.anonymous]
     enabled = false
+    [auth]
+    disable_login_form = true
 
 ---
 
