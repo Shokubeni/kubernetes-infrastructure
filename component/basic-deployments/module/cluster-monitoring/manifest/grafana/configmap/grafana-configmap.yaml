@@ -59,7 +59,7 @@ data:
     apiVersion: 1
     providers:
     - disableDeletion: true
-      editable: false
+      editable: true
       folder: "Ingress"
       name: ingress
       options:
@@ -67,7 +67,7 @@ data:
       orgId: 1
       type: file
     - disableDeletion: true
-      editable: false
+      editable: true
       folder: "Cluster"
       name: cluster
       options:
@@ -75,7 +75,7 @@ data:
       orgId: 1
       type: file
     - disableDeletion: true
-      editable: false
+      editable: true
       folder: "Linkerd"
       name: linkerd-first
       options:
@@ -83,7 +83,7 @@ data:
       orgId: 1
       type: file
     - disableDeletion: true
-      editable: false
+      editable: true
       folder: "Linkerd"
       name: linkerd-second
       options:
@@ -91,7 +91,7 @@ data:
       orgId: 1
       type: file
     - disableDeletion: true
-      editable: false
+      editable: true
       folder: "Linkerd"
       name: linkerd-second
       options:

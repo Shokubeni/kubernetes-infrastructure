@@ -61,7 +61,7 @@ data:
             summary: High Memory Usage of Container
             description: Container named "{{$labels.container}}" in "{{$labels.pod}}" pod in is using more than 75% of Memory Limit
           expr: |
-            ((( sum(container_memory_usage_bytes{image!="",container!="POD", container!="prometheus", namespace!="kube-system"}) by (namespace,container,pod)  / sum(container_spec_memory_limit_bytes{image!="",container!="POD", container!="prometheus",namespace!="kube-system"}) by (namespace,container,pod) ) * 100 ) < +Inf ) > 75
+            ((( sum(container_memory_working_set_bytes{image!="",container!="POD", container!="prometheus", namespace!="kube-system"}) by (namespace,container,pod)  / sum(container_spec_memory_limit_bytes{image!="",container!="POD", container!="prometheus",namespace!="kube-system"}) by (namespace,container,pod) ) * 100 ) < +Inf ) > 75
           for: 5m
           labels:
             severity: warning

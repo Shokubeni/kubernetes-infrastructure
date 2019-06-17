@@ -5558,7 +5558,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / sum(container_spec_memory_limit_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
+              "expr": "sum(container_memory_working_set_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / sum(container_spec_memory_limit_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "actual",
@@ -5762,7 +5762,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (id,pod_name)",
+              "expr": "sum (container_memory_working_set_bytes{container_name=\"$container\",namespace=~\"^$namespace$\"}) by (id,pod_name)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod_name}}",
@@ -5981,7 +5981,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / count(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) ",
+              "expr": "sum (container_memory_working_set_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / count(container_memory_working_set_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "actual",
@@ -6200,7 +6200,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / count(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
+              "expr": "sum (container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\",container_name!=\"POD\",namespace=~\"^$namespace$\"}) by (namespace,container_name) / count(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "actual",
@@ -7151,7 +7151,8 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / sum(container_spec_memory_limit_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
+
+              "expr": "sum (container_memory_working_set_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / sum(container_spec_memory_limit_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) * 100",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -7348,7 +7349,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (id,pod_name)",
+              "expr": "sum (container_memory_working_set_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (id,pod_name)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -7559,7 +7560,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / count(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) ",
+              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / count(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "actual",
@@ -7568,7 +7569,7 @@ data:
               "step": 1
             },
             {
-              "expr": "sum(container_spec_memory_limit_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / count(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) ",
+              "expr": "sum(container_spec_memory_limit_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name) / count(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -7774,7 +7775,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
+              "expr": "sum(container_memory_working_set_bytes{container_name=\"$container\", namespace=\"$namespace\"}) by (namespace,container_name)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
