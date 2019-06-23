@@ -1,15 +1,29 @@
-variable "secure_bucket" {
-  type = "map"
-}
-
 variable "cluster_config" {
-  type = "map"
+  type = object({
+    id         = string
+    name       = string
+    label      = string
+    kubernetes = string
+    docker     = string
+    account    = string
+    region     = string
+    type       = string
+  })
 }
 
-variable "root_dir" {
-  type = "string"
+variable "secure_bucket" {
+  type = object({
+    id     = string
+    arn    = string
+    name   = string
+    region = string
+  })
 }
 
 variable "dependencies" {
-  type = "list"
+  type = list(string)
+}
+
+variable "root_dir" {
+  type = string
 }

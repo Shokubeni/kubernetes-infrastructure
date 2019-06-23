@@ -4,8 +4,8 @@ resource "tls_private_key" "master" {
 }
 
 resource "aws_key_pair" "master" {
-  key_name   = "${var.cluster_config["label"]}-master_${var.cluster_config["id"]}"
-  public_key = "${tls_private_key.master.public_key_openssh}"
+  key_name   = "${var.cluster_config.label}-master_${var.cluster_config.id}"
+  public_key = tls_private_key.master.public_key_openssh
 }
 
 resource "tls_private_key" "worker" {
@@ -14,8 +14,8 @@ resource "tls_private_key" "worker" {
 }
 
 resource "aws_key_pair" "worker" {
-  key_name   = "${var.cluster_config["label"]}-worker_${var.cluster_config["id"]}"
-  public_key = "${tls_private_key.worker.public_key_openssh}"
+  key_name   = "${var.cluster_config.label}-worker_${var.cluster_config.id}"
+  public_key = tls_private_key.worker.public_key_openssh
 }
 
 resource "tls_private_key" "nat" {
@@ -24,6 +24,6 @@ resource "tls_private_key" "nat" {
 }
 
 resource "aws_key_pair" "nat" {
-  key_name   = "${var.cluster_config["label"]}-nat_${var.cluster_config["id"]}"
-  public_key = "${tls_private_key.nat.public_key_openssh}"
+  key_name   = "${var.cluster_config.label}-nat_${var.cluster_config.id}"
+  public_key = tls_private_key.nat.public_key_openssh
 }

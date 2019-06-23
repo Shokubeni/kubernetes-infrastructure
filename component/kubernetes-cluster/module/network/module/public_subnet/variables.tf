@@ -1,19 +1,28 @@
 variable "virtual_cloud_id" {
-  type = "string"
+  type = string
 }
 
 variable "subnets_count" {
-  type = "string"
+  type = string
 }
 
 variable "subnets_zones" {
-  type = "list"
+  type = list(string)
 }
 
 variable "subnets_cidrs" {
-  type = "list"
+  type = list(string)
 }
 
 variable "cluster_config" {
-  type = "map"
+  type = object({
+    id         = string
+    name       = string
+    label      = string
+    kubernetes = string
+    docker     = string
+    account    = string
+    region     = string
+    type       = string
+  })
 }

@@ -1,8 +1,8 @@
 locals {
-  private_subnets_count = "${length(keys(var.private_subnets))}"
-  private_subnets       = "${split(",", var.network_data["private_subnet_ids"])}"
-  public_subnets_count  = "${length(keys(var.public_subnets))}"
-  public_subnets        = "${split(",", var.network_data["public_subnet_ids"])}"
+  private_subnets_count = length(keys(var.network_config.private_subnets))
+  private_subnets       = var.network_data.private_subnet_ids
+  public_subnets_count  = length(keys(var.network_config.public_subnets))
+  public_subnets        = var.network_data.public_subnet_ids
 }
 
 locals {
@@ -27,23 +27,21 @@ locals {
 }
 
 resource "aws_network_interface" "nat" {
-  count             = "${local.public_subnets_count}"
-  subnet_id         = "${element(local.public_subnets, count.index)}"
-  security_groups   = ["${var.nat_security["group_id"]}"]
+  count             = local.public_subnets_count
+  subnet_id         = local.public_subnets[count.index]
+  security_groups   = [var.nat_node_security.group_id]
   source_dest_check = "false"
 
-  tags = "${merge(
-    map(
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_instance" "nat" {
-  count                                = "${local.public_subnets_count}"
-  ami                                  = "${local.zone_image[var.cluster_config["region"]]}"
-  instance_type                        = "${var.nat_instance_type}"
-  key_name                             = "${var.nat_security["key_id"]}"
+  count                                = local.public_subnets_count
+  ami                                  = local.zone_image[var.cluster_config.region]
+  instance_type                        = var.network_config.nat_instance_type
+  key_name                             = var.nat_node_security.key_id
   instance_initiated_shutdown_behavior = "stop"
   disable_api_termination              = "false"
   ebs_optimized                        = "false"
@@ -60,59 +58,51 @@ resource "aws_instance" "nat" {
   }
 
   network_interface {
-    network_interface_id = "${element(aws_network_interface.nat.*.id, count.index)}"
+    network_interface_id = aws_network_interface.nat.*.id[count.index]
     device_index         = 0
   }
 
-  volume_tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} NAT Instance",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  volume_tags = {
+    "Name" = "${var.cluster_config.name} NAT Instance",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} NAT Instance",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} NAT Instance",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_eip" "nat" {
-  count    = "${local.public_subnets_count}"
-  instance = "${element(aws_instance.nat.*.id, count.index)}"
+  count    = local.public_subnets_count
+  instance = aws_instance.nat.*.id[count.index]
   vpc      = true
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} NAT Elastic IP",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} NAT Elastic IP",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_route_table" "nat" {
-  count  = "${local.private_subnets_count}"
-  vpc_id = "${var.network_data["virtual_cloud_id"]}"
+  count  = local.private_subnets_count
+  vpc_id = var.network_data.virtual_cloud_id
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} NAT Table",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} NAT Table",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_route" "nat" {
-  count                  = "${local.private_subnets_count}"
-  route_table_id         = "${element(aws_route_table.nat.*.id, count.index)}"
-  instance_id            = "${element(aws_instance.nat.*.id, count.index)}"
+  count                  = local.private_subnets_count
+  route_table_id         = aws_route_table.nat.*.id[count.index]
+  instance_id            = aws_instance.nat.*.id[count.index]
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route_table_association" "nat" {
-  count          = "${local.private_subnets_count}"
-  subnet_id      = "${element(local.private_subnets, count.index)}"
-  route_table_id = "${element(aws_route_table.nat.*.id, count.index)}"
+  count          = local.private_subnets_count
+  subnet_id      = local.private_subnets[count.index]
+  route_table_id = aws_route_table.nat.*.id[count.index]
 }

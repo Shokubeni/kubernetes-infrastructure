@@ -1,5 +1,5 @@
 resource "aws_vpc" "main" {
-  cidr_block           = "${var.virtual_cloud_cidr}"
+  cidr_block           = var.virtual_cloud_cidr
   instance_tenancy     = "default"
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -8,31 +8,27 @@ resource "aws_vpc" "main" {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Cluster VPC",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Cluster VPC",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_default_route_table" "default" {
-  default_route_table_id = "${aws_vpc.main.default_route_table_id}"
+  default_route_table_id = aws_vpc.main.default_route_table_id
 
   lifecycle {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Default Table",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Default Table",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_default_security_group" "default" {
-  vpc_id = "${aws_vpc.main.id}"
+  vpc_id = aws_vpc.main.id
 
   ingress {
     description = "All traffic"
@@ -54,16 +50,14 @@ resource "aws_default_security_group" "default" {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Default Group",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Default Group",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_default_network_acl" "default" {
-  default_network_acl_id = "${aws_vpc.main.default_network_acl_id}"
+  default_network_acl_id = aws_vpc.main.default_network_acl_id
 
   ingress {
     protocol   = -1
@@ -87,10 +81,8 @@ resource "aws_default_network_acl" "default" {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Network ACL",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Network ACL",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }

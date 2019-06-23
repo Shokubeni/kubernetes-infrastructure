@@ -1,11 +1,24 @@
 variable "secure_bucket" {
-  type = "map"
+  type = object({
+    id     = string
+    arn    = string
+    name   = string
+    region = string
+  })
 }
 
 variable "backup_bucket" {
-  type = "map"
+  type = object({
+    id     = string
+    arn    = string
+    name   = string
+    region = string
+  })
 }
 
 variable "backup_user" {
-  type = "map"
+  type = object({
+    id  = string
+    arn = string
+  })
 }

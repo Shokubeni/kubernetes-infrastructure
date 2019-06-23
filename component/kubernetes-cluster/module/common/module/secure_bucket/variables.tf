@@ -1,15 +1,15 @@
 variable "cluster_name" {
-  type = "string"
+  type = string
 }
 
 variable "cluster_label" {
-  type = "string"
+  type = string
 }
 
 variable "bucket_region" {
-  type = "string"
+  type = string
 }
 
 variable "cluster_id" {
-  type = "string"
+  type = string
 }

@@ -1,39 +1,87 @@
-variable "cluster_config" {
-  type = "map"
+variable "system_commands" {
+  type = object({
+    node_runtime_install   = string
+    general_master_init    = string
+    general_master_restore = string
+    stacked_master_init    = string
+    common_worker_init     = string
+    cluster_etcd_backup    = string
+    renew_join_token       = string
+  })
 }
 
-variable "system_commands" {
-  type = "map"
+variable "cluster_config" {
+  type = object({
+    id         = string
+    name       = string
+    label      = string
+    kubernetes = string
+    docker     = string
+    account    = string
+    region     = string
+    type       = string
+  })
 }
 
 variable "backup_bucket" {
-  type = "map"
+  type = object({
+    id     = string
+    arn    = string
+    name   = string
+    region = string
+  })
 }
 
 variable "secure_bucket" {
-  type = "map"
+  type = object({
+    id     = string
+    arn    = string
+    name   = string
+    region = string
+  })
 }
 
 variable "master_queue" {
-  type = "map"
+  type = object({
+    id   = string
+    arn  = string
+    name = string
+  })
 }
 
 variable "worker_queue" {
-  type = "map"
+  type = object({
+    id   = string
+    arn  = string
+    name = string
+  })
 }
 
 variable "cloudwatch_role" {
-  type = "map"
+  type = object({
+    id  = string
+    arn = string
+  })
 }
 
 variable "master_role" {
-  type = "map"
+  type = object({
+    id  = string
+    arn = string
+  })
 }
 
 variable "worker_role" {
-  type = "map"
+  type = object({
+    id  = string
+    arn = string
+  })
 }
 
 variable "balancer_data" {
-  type = "map"
+  type = object({
+    zone = string
+    dns  = string
+    id   = string
+  })
 }

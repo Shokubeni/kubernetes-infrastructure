@@ -1,6 +1,6 @@
 resource "aws_security_group" "master" {
-  name   = "${var.cluster_config["label"]}-master_${var.cluster_config["id"]}"
-  vpc_id = "${var.virtual_cloud_id}"
+  name   = "${var.cluster_config.label}-master_${var.cluster_config.id}"
+  vpc_id = var.virtual_cloud_id
 
   ingress {
     description = "Weave peer connections"
@@ -69,17 +69,15 @@ resource "aws_security_group" "master" {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Master Node",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Master Node",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_security_group" "worker" {
-  name   = "${var.cluster_config["label"]}-worker_${var.cluster_config["id"]}"
-  vpc_id = "${var.virtual_cloud_id}"
+  name   = "${var.cluster_config.label}-worker_${var.cluster_config.id}"
+  vpc_id = var.virtual_cloud_id
 
   ingress {
     description     = "Weave peer connections"
@@ -87,7 +85,7 @@ resource "aws_security_group" "worker" {
     from_port       = 6783
     to_port         = 6783
     self            = "true"
-    security_groups = ["${aws_security_group.master.id}"]
+    security_groups = [aws_security_group.master.id]
   }
 
   ingress {
@@ -96,7 +94,7 @@ resource "aws_security_group" "worker" {
     from_port       = 6783
     to_port         = 6784
     self            = "true"
-    security_groups = ["${aws_security_group.master.id}"]
+    security_groups = [aws_security_group.master.id]
   }
 
   ingress {
@@ -105,7 +103,7 @@ resource "aws_security_group" "worker" {
     from_port       = 10250
     to_port         = 10250
     self            = "true"
-    security_groups = ["${aws_security_group.master.id}"]
+    security_groups = [aws_security_group.master.id]
   }
 
   ingress {
@@ -114,7 +112,7 @@ resource "aws_security_group" "worker" {
     from_port       = 30000
     to_port         = 32767
     self            = "true"
-    security_groups = ["${aws_security_group.master.id}"]
+    security_groups = [aws_security_group.master.id]
   }
 
   ingress {
@@ -123,7 +121,7 @@ resource "aws_security_group" "worker" {
     from_port       = 30000
     to_port         = 32767
     self            = "true"
-    security_groups = ["${aws_security_group.master.id}"]
+    security_groups = [aws_security_group.master.id]
   }
 
   egress {
@@ -137,17 +135,15 @@ resource "aws_security_group" "worker" {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Worker Node",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Worker Node"
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_security_group" "balancer" {
-  name   = "${var.cluster_config["label"]}-balancer_${var.cluster_config["id"]}"
-  vpc_id = "${var.virtual_cloud_id}"
+  name   = "${var.cluster_config.label}-balancer_${var.cluster_config.id}"
+  vpc_id = var.virtual_cloud_id
 
   ingress {
     description = "HTTP traffic"
@@ -172,8 +168,8 @@ resource "aws_security_group" "balancer" {
     to_port     = 6443
     cidr_blocks = ["0.0.0.0/0"]
     security_groups = [
-      "${aws_security_group.master.id}",
-      "${aws_security_group.worker.id}"
+      aws_security_group.master.id,
+      aws_security_group.worker.id
     ]
   }
 
@@ -188,17 +184,15 @@ resource "aws_security_group" "balancer" {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Load Balancer",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Load Balancer",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_security_group" "nat" {
-  name   = "${var.cluster_config["label"]}-nat_${var.cluster_config["id"]}"
-  vpc_id = "${var.virtual_cloud_id}"
+  name   = "${var.cluster_config.label}-nat_${var.cluster_config.id}"
+  vpc_id = var.virtual_cloud_id
 
   ingress {
     description = "Cluster nodes TCP traffic"
@@ -206,8 +200,8 @@ resource "aws_security_group" "nat" {
     from_port   = 0
     to_port     = 0
     security_groups = [
-      "${aws_security_group.master.id}",
-      "${aws_security_group.worker.id}"
+      aws_security_group.master.id,
+      aws_security_group.worker.id
     ]
   }
 
@@ -222,12 +216,10 @@ resource "aws_security_group" "nat" {
     ignore_changes = ["*"]
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} NAT Instance",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} NAT Instance"
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
 
 resource "aws_security_group_rule" "master_http_from_balancer" {
@@ -236,8 +228,8 @@ resource "aws_security_group_rule" "master_http_from_balancer" {
   from_port                = 32080
   to_port                  = 32080
   protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.balancer.id}"
-  security_group_id        = "${aws_security_group.master.id}"
+  source_security_group_id = aws_security_group.balancer.id
+  security_group_id        = aws_security_group.master.id
 }
 
 resource "aws_security_group_rule" "master_https_from_balancer" {
@@ -246,8 +238,8 @@ resource "aws_security_group_rule" "master_https_from_balancer" {
   from_port                = 32443
   to_port                  = 32443
   protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.balancer.id}"
-  security_group_id        = "${aws_security_group.master.id}"
+  source_security_group_id = aws_security_group.balancer.id
+  security_group_id        = aws_security_group.master.id
 }
 
 resource "aws_security_group_rule" "master_api_from_balancer" {
@@ -256,8 +248,8 @@ resource "aws_security_group_rule" "master_api_from_balancer" {
   from_port                = 6443
   to_port                  = 6443
   protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.balancer.id}"
-  security_group_id        = "${aws_security_group.master.id}"
+  source_security_group_id = aws_security_group.balancer.id
+  security_group_id        = aws_security_group.master.id
 }
 
 resource "aws_security_group_rule" "master_api_from_worker" {
@@ -266,8 +258,8 @@ resource "aws_security_group_rule" "master_api_from_worker" {
   from_port                = 6443
   to_port                  = 6443
   protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.worker.id}"
-  security_group_id        = "${aws_security_group.master.id}"
+  source_security_group_id = aws_security_group.worker.id
+  security_group_id        = aws_security_group.master.id
 }
 
 resource "aws_security_group_rule" "weave_tcp_from_worker" {
@@ -276,8 +268,8 @@ resource "aws_security_group_rule" "weave_tcp_from_worker" {
   from_port                = 6783
   to_port                  = 6783
   protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.worker.id}"
-  security_group_id        = "${aws_security_group.master.id}"
+  source_security_group_id = aws_security_group.worker.id
+  security_group_id        = aws_security_group.master.id
 }
 
 resource "aws_security_group_rule" "weave_udp_from_worker" {
@@ -286,6 +278,6 @@ resource "aws_security_group_rule" "weave_udp_from_worker" {
   from_port                = 6783
   to_port                  = 6784
   protocol                 = "udp"
-  source_security_group_id = "${aws_security_group.worker.id}"
-  security_group_id        = "${aws_security_group.master.id}"
+  source_security_group_id = aws_security_group.worker.id
+  security_group_id        = aws_security_group.master.id
 }

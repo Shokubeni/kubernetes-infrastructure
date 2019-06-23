@@ -3,12 +3,10 @@ resource "aws_sqs_queue" "master_lifecycle" {
   message_retention_seconds  = 600
   visibility_timeout_seconds = 600
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_name} Master Lifecycle",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_name} Master Lifecycle",
+    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
+  }
 }
 
 resource "aws_sqs_queue" "worker_lifecycle" {
@@ -16,10 +14,8 @@ resource "aws_sqs_queue" "worker_lifecycle" {
   message_retention_seconds  = 600
   visibility_timeout_seconds = 600
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_name} Worker Lifecycle",
-      "kubernetes.io/cluster/${var.cluster_id}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_name} Worker Lifecycle",
+    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
+  }
 }

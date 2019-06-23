@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "backup" {
   bucket        = "${var.cluster_label}.backup-data.${var.cluster_id}"
-  region        = "${var.bucket_region}"
+  region        = var.bucket_region
   acl           = "private"
   force_destroy = true
 
@@ -12,10 +12,8 @@ resource "aws_s3_bucket" "backup" {
     }
   }
 
-  tags = "${merge(
-    map(
-      "kubernetes.io/cluster/${var.cluster_id}", "owned",
-      "Name", "${var.cluster_name} Backup Bucket"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_name} Backup Bucket"
+    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
+  }
 }

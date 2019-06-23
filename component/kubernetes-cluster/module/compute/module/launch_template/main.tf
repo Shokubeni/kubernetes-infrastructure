@@ -1,22 +1,14 @@
 locals {
-  shutdown_behavior     = "${lookup(var.launch_config, "shutdown_behavior", "terminate")}"
-  disable_termination   = "${lookup(var.launch_config, "disable_termination", false)}"
-  ebs_optimized         = "${lookup(var.launch_config, "ebs_optimized", false)}"
-  cpu_credits           = "${lookup(var.launch_config, "cpu_credits", "standard")}"
-  monitoring            = "${lookup(var.launch_config, "monitoring", false)}"
-  delete_on_termination = "${lookup(var.volume_config, "delete_on_termination", true)}"
-  volume_type           = "${lookup(var.volume_config, "volume_type", "gp2")}"
-  volume_size           = "${lookup(var.volume_config, "volume_size", 10)}"
-  role_postfix          = "${
-    contains(var.cluster_role, "controlplane")
-        ? "master"
-        : "worker"
-  }"
-  role_name             = "${
-    contains(var.cluster_role, "controlplane")
-        ? "Master"
-        : "Worker"
-  }"
+  shutdown_behavior     = var.node_config.instance.shutdown_behavior
+  disable_termination   = var.node_config.instance.disable_termination
+  ebs_optimized         = var.node_config.instance.ebs_optimized
+  cpu_credits           = var.node_config.instance.cpu_credits
+  monitoring            = var.node_config.instance.monitoring
+  delete_on_termination = var.node_config.volume.delete_on_termination
+  volume_type           = var.node_config.volume.volume_type
+  volume_size           = var.node_config.volume.volume_size
+  role_postfix          = contains(var.cluster_role, "controlplane") ? "master" : "worker"
+  role_name             = contains(var.cluster_role, "controlplane") ? "Master" : "Worker"
 }
 
 locals {
@@ -41,73 +33,67 @@ locals {
 }
 
 resource "aws_iam_instance_profile" "launch" {
-  name = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}."
-  role = "${var.node_role_id}"
+  name = "${var.cluster_config.label}-${local.role_postfix}_${var.cluster_config.id}."
+  role = var.node_role_id
 }
 
 resource "aws_launch_template" "launch" {
-  name                                 = "${var.cluster_config["label"]}-${local.role_postfix}_${var.cluster_config["id"]}"
-  image_id                             = "${local.zone_image[var.cluster_config["region"]]}"
-  instance_type                        = "${element(split(",", var.launch_config["instance_types"]), 0)}"
-  ebs_optimized                        = "${local.ebs_optimized}"
-  instance_initiated_shutdown_behavior = "${local.shutdown_behavior}"
-  disable_api_termination              = "${local.disable_termination}"
-  key_name                             = "${var.key_pair_id}"
+  name                                 = "${var.cluster_config.label}-${local.role_postfix}_${var.cluster_config.id}"
+  image_id                             = local.zone_image[var.cluster_config.region]
+  instance_type                        = var.node_config.instance.instance_types[0]
+  ebs_optimized                        = local.ebs_optimized
+  instance_initiated_shutdown_behavior = local.shutdown_behavior
+  disable_api_termination              = local.disable_termination
+  key_name                             = var.key_pair_id
   description                          = "${local.role_postfix} nodes launch"
 
   block_device_mappings {
     device_name = "/dev/sda1"
 
     ebs {
-      delete_on_termination = "${local.delete_on_termination}"
-      volume_type           = "${local.volume_type}"
-      volume_size           = "${local.volume_size}"
+      delete_on_termination = local.delete_on_termination
+      volume_type           = local.volume_type
+      volume_size           = local.volume_size
       encrypted             = "true"
     }
   }
 
   iam_instance_profile {
-    name = "${aws_iam_instance_profile.launch.id}"
+    name = aws_iam_instance_profile.launch.id
   }
 
   credit_specification {
-    cpu_credits = "${local.cpu_credits}"
+    cpu_credits = local.cpu_credits
   }
 
   monitoring {
-    enabled = "${local.monitoring}"
+    enabled = local.monitoring
   }
 
   network_interfaces {
-    security_groups             = ["${var.security_group_id}"]
+    security_groups             = [var.security_group_id]
     associate_public_ip_address = "false"
     delete_on_termination       = true
   }
 
   tag_specifications {
     resource_type = "volume"
-    tags          = "${merge(
-      map(
-        "Name", "${var.cluster_config["name"]} ${local.role_name} Node",
-        "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-      )
-    )}"
+    tags          = {
+      "Name" = "${var.cluster_config.name} ${local.role_name} Node"
+      "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+    }
   }
 
   tag_specifications {
     resource_type = "instance"
-    tags          = "${merge(
-      map(
-        "Name", "${var.cluster_config["name"]} ${local.role_name} Node",
-        "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-      )
-    )}"
+    tags          = {
+      "Name" = "${var.cluster_config.name} ${local.role_name} Node",
+      "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+    }
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} ${local.role_name} Template",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} ${local.role_name} Template",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }

@@ -1,7 +1,7 @@
 resource "aws_elb" "balancer" {
-  name                      = "${var.cluster_config["label"]}-${var.cluster_config["id"]}"
-  subnets                   = ["${split(",", var.network_data["public_subnet_ids"])}"]
-  security_groups           = ["${var.balancer_security["group_id"]}"]
+  name                      = "${var.cluster_config.label}-${var.cluster_config.id}"
+  subnets                   = var.network_data.public_subnet_ids
+  security_groups           = [var.balancer_security.group_id]
   cross_zone_load_balancing = true
 
   listener {
@@ -33,10 +33,8 @@ resource "aws_elb" "balancer" {
     unhealthy_threshold = 5
   }
 
-  tags = "${merge(
-    map(
-      "Name", "${var.cluster_config["name"]} Load Balancer",
-      "kubernetes.io/cluster/${var.cluster_config["id"]}", "owned"
-    )
-  )}"
+  tags = {
+    "Name" = "${var.cluster_config.name} Load Balancer",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
 }
