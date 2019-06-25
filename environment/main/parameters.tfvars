@@ -19,7 +19,7 @@ master_node_config = {
   volume = {
     delete_on_termination = true
     volume_type           = "gp2"
-    volume_size           = 15
+    volume_size           = 30
   }
 }
 
@@ -35,13 +35,13 @@ worker_node_config = {
     min_size              = 1
     max_size              = 5
     on_demand_capasity    = 0
-    desired_capacity      = 1
+    desired_capacity      = 2
   }
 
   volume = {
     delete_on_termination = true
     volume_type           = "gp2"
-    volume_size           = 15
+    volume_size           = 30
   }
 }
 

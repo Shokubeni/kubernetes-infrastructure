@@ -1,19 +1,29 @@
+variable "network_config" {
+  type = object({
+    virtual_cloud_cidr = string
+    nat_instance_type  = string
+    is_main_cluster    = bool
+    private_subnets    = map(string)
+    public_subnets     = map(string)
+    domain_info        = object({
+      hosted_zone = string
+      domain_name = string
+    })
+  })
+}
+
 variable "balancer_data" {
-  type = "map"
+  type = object({
+    dns  = string
+    id   = string
+    zone = string
+  })
 }
 
 variable "provider_profile" {
-  type = "string"
+  type = string
 }
 
 variable "provider_region" {
-  type = "string"
-}
-
-variable "domain_config" {
-  type = "map"
-}
-
-variable "is_main_cluster" {
-  type = "string"
+  type = string
 }

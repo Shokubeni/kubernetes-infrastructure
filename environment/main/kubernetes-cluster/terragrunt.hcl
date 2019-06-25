@@ -11,7 +11,7 @@ terraform {
       "-var", "cluster_label=${get_env("TF_VAR_CLUSTER_LABEL", "smart-gears")}",
       "-var", "cluster_name=${get_env("TF_VAR_CLUSTER_NAME", "SmartGears")}",
       "-var", "admin_role=${get_env("TF_VAR_AWS_ROLE", "false")}",
-      "-var", "root_dir=${get_terragrunt_dir()}/../../../..",
+      "-var", "root_dir=${get_terragrunt_dir()}/../../..",
     ]
   }
 }

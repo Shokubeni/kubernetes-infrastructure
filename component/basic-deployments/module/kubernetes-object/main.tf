@@ -1,26 +1,24 @@
 locals {
-  config_argument = "${var.config_path != "null" ? "--kubeconfig ${var.config_path}" : "" }"
+  config_argument = var.config_path != false ? "--kubeconfig ${var.config_path}" : ""
 }
 
 resource "null_resource" "dependency_getter" {
   provisioner "local-exec" {
-    command = "echo ${length(var.depends_on)}"
+    command = "echo ${length(var.depends)}"
   }
 }
 
 data "template_file" "kubernetes_object" {
   depends_on = ["null_resource.dependency_getter"]
 
-  template = "${
-    length(values(var.variables)) > 0 ? file("${var.file_path}") : file("${path.module}/empty.yaml")
-  }"
-  vars     = "${var.variables}"
+  template = length(values(var.variables)) > 0 ? file(var.file_path) : file("${path.module}/empty.yaml")
+  vars     = var.variables
 }
 
 resource "null_resource" "kubernetes_object" {
   depends_on = ["null_resource.dependency_getter"]
 
-  triggers {
+  triggers = {
     build_number = "${sha256(file("${var.file_path}"))}:${sha256(join(",", values(var.variables)))}"
   }
 
