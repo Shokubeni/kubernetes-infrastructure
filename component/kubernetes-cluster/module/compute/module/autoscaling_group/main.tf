@@ -1,6 +1,7 @@
 locals {
-  capasity         = var.node_config.instance.on_demand_capasity
+  start_capacity   = var.node_config.instance.desired_capacity <= 2 ? var.node_config.instance.desired_capacity : 1
   desired_capacity = var.node_config.instance.desired_capacity
+  capasity         = var.node_config.instance.on_demand_capasity
   max_size         = var.node_config.instance.max_size
   min_size         = var.node_config.instance.min_size
   check_type       = contains(var.cluster_role, "controlplane") ? "ELB" : "EC2"
@@ -15,8 +16,8 @@ resource "aws_autoscaling_group" "autoscaling" {
   vpc_zone_identifier       = var.private_subnet_ids
   load_balancers            = [local.load_balancer]
   health_check_type         = local.check_type
+  desired_capacity          = local.start_capacity
   force_delete              = false
-  desired_capacity          = 1
 
   initial_lifecycle_hook {
     name                    = "${var.cluster_config.label}-${local.role_postfix}_${var.cluster_config.id}"

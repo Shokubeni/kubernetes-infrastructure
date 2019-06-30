@@ -3,7 +3,7 @@
 //**********************************************************************
 master_node_config = {
   instance = {
-    instance_types        = ["t3.large","t2.large"]
+    instance_types        = ["t3a.large", "t3.large", "t2.large"]
     shutdown_behavior     = "terminate"
     cpu_credits           = "standard"
     disable_termination   = false
@@ -25,13 +25,13 @@ master_node_config = {
 
 worker_node_config = {
   instance = {
-    instance_types        = ["t3a.xlarge","t3.xlarge"]
+    instance_types        = ["t3a.large", "t3.large", "t2.large"]
     shutdown_behavior     = "terminate"
     cpu_credits           = "standard"
     disable_termination   = false
     ebs_optimized         = false
     monitoring            = false
-    max_price             = 0.10
+    max_price             = 0.08
     min_size              = 1
     max_size              = 5
     on_demand_capasity    = 0
@@ -50,7 +50,7 @@ worker_node_config = {
 //**********************************************************************
 network_config = {
   virtual_cloud_cidr = "172.16.0.0/16"
-  nat_instance_type  = "t3.micro"
+  nat_instance_type  = "t3a.micro"
   is_main_cluster    = true
 
   private_subnets    = {

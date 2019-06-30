@@ -5,6 +5,7 @@ kind: StorageClass
 metadata:
   name: aws-ebs
 provisioner: kubernetes.io/aws-ebs
+allowVolumeExpansion: true
 parameters:
   encrypted: "true"
   type: gp2
