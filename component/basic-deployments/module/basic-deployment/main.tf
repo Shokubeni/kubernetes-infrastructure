@@ -86,27 +86,32 @@ module "ingress_controller_service" {
 }
 
 /*  --------------------------------------------------------------------- */
-module "kube_lego_rbac" {
+module "cert_manager_namespace" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/kube-lego/rbac.yaml"
+  file_path   = "${path.module}/manifest/cert-manager/namespace.yaml"
   config_path = var.config_path
 }
 
-module "kube_lego_configmap" {
+module "cert_manager_general" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/kube-lego/configmap.yaml"
+  file_path   = "${path.module}/manifest/cert-manager/general.yaml"
+  config_path = var.config_path
+  depends     = [
+    module.cert_manager_namespace.task_id
+  ]
+}
+
+module "cert_manager_issuer" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/cert-manager/issuer.yaml"
   config_path = var.config_path
   variables   = {
     domain_name = var.network_config.domain_info.domain_name
-    acme_stage  = var.cluster_config.type == "production" ? "acme-v01.api.letsencrypt.org/directory" : "acme-staging-v02.api.letsencrypt.org/directory"
   }
-}
-
-module "kube_lego_deployment" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/kube-lego/deployment.yaml"
-  config_path = var.config_path
+  depends     = [
+    module.cert_manager_namespace.task_id
+  ]
 }

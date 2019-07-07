@@ -25,7 +25,7 @@ master_node_config = {
 
 worker_node_config = {
   instance = {
-    instance_types        = ["t3a.large", "t3.large", "t2.large"]
+    instance_types        = ["t3a.xlarge", "t3.xlarge", "t2.xlarge"]
     shutdown_behavior     = "terminate"
     cpu_credits           = "standard"
     disable_termination   = false
