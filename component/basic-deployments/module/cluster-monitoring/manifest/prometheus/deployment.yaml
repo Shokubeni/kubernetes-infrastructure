@@ -35,10 +35,10 @@ spec:
           resources:
             requests:
               cpu: 150m
-              memory: 512Mi
+              memory: 1024Mi
             limits:
               cpu: 300m
-              memory: 1024Mi
+              memory: 2048Mi
           securityContext:
             privileged: true
           volumeMounts:
@@ -64,6 +64,5 @@ spec:
           effect: NoSchedule
       nodeSelector:
         node-role.kubernetes.io/master: ""
-
 
 ---

@@ -24,6 +24,7 @@ subjects:
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
+# kubernetes versions before 1.8.0 should use rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: kube-state-metrics
@@ -48,9 +49,13 @@ rules:
       - daemonsets
       - deployments
       - replicasets
+      - ingresses
     verbs: ["list", "watch"]
   - apiGroups: ["apps"]
     resources:
+      - daemonsets
+      - deployments
+      - replicasets
       - statefulsets
     verbs: ["list", "watch"]
   - apiGroups: ["batch"]
@@ -62,39 +67,21 @@ rules:
     resources:
       - horizontalpodautoscalers
     verbs: ["list", "watch"]
-
----
-
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kube-state-metrics
-  namespace: monitoring
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: kube-state-metrics-resizer
-subjects:
-  - kind: ServiceAccount
-    name: kube-state-metrics
-    namespace: monitoring
-
----
-
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: monitoring
-  name: kube-state-metrics-resizer
-rules:
-  - apiGroups: [""]
+  - apiGroups: ["policy"]
     resources:
-      - pods
-    verbs: ["get"]
-  - apiGroups: ["extensions"]
+      - poddisruptionbudgets
+    verbs: ["list", "watch"]
+  - apiGroups: ["certificates.k8s.io"]
     resources:
-      - deployments
-    resourceNames: ["kube-state-metrics"]
-    verbs: ["get", "update"]
+      - certificatesigningrequests
+    verbs: ["list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources:
+      - storageclasses
+    verbs: ["list", "watch"]
+  - apiGroups: ["autoscaling.k8s.io"]
+    resources:
+      - verticalpodautoscalers
+    verbs: ["list", "watch"]
 
 ---

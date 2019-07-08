@@ -123,8 +123,8 @@ metadata:
 data:
   prometheus.yml: |-
     global:
-      scrape_interval: 5s
-      evaluation_interval: 5s
+      scrape_interval: 10s
+      evaluation_interval: 10s
     rule_files:
       - "/etc/prometheus-rules/*.rules"
     alerting:
@@ -155,8 +155,6 @@ data:
           - '{job="linkerd-controller"}'
 
     - job_name: kubernetes-cadvisers
-      scrape_interval: 10s
-      scrape_timeout: 10s
       scheme: https
       tls_config:
         ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
