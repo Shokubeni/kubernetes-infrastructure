@@ -213,7 +213,6 @@ module "grafana_general_config" {
     server_url        = "https://metrics.${var.network_config.domain_info.domain_name}"
     domain_name       = var.network_config.domain_info.domain_name
     cluster_name      = var.cluster_config.name
-    okta_url          = var.okta_url
     grafana_client_id = var.grafana_client_id
     grafana_secret    = var.grafana_secret
   }

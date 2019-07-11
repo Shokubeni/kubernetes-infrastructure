@@ -59,6 +59,9 @@ module "ingress_controller_configmap" {
 
   file_path   = "${path.module}/manifest/ingress-controller/configmap.yaml"
   config_path = var.config_path
+  variables   = {
+    ssh_kube_service = var.network_config.ssh_kube_service
+  }
   depends     = [
     module.ingress_controller_namespace.task_id
   ]

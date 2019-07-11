@@ -62,7 +62,6 @@ module "monitoring" {
   grafana_client_id = var.grafana_client_id
   grafana_secret    = var.grafana_secret
   network_config    = var.network_config
-  okta_url          = var.okta_url
   smtp_config       = {
     host         = var.smtp_host
     port         = var.smtp_port

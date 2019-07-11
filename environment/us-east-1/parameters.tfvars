@@ -49,6 +49,7 @@ worker_node_config = {
 //*                              Network                               *
 //**********************************************************************
 network_config = {
+  ssh_kube_service   = "command-center/bitbucket:7999"
   virtual_cloud_cidr = "172.16.0.0/16"
   nat_instance_type  = "t3a.micro"
   is_main_cluster    = true

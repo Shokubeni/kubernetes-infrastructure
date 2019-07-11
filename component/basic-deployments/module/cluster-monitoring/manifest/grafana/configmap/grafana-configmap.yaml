@@ -7,15 +7,15 @@ metadata:
   namespace: monitoring
 data:
   grafana.ini: |
-    [auth.generic_oauth]
-    name = Okta
+    [auth.google]
     enabled = true
-    scopes = openid profile email
     client_id = ${grafana_client_id}
     client_secret = ${grafana_secret}
-    auth_url = ${okta_url}/oauth2/v1/authorize
-    token_url = ${okta_url}/oauth2/v1/token
-    api_url = ${okta_url}/oauth2/v1/userinfo
+    scopes = https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email
+    auth_url = https://accounts.google.com/o/oauth2/auth
+    token_url = https://accounts.google.com/o/oauth2/token
+    allowed_domains = ${domain_name}
+    allow_sign_up = true
     [server]
     root_url = ${server_url}
     domain = ${domain_name}

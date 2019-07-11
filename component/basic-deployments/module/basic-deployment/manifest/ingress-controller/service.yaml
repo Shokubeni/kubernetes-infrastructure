@@ -20,6 +20,11 @@ spec:
       protocol: TCP
       targetPort: https
       nodePort: 32443
+    - name: ssh
+      port: 22
+      protocol: TCP
+      targetPort: 22
+      nodePort: 32022
   selector:
     workload: nginx-ingress-controller
 

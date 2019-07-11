@@ -25,6 +25,13 @@ resource "aws_elb" "balancer" {
     instance_protocol = "tcp"
   }
 
+  listener {
+    lb_port           = 22
+    lb_protocol       = "tcp"
+    instance_port     = 32022
+    instance_protocol = "tcp"
+  }
+
   health_check {
     target              = "TCP:6443"
     interval            = 10
