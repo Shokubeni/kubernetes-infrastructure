@@ -17,7 +17,7 @@ We use Terragrunt. It is provides extra tools for working with multiple Terrafor
 At the beginning you must create AWS profile inside `~/.aws/creditnails` file or use another 
 way [standartized by AWS](https://aws.amazon.com/blogs/security/a-new-and-standardized-way-to-manage-credentials-in-the-aws-sdks/). Then just execute the commands follow below.
 ```sh
-cd environment/general
+cd environment/environment-name
 terragrunt apply-all
 ```
 ## Environment
