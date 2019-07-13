@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "2.2",
+  "description": "Backup etcd database",
+  "mainSteps": [
+    {
+      "action": "aws:runShellScript",
+      "name": "Backup",
+      "inputs": {
+        "runCommand": [
+          "sudo su",
+          "ETCD_BACKUP_DATE=$(date +\"%d.%m.%y-%H.%M.%S\")",
+          "velero backup create $ETCD_BACKUP_DATE --wait --kubeconfig /etc/kubernetes/admin.conf"
+        ]
+      }
+    }
+  ]
+}

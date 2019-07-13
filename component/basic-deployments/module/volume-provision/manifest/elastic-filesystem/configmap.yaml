@@ -1,0 +1,14 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: efs-provisioner
+  namespace: kube-system
+data:
+  file.system.id: ${filesystem_id}
+  aws.region: ${cluster_region}
+  provisioner.name: ${domain_name}/aws-efs
+  dns.name: ${filesystem_dns}
+
+---

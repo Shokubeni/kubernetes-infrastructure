@@ -1,0 +1,106 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: monitoring
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+      containers:
+        - name: grafana
+          image: grafana/grafana:6.2.2
+          ports:
+            - containerPort: 3000
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 518Mi
+          env:
+            - name: GF_SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: host
+            - name: GF_SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: user
+            - name: GF_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: pass
+          volumeMounts:
+            - name: config-ini
+              mountPath: "/etc/grafana/"
+            - name: cluster-dashboard
+              mountPath: "/var/lib/grafana/dashboards/cluster"
+            - name: ingress-dashboard
+              mountPath: "/var/lib/grafana/dashboards/ingress"
+            - name: linkerd-dashboard-first
+              mountPath: "/var/lib/grafana/dashboards/linkerd-first"
+            - name: linkerd-dashboard-second
+              mountPath: "/var/lib/grafana/dashboards/linkerd-second"
+            - name: linkerd-dashboard-third
+              mountPath: "/var/lib/grafana/dashboards/linkerd-third"
+            - name: datasources
+              mountPath: "/etc/grafana/provisioning/datasources/"
+            - name: providers
+              mountPath: "/etc/grafana/provisioning/dashboards/"
+            - name: grafana-data
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: config-ini
+          configMap:
+            name: grafana-ini
+        - name: datasources
+          configMap:
+            name: grafana-datasources
+        - name: providers
+          configMap:
+            name: grafana-providers
+        - name: cluster-dashboard
+          configMap:
+            name: cluster-dashboard
+        - name: ingress-dashboard
+          configMap:
+            name: ingress-dashboard
+        - name: linkerd-dashboard-first
+          configMap:
+            name: linkerd-dashboard-first
+        - name: linkerd-dashboard-second
+          configMap:
+            name: linkerd-dashboard-second
+        - name: linkerd-dashboard-third
+          configMap:
+            name: linkerd-dashboard-third
+        - name: grafana-data
+          persistentVolumeClaim:
+            claimName: grafana-data
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+
+---

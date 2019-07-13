@@ -1,0 +1,59 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "autoscaling:CompleteLifecycleAction",
+        "autoscaling:DescribeAutoScalingGroups",
+        "autoscaling:RecordLifecycleActionHeartbeat",
+        "ec2:DescribeInstances",
+        "ec2:CreateTags",
+        "ec2:DescribeTags"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:ChangeMessageVisibility"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:sqs:*:${account_id}:${queue_name}"
+    },
+    {
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::${cluster_bucket}/*",
+        "arn:aws:s3:::${cluster_bucket}",
+        "arn:aws:s3:::${backup_bucket}/*",
+        "arn:aws:s3:::${backup_bucket}"
+      ]
+    },
+    {
+      "Action": [
+        "ssm:SendCommand",
+        "ssm:CancelCommand",
+        "ssm:ListCommands",
+        "ssm:ListCommandInvocations",
+        "ssm:ListDocuments",
+        "ssm:GetCommandInvocation",
+        "ssm:DescribeDocument*",
+        "ssm:GetDocument",
+        "ssm:DescribeInstance*",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: monitoring
+  name: grafana
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+    - secretName: grafana-ingress
+      hosts:
+        - metrics.${domain_name}
+  rules:
+    - host: metrics.${domain_name}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: grafana
+              servicePort: 3000
+
+---
+
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  namespace: monitoring
+  name: grafana-ingress
+spec:
+  commonName: metrics.${domain_name}
+  secretName: grafana-ingress
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - metrics.${domain_name}
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - metrics.${domain_name}
+
+---

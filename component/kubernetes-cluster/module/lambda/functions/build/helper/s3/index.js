@@ -1,0 +1,35 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const aws_sdk_1 = require("aws-sdk");
+const bucket = new aws_sdk_1.S3();
+function getLastSnapshot(bucketName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const snapshots = yield bucket
+            .listObjects({
+            Bucket: bucketName,
+            Prefix: 'backups/',
+        })
+            .promise();
+        if (snapshots.Contents && (snapshots.Contents.length > 0)) {
+            const snapshot = snapshots.Contents
+                .sort((first, second) => {
+                return first.LastModified.getTime() -
+                    second.LastModified.getTime();
+            })
+                .pop();
+            if (snapshot) {
+                return snapshot.Key ? snapshot.Key.split('/')[1] : null;
+            }
+        }
+        return null;
+    });
+}
+exports.getLastSnapshot = getLastSnapshot;
