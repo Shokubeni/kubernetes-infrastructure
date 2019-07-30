@@ -28,7 +28,7 @@ declare var process : {
     DOCKER_VERSION: string,
     S3_BACKUP_BUCKET: string,
     S3_BUCKET_REGION: string,
-    S3_BUCKED_NAME: string,
+    S3_BUCKET_NAME: string,
     SQS_QUEUE_URL: string,
     CLUSTER_ID: string,
   },
@@ -82,7 +82,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       await refreshLifecycle(event);
       await runCommand(event, process.env.STACKED_MASTER_INIT_COMMAND, {
         S3BucketRegion: [process.env.S3_BUCKET_REGION],
-        S3BucketName: [process.env.S3_BUCKED_NAME],
+        S3BucketName: [process.env.S3_BUCKET_NAME],
         ClusterId: [process.env.CLUSTER_ID],
       });
       await completeLifecycle(event, LifecycleResult.Continue);
@@ -94,7 +94,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       if (!snapshotName) {
         await runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
           S3BucketRegion: [process.env.S3_BUCKET_REGION],
-          S3BucketName: [process.env.S3_BUCKED_NAME],
+          S3BucketName: [process.env.S3_BUCKET_NAME],
           BalancerDNS: [process.env.LOAD_BALANCER_DNS],
           ClusterId: [process.env.CLUSTER_ID],
         });
@@ -102,7 +102,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       } else {
         await runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
           S3BucketRegion: [process.env.S3_BUCKET_REGION],
-          S3BucketName: [process.env.S3_BUCKED_NAME],
+          S3BucketName: [process.env.S3_BUCKET_NAME],
           ClusterId: [process.env.CLUSTER_ID],
           SnapshotName: [snapshotName],
         });

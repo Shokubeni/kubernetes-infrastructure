@@ -7,34 +7,34 @@ metadata:
   name: certificates.certmanager.k8s.io
 spec:
   additionalPrinterColumns:
-  - JSONPath: .status.conditions[?(@.type=="Ready")].status
-    name: Ready
-    type: string
-  - JSONPath: .spec.secretName
-    name: Secret
-    type: string
-  - JSONPath: .spec.issuerRef.name
-    name: Issuer
-    priority: 1
-    type: string
-  - JSONPath: .status.conditions[?(@.type=="Ready")].message
-    name: Status
-    priority: 1
-    type: string
-  - JSONPath: .metadata.creationTimestamp
-    description: CreationTimestamp is a timestamp representing the server time when
-      this object was created. It is not guaranteed to be set in happens-before order
-      across separate operations. Clients may not set this value. It is represented
-      in RFC3339 form and is in UTC.
-    name: Age
-    type: date
+    - JSONPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
+      type: string
+    - JSONPath: .spec.secretName
+      name: Secret
+      type: string
+    - JSONPath: .spec.issuerRef.name
+      name: Issuer
+      priority: 1
+      type: string
+    - JSONPath: .status.conditions[?(@.type=="Ready")].message
+      name: Status
+      priority: 1
+      type: string
+    - JSONPath: .metadata.creationTimestamp
+      description: CreationTimestamp is a timestamp representing the server time when
+        this object was created. It is not guaranteed to be set in happens-before order
+        across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC.
+      name: Age
+      type: date
   group: certmanager.k8s.io
   names:
     kind: Certificate
     plural: certificates
     shortNames:
-    - cert
-    - certs
+      - cert
+      - certs
   scope: Namespaced
   validation:
     openAPIV3Schema:
@@ -69,18 +69,25 @@ spec:
                           type: string
                         type: array
                     required:
-                    - domains
+                      - domains
                     type: object
                   type: array
               required:
-              - config
+                - config
               type: object
             commonName:
-              description: CommonName is a common name to be used on the Certificate
+              description: CommonName is a common name to be used on the Certificate.
+                If no CommonName is given, then the first entry in DNSNames is used
+                as the CommonName. The CommonName should have a length of 64 characters
+                or fewer to avoid generating invalid CSRs; in order to have longer
+                domain names, set the CommonName (or first DNSNames entry) to have
+                64 characters or fewer, and then add the longer domain name to DNSNames.
               type: string
             dnsNames:
               description: DNSNames is a list of subject alt names to be used on the
-                Certificate
+                Certificate. If no CommonName is given, then the first entry in DNSNames
+                is used as the CommonName and must have a length of 64 characters
+                or fewer.
               items:
                 type: string
               type: array
@@ -105,12 +112,14 @@ spec:
                 with the provided name will be used. The 'name' field in this stanza
                 is required at all times.
               properties:
+                group:
+                  type: string
                 kind:
                   type: string
                 name:
                   type: string
               required:
-              - name
+                - name
               type: object
             keyAlgorithm:
               description: KeyAlgorithm is the private key algorithm of the corresponding
@@ -119,8 +128,15 @@ spec:
                 not provided, key size of 256 will be used for "ecdsa" key algorithm
                 and key size of 2048 will be used for "rsa" key algorithm.
               enum:
-              - rsa
-              - ecdsa
+                - rsa
+                - ecdsa
+              type: string
+            keyEncoding:
+              description: KeyEncoding is the private key cryptography standards (PKCS)
+                for this certificate's private key to be encoded in. If provided,
+                allowed values are "pkcs1" and "pkcs8" standing for PKCS#1 and PKCS#8,
+                respectively. If KeyEncoding is not specified, then PKCS#1 will be
+                used by default.
               type: string
             keySize:
               description: KeySize is the key bit size of the corresponding private
@@ -143,8 +159,8 @@ spec:
                 this secret in
               type: string
           required:
-          - secretName
-          - issuerRef
+            - secretName
+            - issuerRef
           type: object
         status:
           properties:
@@ -168,16 +184,16 @@ spec:
                     description: Status of the condition, one of ('True', 'False',
                       'Unknown').
                     enum:
-                    - "True"
-                    - "False"
-                    - Unknown
+                      - "True"
+                      - "False"
+                      - Unknown
                     type: string
                   type:
                     description: Type of the condition, currently ('Ready').
                     type: string
                 required:
-                - type
-                - status
+                  - type
+                  - status
                 type: object
               type: array
             lastFailureTime:
@@ -203,26 +219,163 @@ metadata:
   creationTimestamp: null
   labels:
     controller-tools.k8s.io: "1.0"
+  name: certificaterequests.certmanager.k8s.io
+spec:
+  additionalPrinterColumns:
+    - JSONPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
+      type: string
+    - JSONPath: .spec.issuerRef.name
+      name: Issuer
+      priority: 1
+      type: string
+    - JSONPath: .status.conditions[?(@.type=="Ready")].message
+      name: Status
+      priority: 1
+      type: string
+    - JSONPath: .metadata.creationTimestamp
+      description: CreationTimestamp is a timestamp representing the server time when
+        this object was created. It is not guaranteed to be set in happens-before order
+        across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC.
+      name: Age
+      type: date
+  group: certmanager.k8s.io
+  names:
+    kind: CertificateRequest
+    plural: certificaterequests
+    shortNames:
+      - cr
+      - crs
+  scope: Namespaced
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            csr:
+              description: Byte slice containing the PEM encoded CertificateSigningRequest
+              format: byte
+              type: string
+            duration:
+              description: Requested certificate default Duration
+              type: string
+            isCA:
+              description: IsCA will mark the resulting certificate as valid for signing.
+                This implies that the 'signing' usage is set
+              type: boolean
+            issuerRef:
+              description: IssuerRef is a reference to the issuer for this CertificateRequest.  If
+                the 'kind' field is not set, or set to 'Issuer', an Issuer resource
+                with the given name in the same namespace as the CertificateRequest
+                will be used.  If the 'kind' field is set to 'ClusterIssuer', a ClusterIssuer
+                with the provided name will be used. The 'name' field in this stanza
+                is required at all times. The group field refers to the API group
+                of the issuer which defaults to 'certmanager.k8s.io' if empty.
+              properties:
+                group:
+                  type: string
+                kind:
+                  type: string
+                name:
+                  type: string
+              required:
+                - name
+              type: object
+          required:
+            - issuerRef
+          type: object
+        status:
+          properties:
+            ca:
+              description: Byte slice containing the PEM encoded certificate authority
+                of the signed certificate.
+              format: byte
+              type: string
+            certificate:
+              description: Byte slice containing a PEM encoded signed certificate
+                resulting from the given certificate signing request.
+              format: byte
+              type: string
+            conditions:
+              items:
+                properties:
+                  lastTransitionTime:
+                    description: LastTransitionTime is the timestamp corresponding
+                      to the last status change of this condition.
+                    format: date-time
+                    type: string
+                  message:
+                    description: Message is a human readable description of the details
+                      of the last transition, complementing reason.
+                    type: string
+                  reason:
+                    description: Reason is a brief machine readable explanation for
+                      the condition's last transition.
+                    type: string
+                  status:
+                    description: Status of the condition, one of ('True', 'False',
+                      'Unknown').
+                    enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                    type: string
+                  type:
+                    description: Type of the condition, currently ('Ready').
+                    type: string
+                required:
+                  - type
+                  - status
+                type: object
+              type: array
+          type: object
+  version: v1alpha1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
   name: challenges.certmanager.k8s.io
 spec:
   additionalPrinterColumns:
-  - JSONPath: .status.state
-    name: State
-    type: string
-  - JSONPath: .spec.dnsName
-    name: Domain
-    type: string
-  - JSONPath: .status.reason
-    name: Reason
-    priority: 1
-    type: string
-  - JSONPath: .metadata.creationTimestamp
-    description: CreationTimestamp is a timestamp representing the server time when
-      this object was created. It is not guaranteed to be set in happens-before order
-      across separate operations. Clients may not set this value. It is represented
-      in RFC3339 form and is in UTC.
-    name: Age
-    type: date
+    - JSONPath: .status.state
+      name: State
+      type: string
+    - JSONPath: .spec.dnsName
+      name: Domain
+      type: string
+    - JSONPath: .status.reason
+      name: Reason
+      priority: 1
+      type: string
+    - JSONPath: .metadata.creationTimestamp
+      description: CreationTimestamp is a timestamp representing the server time when
+        this object was created. It is not guaranteed to be set in happens-before order
+        across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC.
+      name: Age
+      type: date
   group: certmanager.k8s.io
   names:
     kind: Challenge
@@ -266,12 +419,14 @@ spec:
                 Issuer, an error will be returned and the Challenge will be marked
                 as failed.
               properties:
+                group:
+                  type: string
                 kind:
                   type: string
                 name:
                   type: string
               required:
-              - name
+                - name
               type: object
             key:
               description: Key is the ACME challenge key for this challenge
@@ -287,15 +442,32 @@ spec:
                     resource that should be solved using this challenge solver.
                   properties:
                     dnsNames:
-                      description: List of DNSNames that can be used to further refine
-                        the domains that this solver applies to.
+                      description: List of DNSNames that this solver will be used
+                        to solve. If specified and a match is found, a dnsNames selector
+                        will take precedence over a dnsZones selector. If multiple
+                        solvers match with the same dnsNames value, the solver with
+                        the most matching labels in matchLabels will be selected.
+                        If neither has more matches, the solver defined earlier in
+                        the list will be selected.
+                      items:
+                        type: string
+                      type: array
+                    dnsZones:
+                      description: List of DNSZones that this solver will be used
+                        to solve. The most specific DNS zone match specified here
+                        will take precedence over other DNS zone matches, so a solver
+                        specifying sys.example.com will be selected over one specifying
+                        example.com for the domain www.sys.example.com. If multiple
+                        solvers match with the same dnsZones value, the solver with
+                        the most matching labels in matchLabels will be selected.
+                        If neither has more matches, the solver defined earlier in
+                        the list will be selected.
                       items:
                         type: string
                       type: array
                     matchLabels:
-                      description: 'A label selector that is used to refine the set
-                        of certificate''s that this challenge solver will apply to.
-                        TODO: use kubernetes standard types for matchLabels'
+                      description: A label selector that is used to refine the set
+                        of certificate's that this challenge solver will apply to.
                       type: object
                   type: object
               type: object
@@ -316,14 +488,14 @@ spec:
                 identifier, for example '*.example.com'
               type: boolean
           required:
-          - authzURL
-          - type
-          - url
-          - dnsName
-          - token
-          - key
-          - wildcard
-          - issuerRef
+            - authzURL
+            - type
+            - url
+            - dnsName
+            - token
+            - key
+            - wildcard
+            - issuerRef
           type: object
         status:
           properties:
@@ -350,24 +522,24 @@ spec:
               description: State contains the current 'state' of the challenge. If
                 not set, the state of the challenge is unknown.
               enum:
-              - ""
-              - valid
-              - ready
-              - pending
-              - processing
-              - invalid
-              - expired
-              - errored
+                - ""
+                - valid
+                - ready
+                - pending
+                - processing
+                - invalid
+                - expired
+                - errored
               type: string
           required:
-          - processing
-          - presented
-          - reason
+            - processing
+            - presented
+            - reason
           type: object
       required:
-      - metadata
-      - spec
-      - status
+        - metadata
+        - spec
+        - status
   version: v1alpha1
 status:
   acceptedNames:
@@ -424,7 +596,7 @@ spec:
                         TODO: Add other useful fields. apiVersion, kind, uid?'
                       type: string
                   required:
-                  - name
+                    - name
                   type: object
                 server:
                   description: Server is the ACME server URL
@@ -442,23 +614,40 @@ spec:
                           resource that should be solved using this challenge solver.
                         properties:
                           dnsNames:
-                            description: List of DNSNames that can be used to further
-                              refine the domains that this solver applies to.
+                            description: List of DNSNames that this solver will be
+                              used to solve. If specified and a match is found, a
+                              dnsNames selector will take precedence over a dnsZones
+                              selector. If multiple solvers match with the same dnsNames
+                              value, the solver with the most matching labels in matchLabels
+                              will be selected. If neither has more matches, the solver
+                              defined earlier in the list will be selected.
+                            items:
+                              type: string
+                            type: array
+                          dnsZones:
+                            description: List of DNSZones that this solver will be
+                              used to solve. The most specific DNS zone match specified
+                              here will take precedence over other DNS zone matches,
+                              so a solver specifying sys.example.com will be selected
+                              over one specifying example.com for the domain www.sys.example.com.
+                              If multiple solvers match with the same dnsZones value,
+                              the solver with the most matching labels in matchLabels
+                              will be selected. If neither has more matches, the solver
+                              defined earlier in the list will be selected.
                             items:
                               type: string
                             type: array
                           matchLabels:
-                            description: 'A label selector that is used to refine
-                              the set of certificate''s that this challenge solver
-                              will apply to. TODO: use kubernetes standard types for
-                              matchLabels'
+                            description: A label selector that is used to refine the
+                              set of certificate's that this challenge solver will
+                              apply to.
                             type: object
                         type: object
                     type: object
                   type: array
               required:
-              - server
-              - privateKeySecretRef
+                - server
+                - privateKeySecretRef
               type: object
             ca:
               properties:
@@ -467,7 +656,7 @@ spec:
                     issued by this Issuer.
                   type: string
               required:
-              - secretName
+                - secretName
               type: object
             selfSigned:
               type: object
@@ -496,12 +685,12 @@ spec:
                                 TODO: Add other useful fields. apiVersion, kind, uid?'
                               type: string
                           required:
-                          - name
+                            - name
                           type: object
                       required:
-                      - path
-                      - roleId
-                      - secretRef
+                        - path
+                        - roleId
+                        - secretRef
                       type: object
                     tokenSecretRef:
                       description: This Secret contains the Vault token key
@@ -515,7 +704,7 @@ spec:
                             TODO: Add other useful fields. apiVersion, kind, uid?'
                           type: string
                       required:
-                      - name
+                        - name
                       type: object
                   type: object
                 caBundle:
@@ -532,9 +721,9 @@ spec:
                   description: Server is the vault connection address
                   type: string
               required:
-              - auth
-              - server
-              - path
+                - auth
+                - server
+                - path
               type: object
             venafi:
               properties:
@@ -555,14 +744,14 @@ spec:
                             TODO: Add other useful fields. apiVersion, kind, uid?'
                           type: string
                       required:
-                      - name
+                        - name
                       type: object
                     url:
                       description: URL is the base URL for Venafi Cloud
                       type: string
                   required:
-                  - url
-                  - apiTokenSecretRef
+                    - url
+                    - apiTokenSecretRef
                   type: object
                 tpp:
                   description: TPP specifies Trust Protection Platform configuration
@@ -587,14 +776,14 @@ spec:
                             TODO: Add other useful fields. apiVersion, kind, uid?'
                           type: string
                       required:
-                      - name
+                        - name
                       type: object
                     url:
                       description: URL is the base URL for the Venafi TPP instance
                       type: string
                   required:
-                  - url
-                  - credentialsRef
+                    - url
+                    - credentialsRef
                   type: object
                 zone:
                   description: Zone is the Venafi Policy Zone to use for this issuer.
@@ -602,13 +791,18 @@ spec:
                     the named zone policy. This field is required.
                   type: string
               required:
-              - zone
+                - zone
               type: object
           type: object
         status:
           properties:
             acme:
               properties:
+                lastRegisteredEmail:
+                  description: LastRegisteredEmail is the email associated with the
+                    latest registered ACME account, in order to track changes made
+                    to registered account associated with the  Issuer
+                  type: string
                 uri:
                   description: URI is the unique account identifier, which can also
                     be used to retrieve account details from the CA
@@ -634,16 +828,16 @@ spec:
                     description: Status of the condition, one of ('True', 'False',
                       'Unknown').
                     enum:
-                    - "True"
-                    - "False"
-                    - Unknown
+                      - "True"
+                      - "False"
+                      - Unknown
                     type: string
                   type:
                     description: Type of the condition, currently ('Ready').
                     type: string
                 required:
-                - type
-                - status
+                  - type
+                  - status
                 type: object
               type: array
           type: object
@@ -703,7 +897,7 @@ spec:
                         TODO: Add other useful fields. apiVersion, kind, uid?'
                       type: string
                   required:
-                  - name
+                    - name
                   type: object
                 server:
                   description: Server is the ACME server URL
@@ -721,23 +915,40 @@ spec:
                           resource that should be solved using this challenge solver.
                         properties:
                           dnsNames:
-                            description: List of DNSNames that can be used to further
-                              refine the domains that this solver applies to.
+                            description: List of DNSNames that this solver will be
+                              used to solve. If specified and a match is found, a
+                              dnsNames selector will take precedence over a dnsZones
+                              selector. If multiple solvers match with the same dnsNames
+                              value, the solver with the most matching labels in matchLabels
+                              will be selected. If neither has more matches, the solver
+                              defined earlier in the list will be selected.
+                            items:
+                              type: string
+                            type: array
+                          dnsZones:
+                            description: List of DNSZones that this solver will be
+                              used to solve. The most specific DNS zone match specified
+                              here will take precedence over other DNS zone matches,
+                              so a solver specifying sys.example.com will be selected
+                              over one specifying example.com for the domain www.sys.example.com.
+                              If multiple solvers match with the same dnsZones value,
+                              the solver with the most matching labels in matchLabels
+                              will be selected. If neither has more matches, the solver
+                              defined earlier in the list will be selected.
                             items:
                               type: string
                             type: array
                           matchLabels:
-                            description: 'A label selector that is used to refine
-                              the set of certificate''s that this challenge solver
-                              will apply to. TODO: use kubernetes standard types for
-                              matchLabels'
+                            description: A label selector that is used to refine the
+                              set of certificate's that this challenge solver will
+                              apply to.
                             type: object
                         type: object
                     type: object
                   type: array
               required:
-              - server
-              - privateKeySecretRef
+                - server
+                - privateKeySecretRef
               type: object
             ca:
               properties:
@@ -746,7 +957,7 @@ spec:
                     issued by this Issuer.
                   type: string
               required:
-              - secretName
+                - secretName
               type: object
             selfSigned:
               type: object
@@ -775,12 +986,12 @@ spec:
                                 TODO: Add other useful fields. apiVersion, kind, uid?'
                               type: string
                           required:
-                          - name
+                            - name
                           type: object
                       required:
-                      - path
-                      - roleId
-                      - secretRef
+                        - path
+                        - roleId
+                        - secretRef
                       type: object
                     tokenSecretRef:
                       description: This Secret contains the Vault token key
@@ -794,7 +1005,7 @@ spec:
                             TODO: Add other useful fields. apiVersion, kind, uid?'
                           type: string
                       required:
-                      - name
+                        - name
                       type: object
                   type: object
                 caBundle:
@@ -811,9 +1022,9 @@ spec:
                   description: Server is the vault connection address
                   type: string
               required:
-              - auth
-              - server
-              - path
+                - auth
+                - server
+                - path
               type: object
             venafi:
               properties:
@@ -834,14 +1045,14 @@ spec:
                             TODO: Add other useful fields. apiVersion, kind, uid?'
                           type: string
                       required:
-                      - name
+                        - name
                       type: object
                     url:
                       description: URL is the base URL for Venafi Cloud
                       type: string
                   required:
-                  - url
-                  - apiTokenSecretRef
+                    - url
+                    - apiTokenSecretRef
                   type: object
                 tpp:
                   description: TPP specifies Trust Protection Platform configuration
@@ -866,14 +1077,14 @@ spec:
                             TODO: Add other useful fields. apiVersion, kind, uid?'
                           type: string
                       required:
-                      - name
+                        - name
                       type: object
                     url:
                       description: URL is the base URL for the Venafi TPP instance
                       type: string
                   required:
-                  - url
-                  - credentialsRef
+                    - url
+                    - credentialsRef
                   type: object
                 zone:
                   description: Zone is the Venafi Policy Zone to use for this issuer.
@@ -881,13 +1092,18 @@ spec:
                     the named zone policy. This field is required.
                   type: string
               required:
-              - zone
+                - zone
               type: object
           type: object
         status:
           properties:
             acme:
               properties:
+                lastRegisteredEmail:
+                  description: LastRegisteredEmail is the email associated with the
+                    latest registered ACME account, in order to track changes made
+                    to registered account associated with the  Issuer
+                  type: string
                 uri:
                   description: URI is the unique account identifier, which can also
                     be used to retrieve account details from the CA
@@ -913,16 +1129,16 @@ spec:
                     description: Status of the condition, one of ('True', 'False',
                       'Unknown').
                     enum:
-                    - "True"
-                    - "False"
-                    - Unknown
+                      - "True"
+                      - "False"
+                      - Unknown
                     type: string
                   type:
                     description: Type of the condition, currently ('Ready').
                     type: string
                 required:
-                - type
-                - status
+                  - type
+                  - status
                 type: object
               type: array
           type: object
@@ -943,24 +1159,24 @@ metadata:
   name: orders.certmanager.k8s.io
 spec:
   additionalPrinterColumns:
-  - JSONPath: .status.state
-    name: State
-    type: string
-  - JSONPath: .spec.issuerRef.name
-    name: Issuer
-    priority: 1
-    type: string
-  - JSONPath: .status.reason
-    name: Reason
-    priority: 1
-    type: string
-  - JSONPath: .metadata.creationTimestamp
-    description: CreationTimestamp is a timestamp representing the server time when
-      this object was created. It is not guaranteed to be set in happens-before order
-      across separate operations. Clients may not set this value. It is represented
-      in RFC3339 form and is in UTC.
-    name: Age
-    type: date
+    - JSONPath: .status.state
+      name: State
+      type: string
+    - JSONPath: .spec.issuerRef.name
+      name: Issuer
+      priority: 1
+      type: string
+    - JSONPath: .status.reason
+      name: Reason
+      priority: 1
+      type: string
+    - JSONPath: .metadata.creationTimestamp
+      description: CreationTimestamp is a timestamp representing the server time when
+        this object was created. It is not guaranteed to be set in happens-before order
+        across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC.
+      name: Age
+      type: date
   group: certmanager.k8s.io
   names:
     kind: Order
@@ -1009,7 +1225,7 @@ spec:
                       type: string
                     type: array
                 required:
-                - domains
+                  - domains
                 type: object
               type: array
             csr:
@@ -1034,16 +1250,18 @@ spec:
                 Issuer, an error will be returned and the Order will be marked as
                 failed.
               properties:
+                group:
+                  type: string
                 kind:
                   type: string
                 name:
                   type: string
               required:
-              - name
+                - name
               type: object
           required:
-          - csr
-          - issuerRef
+            - csr
+            - issuerRef
           type: object
         status:
           properties:
@@ -1081,12 +1299,14 @@ spec:
                       is not an 'ACME' Issuer, an error will be returned and the Challenge
                       will be marked as failed.
                     properties:
+                      group:
+                        type: string
                       kind:
                         type: string
                       name:
                         type: string
                     required:
-                    - name
+                      - name
                     type: object
                   key:
                     description: Key is the ACME challenge key for this challenge
@@ -1102,16 +1322,33 @@ spec:
                           resource that should be solved using this challenge solver.
                         properties:
                           dnsNames:
-                            description: List of DNSNames that can be used to further
-                              refine the domains that this solver applies to.
+                            description: List of DNSNames that this solver will be
+                              used to solve. If specified and a match is found, a
+                              dnsNames selector will take precedence over a dnsZones
+                              selector. If multiple solvers match with the same dnsNames
+                              value, the solver with the most matching labels in matchLabels
+                              will be selected. If neither has more matches, the solver
+                              defined earlier in the list will be selected.
+                            items:
+                              type: string
+                            type: array
+                          dnsZones:
+                            description: List of DNSZones that this solver will be
+                              used to solve. The most specific DNS zone match specified
+                              here will take precedence over other DNS zone matches,
+                              so a solver specifying sys.example.com will be selected
+                              over one specifying example.com for the domain www.sys.example.com.
+                              If multiple solvers match with the same dnsZones value,
+                              the solver with the most matching labels in matchLabels
+                              will be selected. If neither has more matches, the solver
+                              defined earlier in the list will be selected.
                             items:
                               type: string
                             type: array
                           matchLabels:
-                            description: 'A label selector that is used to refine
-                              the set of certificate''s that this challenge solver
-                              will apply to. TODO: use kubernetes standard types for
-                              matchLabels'
+                            description: A label selector that is used to refine the
+                              set of certificate's that this challenge solver will
+                              apply to.
                             type: object
                         type: object
                     type: object
@@ -1132,14 +1369,14 @@ spec:
                       wildcard identifier, for example '*.example.com'
                     type: boolean
                 required:
-                - authzURL
-                - type
-                - url
-                - dnsName
-                - token
-                - key
-                - wildcard
-                - issuerRef
+                  - authzURL
+                  - type
+                  - url
+                  - dnsName
+                  - token
+                  - key
+                  - wildcard
+                  - issuerRef
                 type: object
               type: array
             failureTime:
@@ -1159,14 +1396,14 @@ spec:
               description: State contains the current state of this Order resource.
                 States 'success' and 'expired' are 'final'
               enum:
-              - ""
-              - valid
-              - ready
-              - pending
-              - processing
-              - invalid
-              - expired
-              - errored
+                - ""
+                - valid
+                - ready
+                - pending
+                - processing
+                - invalid
+                - expired
+                - errored
               type: string
             url:
               description: URL of the Order. This will initially be empty when the
@@ -1176,9 +1413,9 @@ spec:
               type: string
           type: object
       required:
-      - metadata
-      - spec
-      - status
+        - metadata
+        - spec
+        - status
   version: v1alpha1
 status:
   acceptedNames:
@@ -1188,6 +1425,7 @@ status:
   storedVersions: []
 
 ---
+---
 # Source: cert-manager/charts/cainjector/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -1196,9 +1434,10 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: cainjector
-    chart: cainjector-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cainjector
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cainjector-v0.9.0
 
 ---
 # Source: cert-manager/charts/webhook/templates/serviceaccount.yaml
@@ -1209,9 +1448,10 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 
 ---
 # Source: cert-manager/templates/serviceaccount.yaml
@@ -1222,9 +1462,10 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: cert-manager
-    chart: cert-manager-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
 
 ---
 # Source: cert-manager/charts/cainjector/templates/rbac.yaml
@@ -1234,9 +1475,10 @@ metadata:
   name: cert-manager-cainjector
   labels:
     app: cainjector
-    chart: cainjector-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cainjector
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cainjector-v0.9.0
 rules:
   - apiGroups: ["certmanager.k8s.io"]
     resources: ["certificates"]
@@ -1246,13 +1488,16 @@ rules:
     verbs: ["get", "list", "watch"]
   - apiGroups: [""]
     resources: ["configmaps", "events"]
-    verbs: ["*"]
+    verbs: ["get", "create", "update", "patch"]
   - apiGroups: ["admissionregistration.k8s.io"]
     resources: ["validatingwebhookconfigurations", "mutatingwebhookconfigurations"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "update"]
   - apiGroups: ["apiregistration.k8s.io"]
     resources: ["apiservices"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "update"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -1260,9 +1505,10 @@ metadata:
   name: cert-manager-cainjector
   labels:
     app: cainjector
-    chart: cainjector-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cainjector
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cainjector-v0.9.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -1276,72 +1522,410 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: cert-manager
+  name: cert-manager-leaderelection
   labels:
     app: cert-manager
-    chart: cert-manager-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+rules:
+  # Used for leader election by the controller
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "create", "update", "patch"]
+
+---
+
+# Issuer controller role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: cert-manager-controller-issuers
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
 rules:
   - apiGroups: ["certmanager.k8s.io"]
-    resources: ["certificates", "certificates/finalizers", "issuers", "clusterissuers", "orders", "orders/finalizers", "challenges",  "challenges/finalizers"]
-    verbs: ["*"]
+    resources: ["issuers", "issuers/status"]
+    verbs: ["update"]
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["issuers"]
+    verbs: ["get", "list", "watch"]
   - apiGroups: [""]
-    resources: ["configmaps", "secrets", "events", "services","pods"]
-    verbs: ["*"]
-  - apiGroups: ["extensions"]
-    resources: ["ingresses", "ingresses/finalizers"]
-    verbs: ["*"]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+
 ---
+
+# ClusterIssuer controller role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: cert-manager-controller-clusterissuers
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+rules:
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["clusterissuers", "clusterissuers/status"]
+    verbs: ["update"]
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["clusterissuers"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+
+---
+
+# Certificates controller role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: cert-manager-controller-certificates
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+rules:
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["certificates", "certificates/status", "certificaterequests", "certificaterequests/status"]
+    verbs: ["update"]
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["certificates", "certificaterequests", "clusterissuers", "issuers", "orders"]
+    verbs: ["get", "list", "watch"]
+  # We require these rules to support users with the OwnerReferencesPermissionEnforcement
+  # admission controller enabled:
+  # https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#ownerreferencespermissionenforcement
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["certificates/finalizers"]
+    verbs: ["update"]
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["orders"]
+    verbs: ["create", "delete"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+
+---
+
+# Orders controller role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: cert-manager-controller-orders
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+rules:
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["orders", "orders/status"]
+    verbs: ["update"]
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["orders", "clusterissuers", "issuers", "challenges"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["challenges"]
+    verbs: ["create", "delete"]
+  # We require these rules to support users with the OwnerReferencesPermissionEnforcement
+  # admission controller enabled:
+  # https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#ownerreferencespermissionenforcement
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["orders/finalizers"]
+    verbs: ["update"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+
+---
+
+# Challenges controller role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: cert-manager-controller-challenges
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+rules:
+  # Use to update challenge resource status
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["challenges", "challenges/status"]
+    verbs: ["update"]
+  # Used to watch challenges, issuer and clusterissuer resources
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["challenges", "issuers", "clusterissuers"]
+    verbs: ["get", "list", "watch"]
+  # Need to be able to retrieve ACME account private key to complete challenges
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]
+  # Used to create events
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+  # HTTP01 rules
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: ["extensions"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "watch", "create", "delete", "update"]
+  # We require these rules to support users with the OwnerReferencesPermissionEnforcement
+  # admission controller enabled:
+  # https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#ownerreferencespermissionenforcement
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["challenges/finalizers"]
+    verbs: ["update"]
+  # DNS01 rules (duplicated above)
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]
+
+---
+
+# ingress-shim controller role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: cert-manager-controller-ingress-shim
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+rules:
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["certificates", "certificaterequests"]
+    verbs: ["create", "update", "delete"]
+  - apiGroups: ["certmanager.k8s.io"]
+    resources: ["certificates", "certificaterequests", "issuers", "clusterissuers"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "watch"]
+  # We require these rules to support users with the OwnerReferencesPermissionEnforcement
+  # admission controller enabled:
+  # https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#ownerreferencespermissionenforcement
+  - apiGroups: ["extensions"]
+    resources: ["ingresses/finalizers"]
+    verbs: ["update"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+
+---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: cert-manager
+  name: cert-manager-leaderelection
   labels:
     app: cert-manager
-    chart: cert-manager-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: cert-manager
+  name: cert-manager-leaderelection
 subjects:
   - name: cert-manager
     namespace: "cert-manager"
     kind: ServiceAccount
+
 ---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-controller-issuers
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-controller-issuers
+subjects:
+  - name: cert-manager
+    namespace: "cert-manager"
+    kind: ServiceAccount
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-controller-clusterissuers
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-controller-clusterissuers
+subjects:
+  - name: cert-manager
+    namespace: "cert-manager"
+    kind: ServiceAccount
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-controller-certificates
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-controller-certificates
+subjects:
+  - name: cert-manager
+    namespace: "cert-manager"
+    kind: ServiceAccount
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-controller-orders
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-controller-orders
+subjects:
+  - name: cert-manager
+    namespace: "cert-manager"
+    kind: ServiceAccount
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-controller-challenges
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-controller-challenges
+subjects:
+  - name: cert-manager
+    namespace: "cert-manager"
+    kind: ServiceAccount
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-controller-ingress-shim
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-controller-ingress-shim
+subjects:
+  - name: cert-manager
+    namespace: "cert-manager"
+    kind: ServiceAccount
+
+---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: cert-manager-view
   labels:
     app: cert-manager
-    chart: cert-manager-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
   - apiGroups: ["certmanager.k8s.io"]
-    resources: ["certificates", "issuers"]
+    resources: ["certificates", "certificaterequests", "issuers"]
     verbs: ["get", "list", "watch"]
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: cert-manager-edit
   labels:
     app: cert-manager
-    chart: cert-manager-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
   - apiGroups: ["certmanager.k8s.io"]
-    resources: ["certificates", "issuers"]
+    resources: ["certificates", "certificaterequests", "issuers"]
     verbs: ["create", "delete", "deletecollection", "patch", "update"]
 
 ---
@@ -1356,18 +1940,19 @@ metadata:
   name: cert-manager-webhook:auth-delegator
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: system:auth-delegator
 subjects:
-- apiGroup: ""
-  kind: ServiceAccount
-  name: cert-manager-webhook
-  namespace: cert-manager
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: cert-manager-webhook
+    namespace: cert-manager
 
 ---
 
@@ -1381,18 +1966,19 @@ metadata:
   namespace: kube-system
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: extension-apiserver-authentication-reader
 subjects:
-- apiGroup: ""
-  kind: ServiceAccount
-  name: cert-manager-webhook
-  namespace: cert-manager
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: cert-manager-webhook
+    namespace: cert-manager
 
 ---
 
@@ -1402,18 +1988,20 @@ metadata:
   name: cert-manager-webhook:webhook-requester
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 rules:
-- apiGroups:
-  - admission.certmanager.k8s.io
-  resources:
-  - certificates
-  - issuers
-  - clusterissuers
-  verbs:
-  - create
+  - apiGroups:
+      - admission.certmanager.k8s.io
+    resources:
+      - certificates
+      - certificaterequests
+      - issuers
+      - clusterissuers
+    verbs:
+      - create
 
 ---
 # Source: cert-manager/charts/webhook/templates/service.yaml
@@ -1424,57 +2012,66 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 spec:
   type: ClusterIP
   ports:
-  - name: https
-    port: 443
-    targetPort: 6443
+    - name: https
+      port: 443
+      targetPort: 6443
   selector:
     app: webhook
-    release: cert-manager
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
 
 ---
 # Source: cert-manager/charts/cainjector/templates/deployment.yaml
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cert-manager-cainjector
   namespace: "cert-manager"
   labels:
     app: cainjector
-    chart: cainjector-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cainjector
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cainjector-v0.9.0
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cainjector
-      release: cert-manager
+      app.kubernetes.io/name: cainjector
+      app.kubernetes.io/instance:  cert-manager
+      app.kubernetes.io/managed-by: Tiller
   template:
     metadata:
       labels:
         app: cainjector
-        release: cert-manager
+        app.kubernetes.io/name: cainjector
+        app.kubernetes.io/instance:  cert-manager
+        app.kubernetes.io/managed-by: Tiller
+        helm.sh/chart: cainjector-v0.9.0
       annotations:
     spec:
       serviceAccountName: cert-manager-cainjector
       containers:
         - name: cainjector
-          image: "quay.io/jetstack/cert-manager-cainjector:v0.8.1"
+          image: "quay.io/jetstack/cert-manager-cainjector:v0.9.0"
           imagePullPolicy: IfNotPresent
           args:
-          - --v=2
-          - --leader-election-namespace=$(POD_NAMESPACE)
+            - --v=2
+            - --leader-election-namespace=$(POD_NAMESPACE)
           env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           resources:
             requests:
               memory: 128Mi
@@ -1482,82 +2079,93 @@ spec:
             limits:
               memory: 256Mi
               cpu: 50m
-            
 
 ---
 # Source: cert-manager/charts/webhook/templates/deployment.yaml
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cert-manager-webhook
   namespace: "cert-manager"
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: webhook
-      release: cert-manager
+      app.kubernetes.io/name: webhook
+      app.kubernetes.io/instance:  cert-manager
+      app.kubernetes.io/managed-by: Tiller
   template:
     metadata:
       labels:
         app: webhook
-        release: cert-manager
+        app.kubernetes.io/name: webhook
+        app.kubernetes.io/instance:  cert-manager
+        app.kubernetes.io/managed-by: Tiller
+        helm.sh/chart: webhook-v0.9.0
       annotations:
     spec:
       serviceAccountName: cert-manager-webhook
       containers:
         - name: webhook
-          image: "quay.io/jetstack/cert-manager-webhook:v0.8.1"
+          image: "quay.io/jetstack/cert-manager-webhook:v0.9.0"
           imagePullPolicy: IfNotPresent
           args:
-          - --v=2
-          - --secure-port=6443
-          - --tls-cert-file=/certs/tls.crt
-          - --tls-private-key-file=/certs/tls.key
+            - --v=2
+            - --secure-port=6443
+            - --tls-cert-file=/certs/tls.crt
+            - --tls-private-key-file=/certs/tls.key
           env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           resources:
             {}
-            
+
           volumeMounts:
-          - name: certs
-            mountPath: /certs
+            - name: certs
+              mountPath: /certs
       volumes:
-      - name: certs
-        secret:
-          secretName: cert-manager-webhook-webhook-tls
+        - name: certs
+          secret:
+            secretName: cert-manager-webhook-webhook-tls
 
 ---
 # Source: cert-manager/templates/deployment.yaml
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cert-manager
   namespace: "cert-manager"
   labels:
     app: cert-manager
-    chart: cert-manager-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: cert-manager-v0.9.0
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cert-manager
-      release: cert-manager
+      app.kubernetes.io/name: cert-manager
+      app.kubernetes.io/instance:  cert-manager
+      app.kubernetes.io/managed-by: Tiller
   template:
     metadata:
       labels:
         app: cert-manager
-        release: cert-manager
+        app.kubernetes.io/name: cert-manager
+        app.kubernetes.io/instance:  cert-manager
+        app.kubernetes.io/managed-by: Tiller
+        helm.sh/chart: cert-manager-v0.9.0
       annotations:
         prometheus.io/path: "/metrics"
         prometheus.io/scrape: 'true'
@@ -1566,24 +2174,24 @@ spec:
       serviceAccountName: cert-manager
       containers:
         - name: cert-manager
-          image: "quay.io/jetstack/cert-manager-controller:v0.8.1"
+          image: "quay.io/jetstack/cert-manager-controller:v0.9.0"
           imagePullPolicy: IfNotPresent
           args:
-          - --v=2
-          - --cluster-resource-namespace=$(POD_NAMESPACE)
-          - --leader-election-namespace=$(POD_NAMESPACE)
+            - --v=2
+            - --cluster-resource-namespace=$(POD_NAMESPACE)
+            - --leader-election-namespace=$(POD_NAMESPACE)
           ports:
-          - containerPort: 9402
+            - containerPort: 9402
           env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           resources:
             requests:
               cpu: 10m
               memory: 32Mi
-            
+
 
 ---
 # Source: cert-manager/charts/webhook/templates/apiservice.yaml
@@ -1593,9 +2201,10 @@ metadata:
   name: v1beta1.admission.certmanager.k8s.io
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
   annotations:
     certmanager.k8s.io/inject-ca-from: "cert-manager/cert-manager-webhook-webhook-tls"
 spec:
@@ -1619,9 +2228,10 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 spec:
   selfSigned: {}
 
@@ -1635,9 +2245,10 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 spec:
   secretName: cert-manager-webhook-ca
   duration: 43800h # 5y
@@ -1656,9 +2267,10 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 spec:
   ca:
     secretName: cert-manager-webhook-ca
@@ -1673,18 +2285,23 @@ metadata:
   namespace: "cert-manager"
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
 spec:
   secretName: cert-manager-webhook-webhook-tls
   duration: 8760h # 1y
   issuerRef:
     name: cert-manager-webhook-ca
   dnsNames:
-  - cert-manager-webhook
-  - cert-manager-webhook.cert-manager
-  - cert-manager-webhook.cert-manager.svc
+    - cert-manager-webhook
+    - cert-manager-webhook.cert-manager
+    - cert-manager-webhook.cert-manager.svc
+
+---
+# Source: cert-manager/templates/servicemonitor.yaml
+
 
 ---
 # Source: cert-manager/charts/webhook/templates/validating-webhook.yaml
@@ -1694,23 +2311,24 @@ metadata:
   name: cert-manager-webhook
   labels:
     app: webhook
-    chart: webhook-v0.8.1
-    release: cert-manager
-    heritage: Tiller
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance:  cert-manager
+    app.kubernetes.io/managed-by: Tiller
+    helm.sh/chart: webhook-v0.9.0
   annotations:
     certmanager.k8s.io/inject-apiserver-ca: "true"
 webhooks:
   - name: certificates.admission.certmanager.k8s.io
     namespaceSelector:
       matchExpressions:
-      - key: "certmanager.k8s.io/disable-validation"
-        operator: "NotIn"
-        values:
-        - "true"
-      - key: "name"
-        operator: "NotIn"
-        values:
-        - cert-manager
+        - key: "certmanager.k8s.io/disable-validation"
+          operator: "NotIn"
+          values:
+            - "true"
+        - key: "name"
+          operator: "NotIn"
+          values:
+            - cert-manager
     rules:
       - apiGroups:
           - "certmanager.k8s.io"
@@ -1730,14 +2348,14 @@ webhooks:
   - name: issuers.admission.certmanager.k8s.io
     namespaceSelector:
       matchExpressions:
-      - key: "certmanager.k8s.io/disable-validation"
-        operator: "NotIn"
-        values:
-        - "true"
-      - key: "name"
-        operator: "NotIn"
-        values:
-        - cert-manager
+        - key: "certmanager.k8s.io/disable-validation"
+          operator: "NotIn"
+          values:
+            - "true"
+        - key: "name"
+          operator: "NotIn"
+          values:
+            - cert-manager
     rules:
       - apiGroups:
           - "certmanager.k8s.io"
@@ -1757,14 +2375,14 @@ webhooks:
   - name: clusterissuers.admission.certmanager.k8s.io
     namespaceSelector:
       matchExpressions:
-      - key: "certmanager.k8s.io/disable-validation"
-        operator: "NotIn"
-        values:
-        - "true"
-      - key: "name"
-        operator: "NotIn"
-        values:
-        - cert-manager
+        - key: "certmanager.k8s.io/disable-validation"
+          operator: "NotIn"
+          values:
+            - "true"
+        - key: "name"
+          operator: "NotIn"
+          values:
+            - cert-manager
     rules:
       - apiGroups:
           - "certmanager.k8s.io"
@@ -1782,4 +2400,3 @@ webhooks:
         namespace: default
         path: /apis/admission.certmanager.k8s.io/v1beta1/clusterissuers
 
----
