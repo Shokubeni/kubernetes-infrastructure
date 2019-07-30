@@ -33,7 +33,7 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             });
             yield manager_1.runCommand(event, process.env.COMMON_WORKER_INIT_COMMAND, {
                 S3BucketRegion: [process.env.S3_BUCKET_REGION],
-                S3BucketName: [process.env.S3_BUCKED_NAME],
+                S3BucketName: [process.env.S3_BUCKET_NAME],
             });
             yield autoscaling_1.setInstanceTags(event, [
                 { Key: types_1.TagName.NodeState, Value: types_1.NodeState.InitFinished },

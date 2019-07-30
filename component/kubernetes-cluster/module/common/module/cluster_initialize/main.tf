@@ -1,7 +1,7 @@
 locals {
   name       = var.cluster_name
   label      = var.cluster_label
-  kubernetes = "1.14.0"
+  kubernetes = "1.15.0"
   docker     = "18.06.0"
 }
 

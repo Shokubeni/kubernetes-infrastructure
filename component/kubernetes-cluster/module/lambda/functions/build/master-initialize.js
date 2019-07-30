@@ -53,7 +53,7 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             yield autoscaling_1.refreshLifecycle(event);
             yield manager_1.runCommand(event, process.env.STACKED_MASTER_INIT_COMMAND, {
                 S3BucketRegion: [process.env.S3_BUCKET_REGION],
-                S3BucketName: [process.env.S3_BUCKED_NAME],
+                S3BucketName: [process.env.S3_BUCKET_NAME],
                 ClusterId: [process.env.CLUSTER_ID],
             });
             yield autoscaling_1.completeLifecycle(event, types_1.LifecycleResult.Continue);
@@ -64,7 +64,7 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             if (!snapshotName) {
                 yield manager_1.runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
                     S3BucketRegion: [process.env.S3_BUCKET_REGION],
-                    S3BucketName: [process.env.S3_BUCKED_NAME],
+                    S3BucketName: [process.env.S3_BUCKET_NAME],
                     BalancerDNS: [process.env.LOAD_BALANCER_DNS],
                     ClusterId: [process.env.CLUSTER_ID],
                 });
@@ -72,7 +72,7 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             else {
                 yield manager_1.runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
                     S3BucketRegion: [process.env.S3_BUCKET_REGION],
-                    S3BucketName: [process.env.S3_BUCKED_NAME],
+                    S3BucketName: [process.env.S3_BUCKET_NAME],
                     ClusterId: [process.env.CLUSTER_ID],
                     SnapshotName: [snapshotName],
                 });
