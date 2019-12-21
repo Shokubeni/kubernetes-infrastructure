@@ -9,7 +9,7 @@ resource "aws_vpc" "main" {
   }
 
   tags = {
-    "Name" = "${var.cluster_config.name} Cluster VPC",
+    "Name" = "${var.cluster_config.name} cluster VPC",
     "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
   }
 }

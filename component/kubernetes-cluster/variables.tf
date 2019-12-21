@@ -13,6 +13,7 @@ variable "master_node_config" {
       on_demand_capasity    = number
       desired_capacity      = number
     })
+
     volume = object({
       delete_on_termination = bool
       volume_type           = string
@@ -36,10 +37,27 @@ variable "worker_node_config" {
       on_demand_capasity    = number
       desired_capacity      = number
     })
+
     volume = object({
       delete_on_termination = bool
       volume_type           = string
       volume_size           = number
+    })
+  })
+}
+
+variable "nodes_runtime_config" {
+  type = object({
+    token_schedule = string
+
+    backups = object({
+      schedule     = string
+      ttl          = string
+    })
+
+    cluster = object({
+      kubernetes   = string
+      docker       = string
     })
   })
 }

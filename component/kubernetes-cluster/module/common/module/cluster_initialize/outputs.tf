@@ -10,14 +10,6 @@ output "cluster_label" {
   value = local.label
 }
 
-output "kubernetes_version" {
-  value = local.kubernetes
-}
-
-output "docker_version" {
-  value = local.docker
-}
-
 output "account_id" {
   value = data.aws_caller_identity.default.account_id
 }

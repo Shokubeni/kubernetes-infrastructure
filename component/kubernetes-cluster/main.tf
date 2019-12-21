@@ -56,6 +56,7 @@ module "lambda" {
   source = "./module/lambda"
 
   cluster_config     = module.common.cluster_config
+  runtime_config     = var.nodes_runtime_config
   system_commands    = module.common.system_command
   secure_bucket      = module.common.secure_bucket
   backup_bucket      = module.common.backup_bucket
@@ -102,6 +103,7 @@ module "finalize" {
   cluster_config     = module.common.cluster_config
   backup_function    = module.lambda.cluster_backup
   renew_function     = module.lambda.renew_token
+  runtime_config     = var.nodes_runtime_config
   root_dir           = var.root_dir
   dependencies       = [
     module.master.autoscaling["group_id"],

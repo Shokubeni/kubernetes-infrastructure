@@ -45,6 +45,20 @@ worker_node_config = {
   }
 }
 
+nodes_runtime_config = {
+  token_schedule = "rate(12 hours)"
+
+  backups = {
+    schedule     = "cron(0 0 ? * * *)"
+    ttl          = "360h0m0s"
+  }
+
+  cluster = {
+    kubernetes   = "1.17.0"
+    docker       = "18.06.0"
+  }
+}
+
 //**********************************************************************
 //*                              Network                               *
 //**********************************************************************

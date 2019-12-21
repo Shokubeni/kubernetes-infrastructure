@@ -44,7 +44,7 @@
           "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - ",
           "echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' >> /etc/apt/sources.list.d/kubernetes.list",
           "apt-get update",
-          "apt-get install -y kubelet={{ KubernetesVersion }}* kubeadm={{ KubernetesVersion }}* kubectl={{ KubernetesVersion }}* kubernetes-cni=0.7.5-00",
+          "apt-get install -y kubelet={{ KubernetesVersion }}* kubeadm={{ KubernetesVersion }}* kubectl={{ KubernetesVersion }}* kubernetes-cni",
           "apt-get install etcd-client",
           "apt-mark hold kubelet kubeadm kubectl"
         ]

@@ -1,10 +1,24 @@
+variable "runtime_config" {
+  type = object({
+    token_schedule = string
+
+    backups = object({
+      schedule     = string
+      ttl          = string
+    })
+
+    cluster = object({
+      kubernetes   = string
+      docker       = string
+    })
+  })
+}
+
 variable "cluster_config" {
   type = object({
     id         = string
     name       = string
     label      = string
-    kubernetes = string
-    docker     = string
     account    = string
     region     = string
     type       = string
