@@ -85,7 +85,7 @@ data:
             summary: High Node Memory Usage
             description: Node "{{$labels.hostname}}" has more than 80% memory used. Plan Capcity
           expr: |
-            (sum (container_memory_working_set_bytes{id="/",container_name!="POD"}) by (hostname) / sum (machine_memory_bytes{}) by (hostname) * 100) > 80
+            (sum (container_memory_working_set_bytes{id="/",container!="POD"}) by (hostname) / sum (machine_memory_bytes{}) by (hostname) * 100) > 80
           for: 5m
           labels:
             severity: warning
@@ -96,7 +96,7 @@ data:
             summary: High Node CPU Usage
             description: Node "{{$labels.hostname}}" has more than 80% allocatable cpu used. Plan Capacity.
           expr: |
-            (sum(rate(container_cpu_usage_seconds_total{id="/", container_name!="POD"}[1m])) by (hostname) / sum(machine_cpu_cores) by (hostname)  * 100) > 80
+            (sum(rate(container_cpu_usage_seconds_total{id="/", container!="POD"}[1m])) by (hostname) / sum(machine_cpu_cores) by (hostname)  * 100) > 80
           for: 5m
           labels:
             severity: warning

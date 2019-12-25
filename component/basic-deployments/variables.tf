@@ -44,6 +44,22 @@ variable "worker_node_config" {
   })
 }
 
+variable "nodes_runtime_config" {
+  type = object({
+    token_schedule = string
+
+    backups = object({
+      schedule     = string
+      ttl          = string
+    })
+
+    cluster = object({
+      kubernetes   = string
+      docker       = string
+    })
+  })
+}
+
 variable "network_config" {
   type = object({
     virtual_cloud_cidr = string

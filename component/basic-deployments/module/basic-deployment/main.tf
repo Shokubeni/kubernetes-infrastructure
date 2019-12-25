@@ -101,6 +101,7 @@ module "cert_manager_general" {
 
   file_path   = "${path.module}/manifest/cert-manager/general.yaml"
   config_path = var.config_path
+  delay_time  = "30s"
   depends     = [
     module.cert_manager_namespace.task_id
   ]
@@ -115,6 +116,7 @@ module "cert_manager_issuer" {
     domain_name = var.network_config.domain_info.domain_name
   }
   depends     = [
-    module.cert_manager_namespace.task_id
+    module.cert_manager_namespace.task_id,
+    module.cert_manager_general.task_id
   ]
 }

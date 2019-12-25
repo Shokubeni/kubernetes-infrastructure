@@ -32,6 +32,7 @@
           "mv cert.pem  /var/aws-iam-authenticator/",
           "mv key.pem /var/aws-iam-authenticator/",
           "mv aws-iam-authenticator.kubeconfig /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml",
+          "chmod +r -R /var/aws-iam-authenticator",
           "aws s3 cp /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml s3://{{ S3BucketName }}/configs/authenticator.conf --region {{ S3BucketRegion }} --content-type \"text/plain\"",
           "aws s3 cp /var/aws-iam-authenticator/cert.pem s3://{{ S3BucketName }}/certificates/authenticator-cert.pem --region {{ S3BucketRegion }} --content-type \"text/plain\"",
           "aws s3 cp /var/aws-iam-authenticator/key.pem s3://{{ S3BucketName }}/certificates/authenticator-key.pem --region {{ S3BucketRegion }} --content-type \"text/plain\"",
@@ -43,7 +44,7 @@
           "  kubeletExtraArgs:",
           "    cloud-provider: \"aws\"",
           "---",
-          "apiVersion: kubeadm.k8s.io/v1beta1",
+          "apiVersion: kubeadm.k8s.io/v1beta2",
           "kind: ClusterConfiguration",
           "kubernetesVersion: stable",
           "clusterName: \"{{ ClusterId }}\"",
@@ -63,6 +64,8 @@
           "  extraArgs:",
           "    cloud-provider: \"aws\"",
           "EOF",
+
+
 
           "kubeadm init --config=kubeadm-config.yaml",
           "mkdir -p $HOME/.kube",
@@ -84,7 +87,6 @@
           "aws s3 cp ./kubeadm-config.yaml s3://{{ S3BucketName }}/configs/kubeadm.conf --region {{ S3BucketRegion }} --content-type \"text/plain\"",
           "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command --region {{ S3BucketRegion }} --content-type \"text/plain\"",
           "rm ./join-command",
-
 
           "wget https://github.com/vmware-tanzu/velero/releases/download/v1.2.0/velero-v1.2.0-linux-amd64.tar.gz -O velero.tar.gz",
           "mkdir velero",

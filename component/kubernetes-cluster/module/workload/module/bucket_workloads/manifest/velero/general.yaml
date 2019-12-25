@@ -1789,6 +1789,8 @@ items:
     name: default
     namespace: velero
   spec:
+    config:
+      region: ${bucket_region}
     objectStorage:
       bucket: ${bucket_name}
     provider: aws
@@ -1801,6 +1803,8 @@ items:
     name: default
     namespace: velero
   spec:
+    config:
+      region: ${bucket_region}
     provider: aws
 - apiVersion: apps/v1
   kind: Deployment

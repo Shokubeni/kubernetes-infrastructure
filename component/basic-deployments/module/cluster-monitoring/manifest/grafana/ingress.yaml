@@ -23,7 +23,7 @@ spec:
 
 ---
 
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   namespace: monitoring
@@ -36,11 +36,5 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - metrics.${domain_name}
-  acme:
-    config:
-      - http01:
-          ingressClass: nginx
-        domains:
-          - metrics.${domain_name}
 
 ---

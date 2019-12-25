@@ -7,8 +7,6 @@ terraform {
     arguments = [
       "-var", "provider_profile=${get_env("TF_VAR_AWS_PROFILE", "cluster_operator")}",
       "-var", "provider_region=${get_env("TF_VAR_AWS_REGION", "us-east-1")}",
-      "-var", "backend_bucket=${get_env("TF_VAR_CLUSTER_LABEL", "smart-gears")}.${get_env("TF_VAR_STATE_BUCKET", "terraform-state")}",
-      "-var", "backend_region=${get_env("TF_VAR_AWS_REGION", "us-east-1")}",
       "-var", "smtp_alerts_user=${get_env("TF_VAR_SMTP_ALERTS_USER", false)}",
       "-var", "smtp_alerts_pass=${get_env("TF_VAR_SMTP_ALERTS_PASS", false)}",
       "-var", "smtp_metrics_user=${get_env("TF_VAR_SMTP_METRICS_USER", false)}",
@@ -20,7 +18,9 @@ terraform {
       "-var", "kube_config=${get_env("TF_VAR_KUBE_CONFIG", false)}",
       "-var", "admin_role=${get_env("TF_VAR_AWS_ROLE", false)}",
       "-var", "grafana_client_id=${get_env("TF_VAR_GRAFANA_CLIENT_ID", false)}",
-      "-var", "grafana_secret=${get_env("TF_VAR_GRAFANA_SECRET", false)}"
+      "-var", "grafana_secret=${get_env("TF_VAR_GRAFANA_SECRET", false)}",
+      "-var", "backend_bucket=kubernetes-cluster.terraform-state",
+      "-var", "backend_region=us-east-1"
     ]
   }
 }

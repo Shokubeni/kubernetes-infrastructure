@@ -1,6 +1,6 @@
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: aws-iam-authenticator
@@ -8,6 +8,9 @@ metadata:
   labels:
     app: aws-iam-authenticator
 spec:
+  selector:
+    matchLabels:
+      app: aws-iam-authenticator
   updateStrategy:
     type: RollingUpdate
   template:
@@ -27,17 +30,14 @@ spec:
           operator: Exists
       containers:
         - name: aws-iam-authenticator
-          image: quay.io/edwin/aws-iam-authenticator:latest
+          image: 602401143452.dkr.ecr.us-west-2.amazonaws.com/amazon/aws-iam-authenticator:v0.4.0
           imagePullPolicy: Always
           args:
-            - aws-iam-authenticator
             - server
             - --config=/etc/aws-iam-authenticator/config.yaml
             - --state-dir=/var/aws-iam-authenticator
             - --kubeconfig-pregenerated=true
             - --generate-kubeconfig=/etc/kubernetes/aws-iam-authenticator/kubeconfig
-            - --reload-enabled
-            - --reload-period=60
           resources:
             requests:
               memory: 20Mi

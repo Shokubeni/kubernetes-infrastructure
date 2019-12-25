@@ -55,7 +55,7 @@ nodes_runtime_config = {
 
   cluster = {
     kubernetes   = "1.17.0"
-    docker       = "18.06.0"
+    docker       = "5:19.03.0"
   }
 }
 
