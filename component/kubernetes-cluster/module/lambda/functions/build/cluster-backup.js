@@ -15,6 +15,7 @@ exports.handler = () => __awaiter(this, void 0, void 0, function* () {
         const instanceId = yield autoscaling_1.getMasterNodeId(process.env.MASTER_AUTOSCALING_GROUP);
         if (instanceId && (yield manager_1.isInSystemManager(instanceId))) {
             yield manager_1.runCommand(instanceId, process.env.ETCD_BACKUP_COMMAND, {
+                CustomResources: [process.env.CUSTOM_RESOURCES],
                 BackupsTTL: [process.env.BACKUPS_TTL],
             });
         }

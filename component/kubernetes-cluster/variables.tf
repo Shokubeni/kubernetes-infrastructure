@@ -53,6 +53,7 @@ variable "nodes_runtime_config" {
     backups = object({
       schedule     = string
       ttl          = string
+      resources    = list(string)
     })
 
     cluster = object({

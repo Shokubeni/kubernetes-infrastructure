@@ -11,6 +11,9 @@
     "SnapshotName": {
       "type": "String"
     },
+    "CustomResources": {
+      "type": "String"
+    },
     "ClusterId": {
       "type": "String"
     }
@@ -70,9 +73,9 @@
           "tar -xvf {{ SnapshotName }}-data.tar.gz -C ./backup",
           "kubectl apply -f backup/resources/nodes/*",
           "rm -rf backup",
-          "until velero restore create --from-backup={{ SnapshotName }} --include-resources certmanager.k8s.io --include-cluster-resources; do echo 'restoring'; done",
+          "until velero restore create --from-backup={{ SnapshotName }} --include-resources {{ CustomResources }} --include-cluster-resources; do echo 'restoring'; done",
           "sleep 30",
-          "until velero restore create --from-backup={{ SnapshotName }} --exclude-resources certmanager.k8s.io --include-cluster-resources; do echo 'restoring'; done"
+          "until velero restore create --from-backup={{ SnapshotName }} --exclude-resources {{ CustomResources }} --include-cluster-resources; do echo 'restoring'; done"
         ]
       }
     }

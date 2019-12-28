@@ -71,6 +71,7 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             }
             else {
                 yield manager_1.runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
+                    CustomResources: [process.env.CUSTOM_RESOURCES],
                     S3BucketRegion: [process.env.S3_BUCKET_REGION],
                     S3BucketName: [process.env.S3_BUCKET_NAME],
                     ClusterId: [process.env.CLUSTER_ID],

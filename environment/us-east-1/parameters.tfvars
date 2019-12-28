@@ -51,6 +51,11 @@ nodes_runtime_config = {
   backups = {
     schedule     = "cron(0 0 ? * * *)"
     ttl          = "360h0m0s"
+    resources    = [
+      "cert-manager.io",
+      "linkerd.io",
+      "velero.io",
+    ]
   }
 
   cluster = {
