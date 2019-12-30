@@ -28,7 +28,7 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             return context.fail(messages_1.HandlerMessages.TaskHandlingDelayed);
         }
         if (yield autoscaling_1.isQueueControlReturn(event, process.env.MASTER_AUTOSCALING_GROUP)) {
-            const controlTimeout = Math.ceil(Math.random() * 30);
+            const controlTimeout = Math.ceil(Math.random() * 50);
             yield autoscaling_1.setInstanceTags(event, [
                 { Key: types_1.TagName.NodeState, Value: types_1.NodeState.InitAwaiting },
                 { Key: types_1.TagName.NodeRole, Value: types_1.NodeRole.MaterNode },
@@ -71,7 +71,8 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             }
             else {
                 yield manager_1.runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
-                    CustomResources: [process.env.CUSTOM_RESOURCES],
+                    BackupNamespaces: [process.env.BACKUP_NAMESPACES],
+                    BackupResources: [process.env.BACKUP_RESOURCES],
                     S3BucketRegion: [process.env.S3_BUCKET_REGION],
                     S3BucketName: [process.env.S3_BUCKET_NAME],
                     ClusterId: [process.env.CLUSTER_ID],

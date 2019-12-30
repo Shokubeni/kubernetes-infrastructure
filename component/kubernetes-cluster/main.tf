@@ -11,6 +11,7 @@ provider "aws" {
 module "common" {
   source = "./module/common"
 
+  runtime_config     = var.nodes_runtime_config
   deployment_type    = var.deployment_type
   cluster_label      = var.cluster_label
   cluster_name       = var.cluster_name

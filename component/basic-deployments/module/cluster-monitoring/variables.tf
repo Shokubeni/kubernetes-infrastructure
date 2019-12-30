@@ -5,7 +5,8 @@ variable "network_config" {
     is_main_cluster    = bool
     private_subnets    = map(string)
     public_subnets     = map(string)
-    ssh_kube_service   = string
+    tcp_services       = map(string)
+    udp_services       = map(string)
     domain_info        = object({
       hosted_zone = string
       domain_name = string
@@ -32,6 +33,7 @@ variable "cluster_config" {
     account    = string
     region     = string
     type       = string
+    prod       = bool
   })
 }
 

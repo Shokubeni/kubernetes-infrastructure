@@ -19,7 +19,8 @@ resource "aws_lambda_function" "cluster_backup" {
     variables = {
       MASTER_AUTOSCALING_GROUP = "${var.cluster_config.label}-master_${var.cluster_config.id}"
       ETCD_BACKUP_COMMAND      = var.system_commands.cluster_etcd_backup
-      CUSTOM_RESOURCES         = join(",", var.runtime_config.backups.resources)
+      BACKUP_NAMESPACES        = join(",", var.runtime_config.backups.namespaces)
+      BACKUP_RESOURCES         = join(",", var.runtime_config.backups.resources)
       BACKUPS_TTL              = var.runtime_config.backups.ttl
       CLUSTER_ID               = var.cluster_config.id
     }
@@ -69,7 +70,8 @@ resource "aws_lambda_function" "master_lifecycle" {
       COMMON_WORKER_INIT_COMMAND     = var.system_commands.common_worker_init
       KUBERNETES_VERSION             = var.runtime_config.cluster.kubernetes
       DOCKER_VERSION                 = var.runtime_config.cluster.docker
-      CUSTOM_RESOURCES               = join(",", var.runtime_config.backups.resources)
+      BACKUP_NAMESPACES              = join(",", var.runtime_config.backups.namespaces)
+      BACKUP_RESOURCES               = join(",", var.runtime_config.backups.resources)
       LOAD_BALANCER_DNS              = var.balancer_data.dns
       S3_BACKUP_BUCKET               = var.backup_bucket.id
       S3_BUCKET_REGION               = var.secure_bucket.region

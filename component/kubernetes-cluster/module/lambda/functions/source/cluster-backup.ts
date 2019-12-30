@@ -1,11 +1,12 @@
-import {getMasterNodeId, isMasterNodeExists} from './helper/autoscaling';
-import {isInSystemManager, runCommand} from './helper/manager';
+import { getMasterNodeId, isMasterNodeExists } from './helper/autoscaling';
+import { isInSystemManager, runCommand } from './helper/manager';
 
 declare var process : {
   env: {
     MASTER_AUTOSCALING_GROUP: string,
     ETCD_BACKUP_COMMAND: string,
-    CUSTOM_RESOURCES: string,
+    BACKUP_NAMESPACES: string,
+    BACKUP_RESOURCES: string,
     BACKUPS_TTL: string,
     CLUSTER_ID: string,
   },
@@ -17,7 +18,8 @@ export const handler = async (): Promise<void> => {
 
     if (instanceId && await isInSystemManager(instanceId)) {
       await runCommand(instanceId, process.env.ETCD_BACKUP_COMMAND, {
-        CustomResources: [process.env.CUSTOM_RESOURCES],
+        BackupNamespaces: [process.env.BACKUP_NAMESPACES],
+        BackupResources: [process.env.BACKUP_RESOURCES],
         BackupsTTL: [process.env.BACKUPS_TTL],
       });
     }

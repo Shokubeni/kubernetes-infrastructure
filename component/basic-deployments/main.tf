@@ -19,10 +19,10 @@ provider "aws" {
 }
 
 locals {
-  config_path    = var.kube_config != false ? data.terraform_remote_state.kubernetes.outputs.config_path : var.kube_config
-  cluster_config = data.terraform_remote_state.kubernetes.outputs.cluster_config
-  balancer_data  = data.terraform_remote_state.kubernetes.outputs.balancer_data
-  network_data   = data.terraform_remote_state.kubernetes.outputs.network_data
+  config_path       = var.kube_config != false ? data.terraform_remote_state.kubernetes.outputs.config_path : var.kube_config
+  cluster_config    = data.terraform_remote_state.kubernetes.outputs.cluster_config
+  balancer_data     = data.terraform_remote_state.kubernetes.outputs.balancer_data
+  network_data      = data.terraform_remote_state.kubernetes.outputs.network_data
 }
 
 module "dns" {

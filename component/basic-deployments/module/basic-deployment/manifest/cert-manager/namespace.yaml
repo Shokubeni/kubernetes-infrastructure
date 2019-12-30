@@ -7,5 +7,4 @@ metadata:
   labels:
     certmanager.k8s.io/disable-validation: "true"
 
-
 ---

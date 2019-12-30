@@ -2,7 +2,10 @@
   "schemaVersion": "2.2",
   "description": "Backup etcd database",
   "parameters": {
-    "CustomResources": {
+    "BackupNamespaces": {
+      "type": "String"
+    },
+    "BackupResources": {
       "type": "String"
     },
     "BackupsTTL": {
@@ -16,8 +19,11 @@
       "inputs": {
         "runCommand": [
           "sudo su",
-          "ETCD_BACKUP_DATE=$(date +\"%d.%m.%y-%H.%M.%S\")",
-          "velero backup create $ETCD_BACKUP_DATE --ttl {{ BackupsTTL }} --include-resources {{ CustomResources }} --wait --kubeconfig /etc/kubernetes/admin.conf"
+          "export ETCD_BACKUP_DATE=$(date +\"%d.%m.%y-%H.%M.%S\")",
+          "export PATH=/root/.linkerd2/bin:/root/bin:$PATH",
+          "export HOME=/root",
+
+          "velero backup create $ETCD_BACKUP_DATE --include-namespaces '{{ BackupNamespaces }}' --include-resources '{{ BackupResources }}' --ttl '{{ BackupsTTL }}' --wait"
         ]
       }
     }

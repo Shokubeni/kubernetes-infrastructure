@@ -60,7 +60,8 @@ module "ingress_controller_configmap" {
   file_path   = "${path.module}/manifest/ingress-controller/configmap.yaml"
   config_path = var.config_path
   variables   = {
-    ssh_kube_service = var.network_config.ssh_kube_service
+    tcp_services = join("\n  ", [for port, service in var.network_config.tcp_services : "${port}: ${service}"])
+    udp_services = join("\n  ", [for port, service in var.network_config.udp_services : "${port}: ${service}"])
   }
   depends     = [
     module.ingress_controller_namespace.task_id
@@ -101,7 +102,6 @@ module "cert_manager_general" {
 
   file_path   = "${path.module}/manifest/cert-manager/general.yaml"
   config_path = var.config_path
-  delay_time  = "10s"
   depends     = [
     module.cert_manager_namespace.task_id
   ]

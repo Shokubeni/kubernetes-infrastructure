@@ -19,16 +19,17 @@
       "inputs": {
         "runCommand": [
           "sudo su",
+          "export PATH=/root/.linkerd2/bin:/root/bin:$PATH",
+          "export HOME=/root",
+          "mkdir -p /root/bin",
 
           "cat <<EOF | sudo tee /etc/default/kubelet",
           "KUBELET_EXTRA_ARGS=--cloud-provider=aws",
           "EOF",
 
           "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator",
-          "chmod +x ./aws-iam-authenticator",
-          "mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$HOME/bin:$PATH",
-          "mkdir -p /etc/kubernetes/aws-iam-authenticator",
-          "mkdir /var/aws-iam-authenticator",
+          "chmod +x ./aws-iam-authenticator && cp ./aws-iam-authenticator /root/bin/aws-iam-authenticator",
+          "mkdir -p /etc/kubernetes/aws-iam-authenticator /var/aws-iam-authenticator",
           "aws s3 cp s3://{{ S3BucketName }}/configs/authenticator.conf /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/authenticator-cert.pem /var/aws-iam-authenticator/cert.pem --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/authenticator-key.pem /var/aws-iam-authenticator/key.pem --region {{ S3BucketRegion }}",
@@ -45,19 +46,15 @@
           "aws s3 cp s3://{{ S3BucketName }}/configs/authenticator.conf /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/commands/join-command ./join-command --region {{ S3BucketRegion }}",
 
-          "mkdir -p $HOME/.kube",
-          "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
-          "chown $(id -u):$(id -g) $HOME/.kube/config",
-          "export KUBECONFIG=$HOME/.kube/config",
-          "$(cat ./join-command) --control-plane",
-          "rm ./join-command",
+          "mkdir -p /root/.kube && cp -i /etc/kubernetes/admin.conf /root/.kube/config && chown $(id -u):$(id -g) /root/.kube/config",
+          "export KUBECONFIG=/root/.kube/config",
+          "$(cat ./join-command) --control-plane && m ./join-command",
 
           "wget https://github.com/vmware-tanzu/velero/releases/download/v1.2.0/velero-v1.2.0-linux-amd64.tar.gz -O velero.tar.gz",
-          "mkdir velero",
-          "tar -xvf velero.tar.gz -C ./velero",
-          "cp velero/velero-v1.2.0-linux-amd64/velero /usr/local/bin",
-          "rm velero.tar.gz",
-          "rm -rf velero"
+          "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v1.2.0-linux-amd64/velero /root/bin",
+          "rm velero.tar.gz && rm -rf velero",
+
+          "curl -sL https://run.linkerd.io/install | sh"
         ]
       }
     }

@@ -45,30 +45,10 @@ worker_node_config = {
   }
 }
 
-nodes_runtime_config = {
-  token_schedule = "rate(12 hours)"
-
-  backups = {
-    schedule     = "cron(0 0 ? * * *)"
-    ttl          = "360h0m0s"
-    resources    = [
-      "cert-manager.io",
-      "linkerd.io",
-      "velero.io",
-    ]
-  }
-
-  cluster = {
-    kubernetes   = "1.17.0"
-    docker       = "5:19.03.0"
-  }
-}
-
 //**********************************************************************
 //*                              Network                               *
 //**********************************************************************
 network_config = {
-  ssh_kube_service   = "command-center/gitlab:22"
   virtual_cloud_cidr = "172.16.0.0/16"
   nat_instance_type  = "t3a.micro"
   is_main_cluster    = true
@@ -86,5 +66,31 @@ network_config = {
   domain_info        = {
     hosted_zone = "Z1IMWHN7BIT6US"
     domain_name = "smart-gears.io"
+  }
+
+  tcp_services = {
+    22 = "command-center/gitlab:22"
+  }
+
+  udp_services = {}
+}
+
+//**********************************************************************
+//*                              Runtime                               *
+//**********************************************************************
+nodes_runtime_config = {
+  token_schedule = "rate(12 hours)"
+  is_prod_env    = true
+
+  backups = {
+    schedule     = "cron(0 0 ? * * *)"
+    ttl          = "360h0m0s"
+    namespaces   = ["*"]
+    resources    = ["*"]
+  }
+
+  cluster = {
+    kubernetes   = "1.17.0"
+    docker       = "5:19.03.0"
   }
 }

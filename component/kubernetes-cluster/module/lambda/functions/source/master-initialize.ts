@@ -25,7 +25,8 @@ declare var process : {
     TASK_EXECUTE_LIMIT: string,
     KUBERNETES_VERSION: string,
     LOAD_BALANCER_DNS: string,
-    CUSTOM_RESOURCES: string,
+    BACKUP_NAMESPACES: string,
+    BACKUP_RESOURCES: string,
     DOCKER_VERSION: string,
     S3_BACKUP_BUCKET: string,
     S3_BUCKET_REGION: string,
@@ -53,7 +54,7 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
     }
 
     if (await isQueueControlReturn(event, process.env.MASTER_AUTOSCALING_GROUP)) {
-      const controlTimeout = Math.ceil(Math.random() * 30);
+      const controlTimeout = Math.ceil(Math.random() * 50);
 
       await setInstanceTags(event, [
         { Key: TagName.NodeState, Value: NodeState.InitAwaiting },
@@ -102,7 +103,8 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
 
       } else {
         await runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
-          CustomResources: [process.env.CUSTOM_RESOURCES],
+          BackupNamespaces: [process.env.BACKUP_NAMESPACES],
+          BackupResources: [process.env.BACKUP_RESOURCES],
           S3BucketRegion: [process.env.S3_BUCKET_REGION],
           S3BucketName: [process.env.S3_BUCKET_NAME],
           ClusterId: [process.env.CLUSTER_ID],

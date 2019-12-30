@@ -20,6 +20,10 @@ export async function runCommand(event: SQSEvent|InstanceId, command: string, pa
 
   const commandLaunch = await systemManager
     .sendCommand({
+        CloudWatchOutputConfig: {
+          CloudWatchLogGroupName: command,
+          CloudWatchOutputEnabled: true,
+        },
         InstanceIds: [instanceId],
         DocumentName: command,
         Parameters: params,
