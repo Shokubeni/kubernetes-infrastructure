@@ -11,7 +11,6 @@ variable "network_config" {
   type = object({
     virtual_cloud_cidr = string
     nat_instance_type  = string
-    is_main_cluster    = bool
     private_subnets    = map(string)
     public_subnets     = map(string)
     tcp_services       = map(string)
@@ -45,6 +44,6 @@ variable "cluster_config" {
     label      = string
     account    = string
     region     = string
-    type       = string
+    prod       = bool
   })
 }

@@ -250,7 +250,7 @@ resource "aws_security_group_rule" "master_https_from_balancer" {
   security_group_id        = aws_security_group.master.id
 }
 
-resource "aws_security_group_rule" "master_https_from_balancer" {
+resource "aws_security_group_rule" "master_shh_from_balancer" {
   description              = "SSH traffic"
   type                     = "ingress"
   from_port                = 32022

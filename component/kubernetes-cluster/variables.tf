@@ -48,19 +48,19 @@ variable "worker_node_config" {
 
 variable "nodes_runtime_config" {
   type = object({
-    token_schedule  = string
-    is_prod_env     = bool
+    token_schedule = string
+    prod_cluster   = bool
 
     backups = object({
-      schedule      = string
-      ttl           = string
-      namespaces    = list(string)
-      resources     = list(string)
+      schedule     = string
+      lifetime     = string
+      namespaces   = list(string)
+      resources    = list(string)
     })
 
     cluster = object({
-      kubernetes    = string
-      docker        = string
+      kubernetes   = string
+      docker       = string
     })
   })
 }
@@ -69,7 +69,6 @@ variable "network_config" {
   type = object({
     virtual_cloud_cidr = string
     nat_instance_type  = string
-    is_main_cluster    = bool
     private_subnets    = map(string)
     public_subnets     = map(string)
     tcp_services       = map(string)
@@ -89,19 +88,11 @@ variable "provider_region" {
   type = string
 }
 
-variable "deployment_type" {
-  type = string
-}
-
 variable "cluster_name" {
   type = string
 }
 
 variable "cluster_label" {
-  type = string
-}
-
-variable "admin_role" {
   type = string
 }
 

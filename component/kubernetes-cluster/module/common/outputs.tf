@@ -17,8 +17,7 @@ output "cluster_config" {
     label   = module.cluster_initialize.cluster_label
     account = module.cluster_initialize.account_id
     region  = module.cluster_initialize.region_name
-    type    = var.deployment_type
-    prod    = var.runtime_config.is_prod_env
+    prod    = var.runtime_config.prod_cluster
   }
 }
 

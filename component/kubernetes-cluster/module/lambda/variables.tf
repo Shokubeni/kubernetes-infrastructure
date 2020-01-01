@@ -12,19 +12,19 @@ variable "system_commands" {
 
 variable "runtime_config" {
   type = object({
-    token_schedule  = string
-    is_prod_env     = bool
+    token_schedule = string
+    prod_cluster   = bool
 
     backups = object({
-      schedule      = string
-      ttl           = string
-      namespaces    = list(string)
-      resources     = list(string)
+      schedule     = string
+      lifetime     = string
+      namespaces   = list(string)
+      resources    = list(string)
     })
 
     cluster = object({
-      kubernetes    = string
-      docker        = string
+      kubernetes   = string
+      docker       = string
     })
   })
 }
@@ -36,7 +36,7 @@ variable "cluster_config" {
     label      = string
     account    = string
     region     = string
-    type       = string
+    prod       = bool
   })
 }
 

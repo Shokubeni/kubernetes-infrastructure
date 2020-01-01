@@ -21,6 +21,6 @@ variable "cluster_config" {
     label      = string
     account    = string
     region     = string
-    type       = string
+    prod       = bool
   })
 }

@@ -21,7 +21,7 @@ resource "aws_lambda_function" "cluster_backup" {
       ETCD_BACKUP_COMMAND      = var.system_commands.cluster_etcd_backup
       BACKUP_NAMESPACES        = join(",", var.runtime_config.backups.namespaces)
       BACKUP_RESOURCES         = join(",", var.runtime_config.backups.resources)
-      BACKUPS_TTL              = var.runtime_config.backups.ttl
+      BACKUPS_TTL              = var.runtime_config.backups.lifetime
       CLUSTER_ID               = var.cluster_config.id
     }
   }

@@ -51,7 +51,6 @@ worker_node_config = {
 network_config = {
   virtual_cloud_cidr = "172.16.0.0/16"
   nat_instance_type  = "t3a.micro"
-  is_main_cluster    = true
 
   private_subnets    = {
     "172.16.0.0/20"  = "us-east-1b"
@@ -80,11 +79,11 @@ network_config = {
 //**********************************************************************
 nodes_runtime_config = {
   token_schedule = "rate(12 hours)"
-  is_prod_env    = true
+  prod_cluster   = true
 
   backups = {
     schedule     = "cron(0 0 ? * * *)"
-    ttl          = "360h0m0s"
+    lifetime     = "360h0m0s"
     namespaces   = ["*"]
     resources    = ["*"]
   }
