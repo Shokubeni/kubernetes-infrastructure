@@ -16,7 +16,8 @@ module "instance_role" {
   source = "./module/instance_role"
 
   cluster_config   = var.cluster_config
-  bucket_name      = var.secure_bucket.id
+  cluster_bucket   = var.secure_bucket.id
+  backup_bucket    = var.backup_bucket.id
 }
 
 module "lambda_role" {

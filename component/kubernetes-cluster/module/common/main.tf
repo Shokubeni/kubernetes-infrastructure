@@ -8,6 +8,7 @@ resource "aws_s3_account_public_access_block" "bucket" {
 module "cluster_initialize" {
   source = "./module/cluster_initialize"
 
+
   cluster_label = var.cluster_label
   cluster_name  = var.cluster_name
 }

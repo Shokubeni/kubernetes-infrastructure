@@ -23,9 +23,10 @@ spec:
         prometheus.io/scrape: "true"
     spec:
       serviceAccountName: nginx-ingress-serviceaccount
+      terminationGracePeriodSeconds: 300
       containers:
         - name: nginx-ingress-controller
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.0
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
           resources:
             limits:
               cpu: 1000m
@@ -89,6 +90,5 @@ spec:
           effect: NoSchedule
       nodeSelector:
         node-role.kubernetes.io/master: ""
-
 
 ---

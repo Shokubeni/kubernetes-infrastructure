@@ -3,14 +3,16 @@ variable "cluster_config" {
     id         = string
     name       = string
     label      = string
-    kubernetes = string
-    docker     = string
     account    = string
     region     = string
-    type       = string
+    prod       = bool
   })
 }
 
-variable "bucket_name" {
+variable "cluster_bucket" {
+  type = string
+}
+
+variable "backup_bucket" {
   type = string
 }

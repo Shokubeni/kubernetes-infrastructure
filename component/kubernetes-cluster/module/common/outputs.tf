@@ -12,14 +12,12 @@ output "system_command" {
 
 output "cluster_config" {
   value = {
-    id         = module.cluster_initialize.cluster_id
-    name       = module.cluster_initialize.cluster_name
-    label      = module.cluster_initialize.cluster_label
-    kubernetes = module.cluster_initialize.kubernetes_version
-    docker     = module.cluster_initialize.docker_version
-    account    = module.cluster_initialize.account_id
-    region     = module.cluster_initialize.region_name
-    type       = var.deployment_type
+    id      = module.cluster_initialize.cluster_id
+    name    = module.cluster_initialize.cluster_name
+    label   = module.cluster_initialize.cluster_label
+    account = module.cluster_initialize.account_id
+    region  = module.cluster_initialize.region_name
+    prod    = var.runtime_config.prod_cluster
   }
 }
 

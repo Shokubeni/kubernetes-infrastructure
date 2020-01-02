@@ -60,7 +60,8 @@ module "ingress_controller_configmap" {
   file_path   = "${path.module}/manifest/ingress-controller/configmap.yaml"
   config_path = var.config_path
   variables   = {
-    ssh_kube_service = var.network_config.ssh_kube_service
+    tcp_services = join("\n  ", [for port, service in var.network_config.tcp_services : "${port}: ${service}"])
+    udp_services = join("\n  ", [for port, service in var.network_config.udp_services : "${port}: ${service}"])
   }
   depends     = [
     module.ingress_controller_namespace.task_id
@@ -115,6 +116,7 @@ module "cert_manager_issuer" {
     domain_name = var.network_config.domain_info.domain_name
   }
   depends     = [
-    module.cert_manager_namespace.task_id
+    module.cert_manager_namespace.task_id,
+    module.cert_manager_general.task_id
   ]
 }

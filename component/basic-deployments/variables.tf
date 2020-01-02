@@ -44,14 +44,33 @@ variable "worker_node_config" {
   })
 }
 
+variable "nodes_runtime_config" {
+  type = object({
+    token_schedule = string
+    prod_cluster   = bool
+
+    backups = object({
+      schedule     = string
+      lifetime     = string
+      namespaces   = list(string)
+      resources    = list(string)
+    })
+
+    cluster = object({
+      kubernetes   = string
+      docker       = string
+    })
+  })
+}
+
 variable "network_config" {
   type = object({
     virtual_cloud_cidr = string
     nat_instance_type  = string
-    is_main_cluster    = bool
     private_subnets    = map(string)
     public_subnets     = map(string)
-    ssh_kube_service   = string
+    tcp_services       = map(string)
+    udp_services       = map(string)
     domain_info        = object({
       hosted_zone = string
       domain_name = string

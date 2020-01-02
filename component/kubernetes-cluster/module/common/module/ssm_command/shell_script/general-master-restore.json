@@ -11,6 +11,12 @@
     "SnapshotName": {
       "type": "String"
     },
+    "BackupNamespaces": {
+      "type": "String"
+    },
+    "BackupResources": {
+      "type": "String"
+    },
     "ClusterId": {
       "type": "String"
     }
@@ -22,6 +28,9 @@
       "inputs": {
         "runCommand": [
           "sudo su",
+          "export PATH=/root/.linkerd2/bin:/root/bin:$PATH",
+          "export HOME=/root",
+          "mkdir -p /root/bin ",
 
           "aws s3 cp s3://{{ S3BucketName }}/certificates/ca.crt /etc/kubernetes/pki/ca.crt --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/ca.key /etc/kubernetes/pki/ca.key --region {{ S3BucketRegion }}",
@@ -34,45 +43,31 @@
           "aws s3 cp s3://{{ S3BucketName }}/configs/kubernetes.conf /etc/kubernetes/admin.conf --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/configs/kubeadm.conf ./kubeadm-config.yaml --region {{ S3BucketRegion }}",
 
-          "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.12.7/2019-03-27/bin/linux/amd64/aws-iam-authenticator",
-          "chmod +x ./aws-iam-authenticator",
-          "mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$HOME/bin:$PATH",
-          "mkdir -p /etc/kubernetes/aws-iam-authenticator",
-          "mkdir /var/aws-iam-authenticator",
+          "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator",
+          "chmod +x ./aws-iam-authenticator && cp ./aws-iam-authenticator /root/bin/aws-iam-authenticator",
+          "mkdir -p /etc/kubernetes/aws-iam-authenticator mkdir /var/aws-iam-authenticator",
           "aws s3 cp s3://{{ S3BucketName }}/configs/authenticator.conf /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/authenticator-cert.pem /var/aws-iam-authenticator/cert.pem --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/certificates/authenticator-key.pem /var/aws-iam-authenticator/key.pem --region {{ S3BucketRegion }}",
 
           "kubeadm init --config=kubeadm-config.yaml",
-          "mkdir -p $HOME/.kube",
-          "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
-          "chown $(id -u):$(id -g) $HOME/.kube/config",
-          "export KUBECONFIG=$HOME/.kube/config",
+          "mkdir -p /root/.kube && cp -i /etc/kubernetes/admin.conf /root/.kube/config && chown $(id -u):$(id -g) /root/.kube/config",
+          "export KUBECONFIG=/root/.kube/config",
           "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\\n')\"",
 
           "kubeadm token create --print-join-command > join-command",
           "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command --region {{ S3BucketRegion }} --content-type \"text/plain\"",
           "rm ./join-command",
 
-          "wget https://github.com/heptio/velero/releases/download/v1.0.0-rc.1/velero-v1.0.0-rc.1-linux-amd64.tar.gz -O velero.tar.gz",
-          "mkdir velero",
-          "tar -xvf velero.tar.gz -C ./velero",
-          "cp velero/velero-v1.0.0-rc.1-linux-amd64/velero /usr/local/bin",
-          "rm velero.tar.gz",
-          "rm -rf velero",
-          "aws s3 cp s3://{{ S3BucketName }}/workload/backup.yaml ./backup-workload.yaml --region {{ S3BucketRegion }}",
-          "kubectl apply -f ./backup-workload.yaml",
-          "rm ./backup-workload.yaml",
-          "sleep 60",
+          "wget https://github.com/vmware-tanzu/velero/releases/download/v1.2.0/velero-v1.2.0-linux-amd64.tar.gz -O velero.tar.gz",
+          "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v1.2.0-linux-amd64/velero /root/bin",
+          "rm velero.tar.gz && rm -rf velero",
+          "aws s3 cp s3://{{ S3BucketName }}/workload/velero.yaml ./velero-workload.yaml --region {{ S3BucketRegion }}",
+          "kubectl apply -f ./velero-workload.yaml && rm ./velero-workload.yaml && sleep 60",
+          "velero restore create --from-backup={{ SnapshotName }} --include-namespaces '{{ BackupNamespaces }}' --include-resources '{{ BackupResources }}' --include-cluster-resources auto --wait",
 
-          "velero backup download {{ SnapshotName }}",
-          "mkdir backup",
-          "tar -xvf {{ SnapshotName }}-data.tar.gz -C ./backup",
-          "kubectl apply -f backup/resources/nodes/*",
-          "rm -rf backup",
-          "until velero restore create --from-backup={{ SnapshotName }} --include-resources certmanager.k8s.io --include-cluster-resources; do echo 'restoring'; done",
-          "sleep 30",
-          "until velero restore create --from-backup={{ SnapshotName }} --exclude-resources certmanager.k8s.io --include-cluster-resources; do echo 'restoring'; done"
+          "curl -sL https://run.linkerd.io/install | sh",
+          "linkerd install --ignore-cluster | kubectl apply -f -"
         ]
       }
     }

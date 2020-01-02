@@ -14,7 +14,11 @@ exports.handler = () => __awaiter(this, void 0, void 0, function* () {
     if (yield autoscaling_1.isMasterNodeExists(process.env.MASTER_AUTOSCALING_GROUP)) {
         const instanceId = yield autoscaling_1.getMasterNodeId(process.env.MASTER_AUTOSCALING_GROUP);
         if (instanceId && (yield manager_1.isInSystemManager(instanceId))) {
-            yield manager_1.runCommand(instanceId, process.env.ETCD_BACKUP_COMMAND);
+            yield manager_1.runCommand(instanceId, process.env.ETCD_BACKUP_COMMAND, {
+                BackupNamespaces: [process.env.BACKUP_NAMESPACES],
+                BackupResources: [process.env.BACKUP_RESOURCES],
+                BackupsTTL: [process.env.BACKUPS_TTL],
+            });
         }
     }
 });

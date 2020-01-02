@@ -12,11 +12,9 @@ variable "cluster_config" {
     id         = string
     name       = string
     label      = string
-    kubernetes = string
-    docker     = string
     account    = string
     region     = string
-    type       = string
+    prod       = bool
   })
 }
 

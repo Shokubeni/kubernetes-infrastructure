@@ -20,7 +20,7 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 data:
-  22: "${ssh_kube_service}"
+  ${tcp_services}
 
 ---
 
@@ -32,5 +32,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
+data:
+  ${udp_services}
 
 ---

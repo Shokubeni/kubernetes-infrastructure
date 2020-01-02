@@ -10,7 +10,7 @@ resource "aws_lambda_function" "cluster_backup" {
   handler                        = "build/cluster-backup.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = var.cloudwatch_role.arn
-  runtime                        = "nodejs10.x"
+  runtime                        = "nodejs12.x"
   timeout                        = 600
   memory_size                    = 256
   reserved_concurrent_executions = 1
@@ -19,6 +19,9 @@ resource "aws_lambda_function" "cluster_backup" {
     variables = {
       MASTER_AUTOSCALING_GROUP = "${var.cluster_config.label}-master_${var.cluster_config.id}"
       ETCD_BACKUP_COMMAND      = var.system_commands.cluster_etcd_backup
+      BACKUP_NAMESPACES        = join(",", var.runtime_config.backups.namespaces)
+      BACKUP_RESOURCES         = join(",", var.runtime_config.backups.resources)
+      BACKUPS_TTL              = var.runtime_config.backups.lifetime
       CLUSTER_ID               = var.cluster_config.id
     }
   }
@@ -30,7 +33,7 @@ resource "aws_lambda_function" "renew_token" {
   handler                        = "build/renew-token.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = var.cloudwatch_role.arn
-  runtime                        = "nodejs10.x"
+  runtime                        = "nodejs12.x"
   timeout                        = 600
   memory_size                    = 256
   reserved_concurrent_executions = 1
@@ -52,7 +55,7 @@ resource "aws_lambda_function" "master_lifecycle" {
   handler                        = "build/master-initialize.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = var.master_role.arn
-  runtime                        = "nodejs10.x"
+  runtime                        = "nodejs12.x"
   timeout                        = 600
   memory_size                    = 512
   reserved_concurrent_executions = 5
@@ -65,8 +68,10 @@ resource "aws_lambda_function" "master_lifecycle" {
       GENERAL_MASTER_INIT_COMMAND    = var.system_commands.general_master_init
       STACKED_MASTER_INIT_COMMAND    = var.system_commands.stacked_master_init
       COMMON_WORKER_INIT_COMMAND     = var.system_commands.common_worker_init
-      KUBERNETES_VERSION             = var.cluster_config.kubernetes
-      DOCKER_VERSION                 = var.cluster_config.docker
+      KUBERNETES_VERSION             = var.runtime_config.cluster.kubernetes
+      DOCKER_VERSION                 = var.runtime_config.cluster.docker
+      BACKUP_NAMESPACES              = join(",", var.runtime_config.backups.namespaces)
+      BACKUP_RESOURCES               = join(",", var.runtime_config.backups.resources)
       LOAD_BALANCER_DNS              = var.balancer_data.dns
       S3_BACKUP_BUCKET               = var.backup_bucket.id
       S3_BUCKET_REGION               = var.secure_bucket.region
@@ -85,7 +90,7 @@ resource "aws_lambda_function" "worker_lifecycle" {
   handler                        = "build/worker-initialize.handler"
   filename                       = "${path.module}/functions.zip"
   role                           = var.worker_role.arn
-  runtime                        = "nodejs10.x"
+  runtime                        = "nodejs12.x"
   timeout                        = 600
   memory_size                    = 512
   reserved_concurrent_executions = 5
@@ -95,8 +100,8 @@ resource "aws_lambda_function" "worker_lifecycle" {
       MASTER_AUTOSCALING_GROUP     = "${var.cluster_config.label}-master_${var.cluster_config.id}"
       NODE_RUNTIME_INSTALL_COMMAND = var.system_commands.node_runtime_install
       COMMON_WORKER_INIT_COMMAND   = var.system_commands.common_worker_init
-      KUBERNETES_VERSION           = var.cluster_config.kubernetes
-      DOCKER_VERSION               = var.cluster_config.docker
+      KUBERNETES_VERSION           = var.runtime_config.cluster.kubernetes
+      DOCKER_VERSION               = var.runtime_config.cluster.docker
       S3_BUCKET_REGION             = var.secure_bucket.region
       S3_BUCKET_NAME               = var.secure_bucket.id
       SQS_QUEUE_URL                = var.worker_queue.id

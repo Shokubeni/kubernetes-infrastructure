@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket        = "${var.cluster_label}.cluster-data.${var.cluster_id}"
+  bucket        = "kubernetes-cluster.cluster-data.${var.cluster_id}"
   region        = var.bucket_region
   acl           = "private"
   force_destroy = true

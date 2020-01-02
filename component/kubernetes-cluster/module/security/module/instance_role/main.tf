@@ -2,7 +2,8 @@ data "template_file" "master" {
   template = file("${path.module}/master-policy.json")
 
   vars = {
-    cluster_bucket = var.bucket_name
+    cluster_bucket = var.cluster_bucket
+    backup_bucket  = var.backup_bucket
   }
 }
 
@@ -27,7 +28,7 @@ data "template_file" "worker" {
   template = file("${path.module}/worker-policy.json")
 
   vars = {
-    cluster_bucket = var.bucket_name
+    cluster_bucket = var.cluster_bucket
   }
 }
 

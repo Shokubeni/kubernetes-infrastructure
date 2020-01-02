@@ -18,6 +18,10 @@ function runCommand(event, command, params) {
             : event;
         const commandLaunch = yield systemManager
             .sendCommand({
+            CloudWatchOutputConfig: {
+                CloudWatchLogGroupName: command,
+                CloudWatchOutputEnabled: true,
+            },
             InstanceIds: [instanceId],
             DocumentName: command,
             Parameters: params,

@@ -49,10 +49,8 @@ worker_node_config = {
 //*                              Network                               *
 //**********************************************************************
 network_config = {
-  ssh_kube_service   = "command-center/gitlab:22"
   virtual_cloud_cidr = "172.16.0.0/16"
   nat_instance_type  = "t3a.micro"
-  is_main_cluster    = true
 
   private_subnets    = {
     "172.16.0.0/20"  = "us-east-1b"
@@ -67,5 +65,31 @@ network_config = {
   domain_info        = {
     hosted_zone = "Z1IMWHN7BIT6US"
     domain_name = "smart-gears.io"
+  }
+
+  tcp_services = {
+    22 = "command-center/gitlab:22"
+  }
+
+  udp_services = {}
+}
+
+//**********************************************************************
+//*                              Runtime                               *
+//**********************************************************************
+nodes_runtime_config = {
+  token_schedule = "rate(12 hours)"
+  prod_cluster   = true
+
+  backups = {
+    schedule     = "cron(0 0 ? * * *)"
+    lifetime     = "360h0m0s"
+    namespaces   = ["*"]
+    resources    = ["*"]
+  }
+
+  cluster = {
+    kubernetes   = "1.17.0"
+    docker       = "5:19.03.0"
   }
 }

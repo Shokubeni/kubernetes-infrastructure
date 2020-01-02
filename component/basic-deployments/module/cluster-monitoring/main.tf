@@ -272,6 +272,7 @@ module "grafana_ingress" {
   file_path   = "${path.module}/manifest/grafana/ingress.yaml"
   config_path = var.config_path
   variables   = {
+    cert_issuer = var.cluster_config.prod == true ? "prod" : "stage"
     domain_name = var.network_config.domain_info.domain_name
   }
   depends     = [

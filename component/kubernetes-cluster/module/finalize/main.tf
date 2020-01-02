@@ -10,6 +10,7 @@ module "cloudwatch_event" {
   cluster_config  = var.cluster_config
   backup_function = var.backup_function
   renew_function  = var.renew_function
+  runtime_config  = var.runtime_config
   dependencies    = var.dependencies
 }
 

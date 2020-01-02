@@ -1,26 +1,26 @@
-resource "aws_iam_access_key" "backup" {
+resource "aws_iam_access_key" "velero" {
   user = var.backup_user.id
 }
 
-data "template_file" "backup-credentials" {
-  template = file("${path.module}/manifest/credentials")
+data "template_file" "velero-credentials" {
+  template = file("${path.module}/manifest/velero/credentials")
   vars = {
-    access_key = aws_iam_access_key.backup.id
-    secret_key = aws_iam_access_key.backup.secret
+    access_key = aws_iam_access_key.velero.id
+    secret_key = aws_iam_access_key.velero.secret
   }
 }
 
-data "template_file" "backup-workload" {
-  template = file("${path.module}/manifest/backup.yaml")
+data "template_file" "velero-general" {
+  template = file("${path.module}/manifest/velero/general.yaml")
   vars = {
-    backup_access = base64encode(data.template_file.backup-credentials.rendered)
+    backup_access = base64encode(data.template_file.velero-credentials.rendered)
     bucket_region = var.backup_bucket.region
     bucket_name   = var.backup_bucket.id
   }
 }
 
-resource "aws_s3_bucket_object" "backup-workload" {
-  key     = "workload/backup.yaml"
-  content = data.template_file.backup-workload.rendered
+resource "aws_s3_bucket_object" "velero-workload" {
+  key     = "workload/velero.yaml"
+  content = data.template_file.velero-general.rendered
   bucket  = var.secure_bucket.id
 }

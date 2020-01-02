@@ -8,7 +8,7 @@ resource "aws_cloudwatch_event_rule" "cluster_backup" {
   depends_on = ["null_resource.dependency_getter"]
 
   name                = "${var.cluster_config.label}-cluster-backup_${var.cluster_config.id}"
-  schedule_expression = "cron(0 0 ? * * *)"
+  schedule_expression = var.runtime_config.backups.schedule
 }
 
 resource "aws_cloudwatch_event_target" "cluster_backup" {
@@ -31,7 +31,7 @@ resource "aws_cloudwatch_event_rule" "renew_token" {
   depends_on = ["null_resource.dependency_getter"]
 
   name                = "${var.cluster_config.label}-renew-token_${var.cluster_config.id}"
-  schedule_expression = "rate(12 hours)"
+  schedule_expression = var.runtime_config.token_schedule
 }
 
 resource "aws_cloudwatch_event_target" "renew_token" {

@@ -16,15 +16,21 @@
       "inputs": {
         "runCommand": [
           "sudo su",
+          "echo \"export PATH=/root/.linkerd2/bin:/root/bin:$PATH\" >> /root/.bashrc",
+          "echo \"export KUBECONFIG=/root/.kube/config\" >> /root/.bashrc",
           "hostnamectl set-hostname $(ec2metadata --local-hostname)",
 
           "apt-get update",
-          "apt-get install -y nfs-common",
-          "apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common",
+          "apt-get install -y awscli nfs-common dialog apt-utils apt-transport-https ca-certificates curl gnupg-agent software-properties-common",
           "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
           "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
+          "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - ",
+          "add-apt-repository \"deb https://apt.kubernetes.io/ kubernetes-xenial main\"",
+
           "apt-get update",
-          "apt-get install -y docker-ce={{ DockerVersion }}*",
+          "apt-get install -y docker-ce={{ DockerVersion }}* kubelet={{ KubernetesVersion }}* kubeadm={{ KubernetesVersion }}* kubectl={{ KubernetesVersion }}* kubernetes-cni etcd-client",
+          "apt-mark hold kubelet kubeadm kubectl",
+
           "cat > /etc/docker/daemon.json <<EOF",
           "{",
             "\"exec-opts\": [\"native.cgroupdriver=systemd\"],",
@@ -37,16 +43,7 @@
           "EOF",
           "mkdir -p /etc/systemd/system/docker.service.d",
           "systemctl daemon-reload",
-          "systemctl restart docker",
-
-          "sudo apt-get install -y awscli",
-          "apt-get update && apt-get install -y apt-transport-https curl",
-          "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - ",
-          "echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' >> /etc/apt/sources.list.d/kubernetes.list",
-          "apt-get update",
-          "apt-get install -y kubelet={{ KubernetesVersion }}* kubeadm={{ KubernetesVersion }}* kubectl={{ KubernetesVersion }}* kubernetes-cni=0.7.5-00",
-          "apt-get install etcd-client",
-          "apt-mark hold kubelet kubeadm kubectl"
+          "systemctl restart docker"
         ]
       }
     }

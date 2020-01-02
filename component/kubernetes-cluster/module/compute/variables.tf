@@ -13,6 +13,7 @@ variable "node_config" {
       on_demand_capasity    = number
       desired_capacity      = number
     })
+
     volume = object({
       delete_on_termination = bool
       volume_type           = string
@@ -35,11 +36,9 @@ variable "cluster_config" {
     id         = string
     name       = string
     label      = string
-    kubernetes = string
-    docker     = string
     account    = string
     region     = string
-    type       = string
+    prod       = bool
   })
 }
 
