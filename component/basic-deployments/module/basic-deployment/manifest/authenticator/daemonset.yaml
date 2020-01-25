@@ -20,6 +20,7 @@ spec:
       labels:
         app: aws-iam-authenticator
     spec:
+      priorityClassName: system-cluster-critical
       hostNetwork: true
       nodeSelector:
         node-role.kubernetes.io/master: ""

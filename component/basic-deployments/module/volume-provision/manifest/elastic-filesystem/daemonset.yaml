@@ -14,6 +14,7 @@ spec:
       labels:
         app: efs-provisioner
     spec:
+      priorityClassName: system-cluster-critical
       serviceAccountName: efs-provisioner
       containers:
         - name: efs-provisioner
