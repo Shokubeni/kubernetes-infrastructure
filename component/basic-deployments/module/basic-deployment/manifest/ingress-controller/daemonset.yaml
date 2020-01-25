@@ -22,6 +22,7 @@ spec:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
     spec:
+      priorityClassName: system-cluster-critical
       serviceAccountName: nginx-ingress-serviceaccount
       terminationGracePeriodSeconds: 300
       containers:

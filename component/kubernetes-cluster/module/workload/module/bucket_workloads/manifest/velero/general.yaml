@@ -1830,6 +1830,7 @@ items:
           component: velero
           deploy: velero
       spec:
+        priorityClassName: system-cluster-critical
         containers:
         - args:
           - server

@@ -16,6 +16,7 @@ spec:
       labels:
         app: node-exporter
     spec:
+      priorityClassName: system-cluster-critical
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
