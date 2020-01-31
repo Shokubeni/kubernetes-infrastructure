@@ -58,11 +58,5 @@ spec:
         - name: prometeus-data
           persistentVolumeClaim:
             claimName: prometheus-data
-      tolerations:
-        - key: node-role.kubernetes.io/master
-          operator: Exists
-          effect: NoSchedule
-      nodeSelector:
-        node-role.kubernetes.io/master: ""
 
 ---
