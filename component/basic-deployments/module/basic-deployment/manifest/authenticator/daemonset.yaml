@@ -42,10 +42,10 @@ spec:
           resources:
             requests:
               memory: 20Mi
-              cpu: 10m
+              cpu: 25m
             limits:
               memory: 20Mi
-              cpu: 100m
+              cpu: 50m
           volumeMounts:
             - name: config
               mountPath: /etc/aws-iam-authenticator/

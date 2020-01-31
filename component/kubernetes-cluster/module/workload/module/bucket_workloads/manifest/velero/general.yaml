@@ -1745,6 +1745,9 @@ items:
     labels:
       component: velero
     name: velero
+    annotations:
+      linkerd.io/inject: enabled
+
   spec: {}
 - apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRoleBinding
@@ -1818,7 +1821,7 @@ items:
     selector:
       matchLabels:
         deploy: velero
-    strategy: {}
+    replicas: 1
     template:
       metadata:
         annotations:
@@ -1853,10 +1856,10 @@ items:
             name: metrics
           resources:
             limits:
-              cpu: "1"
+              cpu: 100m
               memory: 256Mi
             requests:
-              cpu: 500m
+              cpu: 25m
               memory: 128Mi
           volumeMounts:
           - mountPath: /plugins
@@ -1884,4 +1887,3 @@ items:
         nodeSelector:
           node-role.kubernetes.io/master: ""
 kind: List
-
