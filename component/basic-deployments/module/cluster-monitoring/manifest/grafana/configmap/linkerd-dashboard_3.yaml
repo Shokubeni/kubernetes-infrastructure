@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: monitoring
+  namespace: cluster-metrics
   name: linkerd-dashboard-third
 data:
   linkerd-job.json: |

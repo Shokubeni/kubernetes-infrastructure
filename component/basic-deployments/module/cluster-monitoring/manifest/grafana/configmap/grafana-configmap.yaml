@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-ini
-  namespace: monitoring
+  namespace: cluster-metrics
 data:
   grafana.ini: |
     [auth.google]
@@ -35,7 +35,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-datasources
-  namespace: monitoring
+  namespace: cluster-metrics
 data:
   datasources.yaml: |
     apiVersion: 1
@@ -53,7 +53,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-providers
-  namespace: monitoring
+  namespace: cluster-metrics
 data:
   dashboardproviders.yaml: |
     apiVersion: 1

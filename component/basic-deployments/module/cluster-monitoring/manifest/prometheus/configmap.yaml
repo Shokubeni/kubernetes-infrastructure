@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: monitoring
+  namespace: cluster-metrics
   name: prometheus-rules
 data:
   alert.rules: |-
@@ -118,7 +118,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: monitoring
+  namespace: cluster-metrics
   name: prometheus-config
 data:
   prometheus.yml: |-

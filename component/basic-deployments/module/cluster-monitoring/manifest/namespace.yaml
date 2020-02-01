@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: monitoring
+  name: cluster-metrics
   annotations:
     linkerd.io/inject: enabled
 
