@@ -6,7 +6,7 @@ metadata:
   labels:
     k8s-app: kube-state-metrics
   name: kube-state-metrics
-  namespace: monitoring
+  namespace: cluster-metrics
 spec:
   selector:
     matchLabels:

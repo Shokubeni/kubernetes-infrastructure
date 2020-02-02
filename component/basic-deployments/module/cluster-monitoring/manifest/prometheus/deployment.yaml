@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: monitoring
+  namespace: cluster-metrics
   name: prometheus
   labels:
     app: prometheus
@@ -17,7 +17,7 @@ spec:
       labels:
         app: prometheus
     spec:
-      serviceAccountName: monitoring
+      serviceAccountName: cluster-metrics
       securityContext:
         fsGroup: 9090
       containers:

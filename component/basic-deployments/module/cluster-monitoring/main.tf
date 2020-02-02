@@ -1,4 +1,4 @@
-module "monitoring_namespace" {
+module "cluster_metrics_namespace" {
   source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/namespace.yaml"
@@ -21,7 +21,7 @@ module "alertmanager_configmap" {
     slack_hook    = var.slack_hook
   }
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -31,7 +31,7 @@ module "alertmanager_deployment" {
   file_path   = "${path.module}/manifest/alertmanager/deployment.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -41,7 +41,7 @@ module "alertmanager_service" {
   file_path   = "${path.module}/manifest/alertmanager/service.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -53,7 +53,7 @@ module "node_exporter_daemonset" {
   file_path   = "${path.module}/manifest/node-exporter/daemonset.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -63,7 +63,7 @@ module "node_exporter_service" {
   file_path   = "${path.module}/manifest/node-exporter/service.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -75,7 +75,7 @@ module "kube_state_rbac" {
   file_path   = "${path.module}/manifest/kube-state/rbac.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -85,7 +85,7 @@ module "kube_state_deployment" {
   file_path   = "${path.module}/manifest/kube-state/deployment.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -95,7 +95,7 @@ module "kube_state_service" {
   file_path   = "${path.module}/manifest/kube-state/service.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -107,7 +107,7 @@ module "prometheus_rbac" {
   file_path   = "${path.module}/manifest/prometheus/rbac.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -117,7 +117,7 @@ module "prometheus_configmap" {
   file_path   = "${path.module}/manifest/prometheus/configmap.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -127,7 +127,7 @@ module "prometheus_volume" {
   file_path   = "${path.module}/manifest/prometheus/volume.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -137,7 +137,7 @@ module "prometheus_deployment" {
   file_path   = "${path.module}/manifest/prometheus/deployment.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -147,7 +147,7 @@ module "prometheus_service" {
   file_path   = "${path.module}/manifest/prometheus/service.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -159,7 +159,7 @@ module "grafana_cluster_dashboard" {
   file_path   = "${path.module}/manifest/grafana/configmap/cluster-dashboard.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -169,7 +169,7 @@ module "grafana_ingress_dashboard" {
   file_path   = "${path.module}/manifest/grafana/configmap/ingress-dashboard.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -179,7 +179,7 @@ module "linkerd_dashboard_1" {
   file_path   = "${path.module}/manifest/grafana/configmap/linkerd-dashboard_1.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -189,7 +189,7 @@ module "linkerd_dashboard_2" {
   file_path   = "${path.module}/manifest/grafana/configmap/linkerd-dashboard_2.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -199,7 +199,7 @@ module "linkerd_dashboard_3" {
   file_path   = "${path.module}/manifest/grafana/configmap/linkerd-dashboard_3.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -217,7 +217,7 @@ module "grafana_general_config" {
     grafana_secret    = var.grafana_secret
   }
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -227,7 +227,7 @@ module "grafana_volume" {
   file_path   = "${path.module}/manifest/grafana/volume.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -237,7 +237,7 @@ module "grafana_deployment" {
   file_path   = "${path.module}/manifest/grafana/deployment.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -247,7 +247,7 @@ module "grafana_service" {
   file_path   = "${path.module}/manifest/grafana/service.yaml"
   config_path = var.config_path
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -262,7 +262,7 @@ module "grafana_secret" {
     smtp_pass = base64encode(var.smtp_config.metrics_pass)
   }
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }
 
@@ -276,6 +276,6 @@ module "grafana_ingress" {
     domain_name = var.network_config.domain_info.domain_name
   }
   depends     = [
-    module.monitoring_namespace.task_id
+    module.cluster_metrics_namespace.task_id
   ]
 }

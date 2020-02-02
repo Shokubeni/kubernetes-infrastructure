@@ -37,74 +37,64 @@ module "authenticator_daemonset" {
 
 /*  --------------------------------------------------------------------- */
 
-module "ingress_controller_namespace" {
+module "ingress_nginx_namespace" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/ingress-controller/namespace.yaml"
+  file_path   = "${path.module}/manifest/ingress-nginx/namespace.yaml"
   config_path = var.config_path
 }
 
-module "ingress_controller_rbac" {
+module "ingress_nginx_rbac" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/ingress-controller/rbac.yaml"
+  file_path   = "${path.module}/manifest/ingress-nginx/rbac.yaml"
   config_path = var.config_path
   depends     = [
-    module.ingress_controller_namespace.task_id
+    module.ingress_nginx_namespace.task_id
   ]
 }
 
-module "ingress_controller_configmap" {
+module "ingress_nginx_configmap" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/ingress-controller/configmap.yaml"
+  file_path   = "${path.module}/manifest/ingress-nginx/configmap.yaml"
   config_path = var.config_path
   variables   = {
     tcp_services = join("\n  ", [for port, service in var.network_config.tcp_services : "${port}: ${service}"])
     udp_services = join("\n  ", [for port, service in var.network_config.udp_services : "${port}: ${service}"])
   }
   depends     = [
-    module.ingress_controller_namespace.task_id
+    module.ingress_nginx_namespace.task_id
   ]
 }
 
-module "ingress_controller_daemonset" {
+module "ingress_nginx_daemonset" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/ingress-controller/daemonset.yaml"
+  file_path   = "${path.module}/manifest/ingress-nginx/daemonset.yaml"
   config_path = var.config_path
   depends     = [
-    module.ingress_controller_namespace.task_id
+    module.ingress_nginx_namespace.task_id
   ]
 }
 
-module "ingress_controller_service" {
+module "ingress_nginx_service" {
   source = "../kubernetes-object"
 
-  file_path   = "${path.module}/manifest/ingress-controller/service.yaml"
+  file_path   = "${path.module}/manifest/ingress-nginx/service.yaml"
   config_path = var.config_path
   delay_time  = "120s"
   depends     = [
-    module.ingress_controller_namespace.task_id
+    module.ingress_nginx_namespace.task_id
   ]
 }
 
 /*  --------------------------------------------------------------------- */
-module "cert_manager_namespace" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/cert-manager/namespace.yaml"
-  config_path = var.config_path
-}
-
 module "cert_manager_general" {
   source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/cert-manager/general.yaml"
   config_path = var.config_path
-  depends     = [
-    module.cert_manager_namespace.task_id
-  ]
 }
 
 module "cert_manager_issuer" {
@@ -115,8 +105,4 @@ module "cert_manager_issuer" {
   variables   = {
     domain_name = var.network_config.domain_info.domain_name
   }
-  depends     = [
-    module.cert_manager_namespace.task_id,
-    module.cert_manager_general.task_id
-  ]
 }
