@@ -36,22 +36,11 @@ module "authenticator_daemonset" {
 }
 
 /*  --------------------------------------------------------------------- */
-
-module "ingress_nginx_namespace" {
-  source = "../kubernetes-object"
-
-  file_path   = "${path.module}/manifest/ingress-nginx/namespace.yaml"
-  config_path = var.config_path
-}
-
 module "ingress_nginx_rbac" {
   source = "../kubernetes-object"
 
   file_path   = "${path.module}/manifest/ingress-nginx/rbac.yaml"
   config_path = var.config_path
-  depends     = [
-    module.ingress_nginx_namespace.task_id
-  ]
 }
 
 module "ingress_nginx_configmap" {
@@ -63,9 +52,6 @@ module "ingress_nginx_configmap" {
     tcp_services = join("\n  ", [for port, service in var.network_config.tcp_services : "${port}: ${service}"])
     udp_services = join("\n  ", [for port, service in var.network_config.udp_services : "${port}: ${service}"])
   }
-  depends     = [
-    module.ingress_nginx_namespace.task_id
-  ]
 }
 
 module "ingress_nginx_daemonset" {
@@ -73,9 +59,6 @@ module "ingress_nginx_daemonset" {
 
   file_path   = "${path.module}/manifest/ingress-nginx/daemonset.yaml"
   config_path = var.config_path
-  depends     = [
-    module.ingress_nginx_namespace.task_id
-  ]
 }
 
 module "ingress_nginx_service" {
@@ -84,9 +67,6 @@ module "ingress_nginx_service" {
   file_path   = "${path.module}/manifest/ingress-nginx/service.yaml"
   config_path = var.config_path
   delay_time  = "120s"
-  depends     = [
-    module.ingress_nginx_namespace.task_id
-  ]
 }
 
 /*  --------------------------------------------------------------------- */
