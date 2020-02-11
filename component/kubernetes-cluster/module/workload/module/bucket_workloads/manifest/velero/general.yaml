@@ -1876,10 +1876,3 @@ items:
         nodeSelector:
           node-role.kubernetes.io/master: ""
 kind: List
-
-
-linkerd-service
-ingress-nginx
-cluster-metrics
-command-center
-gitlab-runners

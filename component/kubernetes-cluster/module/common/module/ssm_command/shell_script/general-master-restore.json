@@ -61,6 +61,7 @@
 
           "wget https://github.com/vmware-tanzu/velero/releases/download/v1.2.0/velero-v1.2.0-linux-amd64.tar.gz -O velero.tar.gz",
           "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v1.2.0-linux-amd64/velero /root/bin",
+          "velero client config set namespace=kube-system",
           "rm velero.tar.gz && rm -rf velero",
           "aws s3 cp s3://{{ S3BucketName }}/workload/velero.yaml ./velero-workload.yaml --region {{ S3BucketRegion }}",
           "kubectl apply -f ./velero-workload.yaml && rm ./velero-workload.yaml",
