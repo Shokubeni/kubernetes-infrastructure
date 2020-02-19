@@ -6,6 +6,7 @@ metadata:
   namespace: cluster-metrics
   name: grafana
   annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "${vpn_cidr}"
     kubernetes.io/ingress.class: nginx
 spec:
   tls:

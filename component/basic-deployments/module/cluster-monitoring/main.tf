@@ -274,6 +274,7 @@ module "grafana_ingress" {
   variables   = {
     cert_issuer = var.cluster_config.prod == true ? "prod" : "stage"
     domain_name = var.network_config.domain_info.domain_name
+    vpn_cidr    = var.network_config.vpn_clients_cidr
   }
   depends     = [
     module.cluster_metrics_namespace.task_id

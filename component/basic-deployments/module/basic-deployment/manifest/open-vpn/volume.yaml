@@ -1,0 +1,16 @@
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: kube-system
+  name: openvpn-data
+spec:
+  storageClassName: aws-ebs-gp2
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---

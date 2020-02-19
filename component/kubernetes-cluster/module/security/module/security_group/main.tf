@@ -154,6 +154,14 @@ resource "aws_security_group" "balancer" {
   }
 
   ingress {
+    description = "OpenVPN traffic"
+    protocol    = "tcp"
+    from_port   = 1194
+    to_port     = 1194
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     description = "HTTPS traffic"
     protocol    = "tcp"
     from_port   = 443
@@ -245,6 +253,16 @@ resource "aws_security_group_rule" "master_https_from_balancer" {
   type                     = "ingress"
   from_port                = 32443
   to_port                  = 32443
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.balancer.id
+  security_group_id        = aws_security_group.master.id
+}
+
+resource "aws_security_group_rule" "master_vpn_from_balancer" {
+  description              = "OpenVPN traffic"
+  type                     = "ingress"
+  from_port                = 32194
+  to_port                  = 32194
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.balancer.id
   security_group_id        = aws_security_group.master.id
