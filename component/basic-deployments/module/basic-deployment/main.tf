@@ -86,3 +86,32 @@ module "cert_manager_issuer" {
     domain_name = var.network_config.domain_info.domain_name
   }
 }
+
+/*  --------------------------------------------------------------------- */
+module "open_vpn_configmap" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/open-vpn/configmap.yaml"
+  config_path = var.config_path
+}
+
+module "open_vpn_service" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/open-vpn/service.yaml"
+  config_path = var.config_path
+}
+
+module "open_vpn_volume" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/open-vpn/volume.yaml"
+  config_path = var.config_path
+}
+
+module "open_vpn_deployment" {
+  source = "../kubernetes-object"
+
+  file_path   = "${path.module}/manifest/open-vpn/deployment.yaml"
+  config_path = var.config_path
+}

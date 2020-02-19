@@ -15,7 +15,7 @@ data "terraform_remote_state" "kubernetes" {
 provider "aws" {
   profile = var.provider_profile
   region  = var.provider_region
-  version = ">= 1.50.0"
+  version = ">= 2.0"
 }
 
 locals {
