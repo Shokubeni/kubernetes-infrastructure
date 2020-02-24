@@ -1,5 +1,3 @@
----
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -83,14 +81,14 @@ data:
               "expr": "process_virtual_memory_bytes{control_plane_ns=\"$namespace\", job=\"linkerd-proxy\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/{{pod}}/virtual",
+              "legendFormat": "{{`{{namespace}}`}}/{{`{{pod}}`}}/virtual",
               "refId": "A"
             },
             {
               "expr": "process_resident_memory_bytes{control_plane_ns=\"$namespace\", job=\"linkerd-proxy\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/{{pod}}/resident",
+              "legendFormat": "{{`{{namespace}}`}}/{{`{{pod}}`}}/resident",
               "refId": "B"
             }
           ],
@@ -175,7 +173,7 @@ data:
               "expr": "sum(irate(process_cpu_seconds_total{control_plane_ns=\"$namespace\", job=\"linkerd-proxy\"}[20s])) by (namespace, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/{{pod}}",
+              "legendFormat": "{{`{{namespace}}`}}/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -260,7 +258,7 @@ data:
               "expr": "process_open_fds{control_plane_ns=\"$namespace\", job=\"linkerd-proxy\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/{{pod}}",
+              "legendFormat": "{{`{{namespace}}`}}/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -410,7 +408,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod) / sum(irate(response_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -502,7 +500,7 @@ data:
               "expr": "sum(irate(request_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -594,21 +592,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 po/{{pod}}",
+              "legendFormat": "p50 po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 po/{{pod}}",
+              "legendFormat": "p95 po/{{`{{pod}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 po/{{pod}}",
+              "legendFormat": "p99 po/{{`{{pod}}`}}",
               "refId": "C"
             }
           ],
@@ -751,7 +749,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod) / sum(irate(response_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -846,7 +844,7 @@ data:
               "expr": "sum(irate(request_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -941,21 +939,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 po/{{pod}}",
+              "legendFormat": "p50 po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 po/{{pod}}",
+              "legendFormat": "p95 po/{{`{{pod}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 po/{{pod}}",
+              "legendFormat": "p99 po/{{`{{pod}}`}}",
               "refId": "C"
             }
           ],
@@ -1098,7 +1096,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod) / sum(irate(response_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -1193,7 +1191,7 @@ data:
               "expr": "sum(irate(request_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -1288,21 +1286,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 po/{{pod}}",
+              "legendFormat": "p50 po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 po/{{pod}}",
+              "legendFormat": "p95 po/{{`{{pod}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 po/{{pod}}",
+              "legendFormat": "p99 po/{{`{{pod}}`}}",
               "refId": "C"
             }
           ],
@@ -1445,7 +1443,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod) / sum(irate(response_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -1540,7 +1538,7 @@ data:
               "expr": "sum(irate(request_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -1635,21 +1633,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 po/{{pod}}",
+              "legendFormat": "p50 po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 po/{{pod}}",
+              "legendFormat": "p95 po/{{`{{pod}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 po/{{pod}}",
+              "legendFormat": "p99 po/{{`{{pod}}`}}",
               "refId": "C"
             }
           ],
@@ -1792,7 +1790,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod) / sum(irate(response_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -1887,7 +1885,7 @@ data:
               "expr": "sum(irate(request_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -1982,21 +1980,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 po/{{pod}}",
+              "legendFormat": "p50 po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 po/{{pod}}",
+              "legendFormat": "p95 po/{{`{{pod}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 po/{{pod}}",
+              "legendFormat": "p99 po/{{`{{pod}}`}}",
               "refId": "C"
             }
           ],
@@ -2139,7 +2137,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod) / sum(irate(response_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -2234,7 +2232,7 @@ data:
               "expr": "sum(irate(request_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -2329,21 +2327,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 po/{{pod}}",
+              "legendFormat": "p50 po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 po/{{pod}}",
+              "legendFormat": "p95 po/{{`{{pod}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 po/{{pod}}",
+              "legendFormat": "p99 po/{{`{{pod}}`}}",
               "refId": "C"
             }
           ],
@@ -2486,7 +2484,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod) / sum(irate(response_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -2581,7 +2579,7 @@ data:
               "expr": "sum(irate(request_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -2676,21 +2674,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 po/{{pod}}",
+              "legendFormat": "p50 po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 po/{{pod}}",
+              "legendFormat": "p95 po/{{`{{pod}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (le, deployment, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 po/{{pod}}",
+              "legendFormat": "p99 po/{{`{{pod}}`}}",
               "refId": "C"
             }
           ],
@@ -2843,7 +2841,7 @@ data:
                   "expr": "tcp_close_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -2935,7 +2933,7 @@ data:
                   "expr": "tcp_open_connections{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -3143,7 +3141,7 @@ data:
                   "expr": "tcp_close_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -3237,7 +3235,7 @@ data:
                   "expr": "tcp_open_connections{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -3449,7 +3447,7 @@ data:
                   "expr": "tcp_close_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -3543,7 +3541,7 @@ data:
                   "expr": "tcp_open_connections{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -3755,7 +3753,7 @@ data:
                   "expr": "tcp_close_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -3849,7 +3847,7 @@ data:
                   "expr": "tcp_open_connections{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4061,7 +4059,7 @@ data:
                   "expr": "tcp_close_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4155,7 +4153,7 @@ data:
                   "expr": "tcp_open_connections{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4367,7 +4365,7 @@ data:
                   "expr": "tcp_close_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4461,7 +4459,7 @@ data:
                   "expr": "tcp_open_connections{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4673,7 +4671,7 @@ data:
                   "expr": "tcp_close_total{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4767,7 +4765,7 @@ data:
                   "expr": "tcp_open_connections{deployment=\"$deployment\", namespace=\"$namespace\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4962,7 +4960,7 @@ data:
               "expr": "go_goroutines{job=\"linkerd-controller\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}",
+              "legendFormat": "{{`{{component}}`}}",
               "refId": "A"
             }
           ],
@@ -5047,14 +5045,14 @@ data:
               "expr": "process_resident_memory_bytes{job=\"linkerd-controller\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}/resident",
+              "legendFormat": "{{`{{component}}`}}/resident",
               "refId": "A"
             },
             {
               "expr": "process_virtual_memory_bytes{job=\"linkerd-controller\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}/virtual",
+              "legendFormat": "{{`{{component}}`}}/virtual",
               "refId": "B"
             }
           ],
@@ -5139,7 +5137,7 @@ data:
               "expr": "process_open_fds{job=\"linkerd-controller\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}",
+              "legendFormat": "{{`{{component}}`}}",
               "refId": "A"
             }
           ],
@@ -5237,7 +5235,7 @@ data:
               "expr": "go_threads{job=\"linkerd-controller\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}",
+              "legendFormat": "{{`{{component}}`}}",
               "refId": "A"
             }
           ],
@@ -5337,7 +5335,7 @@ data:
               "expr": "sum(irate(http_server_requests_total{job=\"linkerd-controller\"}[30s])) by (component, method, code)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}/{{method}}/{{code}}",
+              "legendFormat": "{{`{{component}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "A"
             }
           ],
@@ -5422,21 +5420,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(http_server_request_latency_seconds_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}/{{method}}/{{code}}",
+              "legendFormat": "P50 {{`{{component}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(http_server_request_latency_seconds_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 {{component}}/{{method}}/{{code}}",
+              "legendFormat": "P95 {{`{{component}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(http_server_request_latency_seconds_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P99 {{component}}/{{method}}/{{code}}",
+              "legendFormat": "P99 {{`{{component}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "C"
             }
           ],
@@ -5521,21 +5519,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(http_server_response_size_bytes_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}/{{method}}/{{code}}",
+              "legendFormat": "P50 {{`{{component}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(http_server_response_size_bytes_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 {{component}}/{{method}}/{{code}}",
+              "legendFormat": "P95 {{`{{component}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(http_server_response_size_bytes_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P99 {{component}}/{{method}}/{{code}}",
+              "legendFormat": "P99 {{`{{component}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "C"
             }
           ],
@@ -5620,7 +5618,7 @@ data:
               "expr": "sum(irate(http_client_requests_total{job=\"linkerd-controller\"}[30s])) by (component, client, method, code)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}/{{client}}/{{method}}/{{code}}",
+              "legendFormat": "{{`{{component}}`}}/{{`{{client}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "A"
             }
           ],
@@ -5705,21 +5703,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(http_client_request_latency_seconds_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, client, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}/{{client}}/{{method}}/{{code}}",
+              "legendFormat": "P50 {{`{{component}}`}}/{{`{{client}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(http_client_request_latency_seconds_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, client, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 {{component}}/{{client}}/{{method}}/{{code}}",
+              "legendFormat": "P95 {{`{{component}}`}}/{{`{{client}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(http_client_request_latency_seconds_bucket{job=\"linkerd-controller\"}[30s])) by (le, component, client, method, code))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P99 {{component}}/{{client}}/{{method}}/{{code}}",
+              "legendFormat": "P99 {{`{{component}}`}}/{{`{{client}}`}}/{{`{{method}}`}}/{{`{{code}}`}}",
               "refId": "C"
             }
           ],
@@ -5804,7 +5802,7 @@ data:
               "expr": "sum(http_client_in_flight_requests{job=\"linkerd-controller\"}) by (component, client)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{component}}/{{client}}",
+              "legendFormat": "{{`{{component}}`}}/{{`{{client}}`}}",
               "refId": "A"
             }
           ],
@@ -5939,28 +5937,28 @@ data:
               "expr": "go_memstats_alloc_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc/{{component}}",
+              "legendFormat": "alloc/{{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(go_memstats_alloc_bytes_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc rate/{{component}}",
+              "legendFormat": "alloc rate/{{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_memstats_stack_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "stack/{{component}}",
+              "legendFormat": "stack/{{`{{component}}`}}",
               "refId": "C"
             },
             {
               "expr": "go_memstats_heap_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "heap/{{component}}",
+              "legendFormat": "heap/{{`{{component}}`}}",
               "refId": "D"
             }
           ],
@@ -6052,21 +6050,21 @@ data:
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.5\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}",
+              "legendFormat": "P50 {{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.75\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P75 {{component}}",
+              "legendFormat": "P75 {{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"1\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Max {{component}}",
+              "legendFormat": "Max {{`{{component}}`}}",
               "refId": "C"
             }
           ],
@@ -6158,14 +6156,14 @@ data:
               "expr": "irate(grpc_server_msg_sent_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sent/{{component}}/{{grpc_method}}",
+              "legendFormat": "sent/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(grpc_server_msg_received_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "received/{{component}}/{{grpc_method}}",
+              "legendFormat": "received/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "B"
             }
           ],
@@ -6308,28 +6306,28 @@ data:
               "expr": "go_memstats_alloc_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc/{{component}}",
+              "legendFormat": "alloc/{{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(go_memstats_alloc_bytes_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc rate/{{component}}",
+              "legendFormat": "alloc rate/{{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_memstats_stack_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "stack/{{component}}",
+              "legendFormat": "stack/{{`{{component}}`}}",
               "refId": "C"
             },
             {
               "expr": "go_memstats_heap_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "heap/{{component}}",
+              "legendFormat": "heap/{{`{{component}}`}}",
               "refId": "D"
             }
           ],
@@ -6424,21 +6422,21 @@ data:
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.5\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}",
+              "legendFormat": "P50 {{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.75\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P75 {{component}}",
+              "legendFormat": "P75 {{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"1\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Max {{component}}",
+              "legendFormat": "Max {{`{{component}}`}}",
               "refId": "C"
             }
           ],
@@ -6533,14 +6531,14 @@ data:
               "expr": "irate(grpc_server_msg_sent_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sent/{{component}}/{{grpc_method}}",
+              "legendFormat": "sent/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(grpc_server_msg_received_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "received/{{component}}/{{grpc_method}}",
+              "legendFormat": "received/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "B"
             }
           ],
@@ -6683,28 +6681,28 @@ data:
               "expr": "go_memstats_alloc_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc/{{component}}",
+              "legendFormat": "alloc/{{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(go_memstats_alloc_bytes_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc rate/{{component}}",
+              "legendFormat": "alloc rate/{{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_memstats_stack_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "stack/{{component}}",
+              "legendFormat": "stack/{{`{{component}}`}}",
               "refId": "C"
             },
             {
               "expr": "go_memstats_heap_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "heap/{{component}}",
+              "legendFormat": "heap/{{`{{component}}`}}",
               "refId": "D"
             }
           ],
@@ -6799,21 +6797,21 @@ data:
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.5\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}",
+              "legendFormat": "P50 {{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.75\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P75 {{component}}",
+              "legendFormat": "P75 {{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"1\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Max {{component}}",
+              "legendFormat": "Max {{`{{component}}`}}",
               "refId": "C"
             }
           ],
@@ -6908,14 +6906,14 @@ data:
               "expr": "irate(grpc_server_msg_sent_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sent/{{component}}/{{grpc_method}}",
+              "legendFormat": "sent/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(grpc_server_msg_received_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "received/{{component}}/{{grpc_method}}",
+              "legendFormat": "received/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "B"
             }
           ],
@@ -7058,28 +7056,28 @@ data:
               "expr": "go_memstats_alloc_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc/{{component}}",
+              "legendFormat": "alloc/{{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(go_memstats_alloc_bytes_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc rate/{{component}}",
+              "legendFormat": "alloc rate/{{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_memstats_stack_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "stack/{{component}}",
+              "legendFormat": "stack/{{`{{component}}`}}",
               "refId": "C"
             },
             {
               "expr": "go_memstats_heap_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "heap/{{component}}",
+              "legendFormat": "heap/{{`{{component}}`}}",
               "refId": "D"
             }
           ],
@@ -7174,21 +7172,21 @@ data:
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.5\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}",
+              "legendFormat": "P50 {{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.75\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P75 {{component}}",
+              "legendFormat": "P75 {{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"1\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Max {{component}}",
+              "legendFormat": "Max {{`{{component}}`}}",
               "refId": "C"
             }
           ],
@@ -7283,14 +7281,14 @@ data:
               "expr": "irate(grpc_server_msg_sent_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sent/{{component}}/{{grpc_method}}",
+              "legendFormat": "sent/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(grpc_server_msg_received_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "received/{{component}}/{{grpc_method}}",
+              "legendFormat": "received/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "B"
             }
           ],
@@ -7433,28 +7431,28 @@ data:
               "expr": "go_memstats_alloc_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc/{{component}}",
+              "legendFormat": "alloc/{{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(go_memstats_alloc_bytes_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc rate/{{component}}",
+              "legendFormat": "alloc rate/{{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_memstats_stack_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "stack/{{component}}",
+              "legendFormat": "stack/{{`{{component}}`}}",
               "refId": "C"
             },
             {
               "expr": "go_memstats_heap_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "heap/{{component}}",
+              "legendFormat": "heap/{{`{{component}}`}}",
               "refId": "D"
             }
           ],
@@ -7549,21 +7547,21 @@ data:
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.5\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}",
+              "legendFormat": "P50 {{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.75\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P75 {{component}}",
+              "legendFormat": "P75 {{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"1\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Max {{component}}",
+              "legendFormat": "Max {{`{{component}}`}}",
               "refId": "C"
             }
           ],
@@ -7658,14 +7656,14 @@ data:
               "expr": "irate(grpc_server_msg_sent_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sent/{{component}}/{{grpc_method}}",
+              "legendFormat": "sent/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(grpc_server_msg_received_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "received/{{component}}/{{grpc_method}}",
+              "legendFormat": "received/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "B"
             }
           ],
@@ -7808,28 +7806,28 @@ data:
               "expr": "go_memstats_alloc_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc/{{component}}",
+              "legendFormat": "alloc/{{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(go_memstats_alloc_bytes_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "alloc rate/{{component}}",
+              "legendFormat": "alloc rate/{{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_memstats_stack_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "stack/{{component}}",
+              "legendFormat": "stack/{{`{{component}}`}}",
               "refId": "C"
             },
             {
               "expr": "go_memstats_heap_inuse_bytes{job=\"linkerd-controller\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "heap/{{component}}",
+              "legendFormat": "heap/{{`{{component}}`}}",
               "refId": "D"
             }
           ],
@@ -7924,21 +7922,21 @@ data:
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.5\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 {{component}}",
+              "legendFormat": "P50 {{`{{component}}`}}",
               "refId": "A"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"0.75\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P75 {{component}}",
+              "legendFormat": "P75 {{`{{component}}`}}",
               "refId": "B"
             },
             {
               "expr": "go_gc_duration_seconds{job=\"linkerd-controller\", quantile=\"1\", component=\"$component\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Max {{component}}",
+              "legendFormat": "Max {{`{{component}}`}}",
               "refId": "C"
             }
           ],
@@ -8033,14 +8031,14 @@ data:
               "expr": "irate(grpc_server_msg_sent_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sent/{{component}}/{{grpc_method}}",
+              "legendFormat": "sent/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "A"
             },
             {
               "expr": "irate(grpc_server_msg_received_total{job=\"linkerd-controller\", component=\"$component\"}[30s])",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "received/{{component}}/{{grpc_method}}",
+              "legendFormat": "received/{{`{{component}}`}}/{{`{{grpc_method}}`}}",
               "refId": "B"
             }
           ],
@@ -8218,4 +8216,3 @@ data:
       "uid": "linkerd-health",
       "version": 1
     }
----

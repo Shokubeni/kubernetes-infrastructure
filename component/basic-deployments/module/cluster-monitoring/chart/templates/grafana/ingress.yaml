@@ -6,15 +6,15 @@ metadata:
   namespace: cluster-metrics
   name: grafana
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "${vpn_cidr}"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "{{ .Values.general.vpnCidr }}"
     kubernetes.io/ingress.class: nginx
 spec:
   tls:
     - secretName: grafana-ingress
       hosts:
-        - metrics.${domain_name}
+        - metrics.{{ .Values.general.domainName }}
   rules:
-    - host: metrics.${domain_name}
+    - host: metrics.{{ .Values.general.domainName }}
       http:
         paths:
           - path: /
@@ -30,12 +30,12 @@ metadata:
   namespace: cluster-metrics
   name: grafana-ingress
 spec:
-  commonName: metrics.${domain_name}
+  commonName: metrics.{{ .Values.general.domainName }}
   secretName: grafana-ingress
   issuerRef:
-    name: letsencrypt-${cert_issuer}
+    name: letsencrypt-{{ .Values.general.certIssuer }}
     kind: ClusterIssuer
   dnsNames:
-    - metrics.${domain_name}
+    - metrics.{{ .Values.general.domainName }}
 
 ---
