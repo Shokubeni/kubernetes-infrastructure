@@ -12,6 +12,16 @@ data "terraform_remote_state" "kubernetes" {
   }
 }
 
+provider "helm" {
+  kubernetes {
+    config_path = local.config_path
+  }
+}
+
+provider "kubernetes" {
+  config_path = local.config_path
+}
+
 provider "aws" {
   profile = var.provider_profile
   region  = var.provider_region

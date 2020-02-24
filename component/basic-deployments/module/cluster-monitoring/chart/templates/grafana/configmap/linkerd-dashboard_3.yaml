@@ -1,5 +1,3 @@
----
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -431,7 +429,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\"}[30s])) by (k8s_job) / sum(irate(response_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\"}[30s])) by (k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "job/{{k8s_job}}",
+              "legendFormat": "job/{{`{{k8s_job}}`}}",
               "refId": "A"
             }
           ],
@@ -517,14 +515,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\", tls=\"true\"}[30s])) by (k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒job/{{k8s_job}}",
+              "legendFormat": "🔒job/{{`{{k8s_job}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\", tls!=\"true\"}[30s])) by (k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "job/{{k8s_job}}",
+              "legendFormat": "job/{{`{{k8s_job}}`}}",
               "refId": "B"
             }
           ],
@@ -610,7 +608,7 @@ data:
               "expr": "histogram_quantile(0.5, sum(irate(response_latency_ms_bucket{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\"}[30s])) by (le, k8s_job))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 job/{{k8s_job}}",
+              "legendFormat": "p50 job/{{`{{k8s_job}}`}}",
               "refId": "A"
             },
             {
@@ -618,14 +616,14 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "p95 job/{{k8s_job}}",
+              "legendFormat": "p95 job/{{`{{k8s_job}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(irate(response_latency_ms_bucket{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\"}[30s])) by (le, k8s_job))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 job/{{k8s_job}}",
+              "legendFormat": "p99 job/{{`{{k8s_job}}`}}",
               "refId": "C"
             }
           ],
@@ -721,7 +719,7 @@ data:
                   "expr": "tcp_close_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -806,7 +804,7 @@ data:
                   "expr": "tcp_open_connections{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -992,7 +990,7 @@ data:
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 1,
-                  "legendFormat": "po/{{pod}}",
+                  "legendFormat": "po/{{`{{pod}}`}}",
                   "refId": "A"
                 }
               ],
@@ -1077,14 +1075,14 @@ data:
                   "expr": "sum(irate(request_total{k8s_job!=\"\", k8s_job=\"$inbound\", dst_namespace=\"$namespace\", dst_k8s_job=\"$job\", direction=\"outbound\", tls=\"true\"}[30s])) by (k8s_job, pod)",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "🔒po/{{pod}}",
+                  "legendFormat": "🔒po/{{`{{pod}}`}}",
                   "refId": "A"
                 },
                 {
                   "expr": "sum(irate(request_total{k8s_job!=\"\", k8s_job=\"$inbound\", dst_namespace=\"$namespace\", dst_k8s_job=\"$job\", direction=\"outbound\", tls!=\"true\"}[30s])) by (k8s_job, pod)",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "po/{{pod}}",
+                  "legendFormat": "po/{{`{{pod}}`}}",
                   "refId": "B"
                 }
               ],
@@ -1169,21 +1167,21 @@ data:
                   "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{k8s_job!=\"\", k8s_job=\"$inbound\", dst_namespace=\"$namespace\", dst_k8s_job=\"$job\", direction=\"outbound\"}[30s])) by (le, k8s_job))",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "P50 job/{{k8s_job}}",
+                  "legendFormat": "P50 job/{{`{{k8s_job}}`}}",
                   "refId": "A"
                 },
                 {
                   "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{k8s_job!=\"\", k8s_job=\"$inbound\", dst_namespace=\"$namespace\", dst_k8s_job=\"$job\", direction=\"outbound\"}[30s])) by (le, k8s_job))",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "P95 job/{{k8s_job}}",
+                  "legendFormat": "P95 job/{{`{{k8s_job}}`}}",
                   "refId": "B"
                 },
                 {
                   "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{k8s_job!=\"\", k8s_job=\"$inbound\", dst_namespace=\"$namespace\", dst_k8s_job=\"$job\", direction=\"outbound\"}[30s])) by (le, k8s_job))",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "P99 job/{{k8s_job}}",
+                  "legendFormat": "P99 job/{{`{{k8s_job}}`}}",
                   "refId": "C"
                 }
               ],
@@ -1301,7 +1299,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", k8s_job=\"$job\", direction=\"outbound\"}[30s])) by (dst_k8s_job) / sum(irate(response_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"outbound\"}[30s])) by (dst_k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "job/{{dst_k8s_job}}",
+              "legendFormat": "job/{{`{{dst_k8s_job}}`}}",
               "refId": "A"
             }
           ],
@@ -1387,14 +1385,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"outbound\", tls=\"true\"}[30s])) by (dst_k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒job/{{dst_k8s_job}}",
+              "legendFormat": "🔒job/{{`{{dst_k8s_job}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"outbound\", tls!=\"true\"}[30s])) by (dst_k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "job/{{dst_k8s_job}}",
+              "legendFormat": "job/{{`{{dst_k8s_job}}`}}",
               "refId": "B"
             }
           ],
@@ -1479,7 +1477,7 @@ data:
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"outbound\"}[30s])) by (le, dst_k8s_job))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 job/{{dst_k8s_job}}",
+              "legendFormat": "P95 job/{{`{{dst_k8s_job}}`}}",
               "refId": "A"
             }
           ],
@@ -1574,7 +1572,7 @@ data:
                   "expr": "tcp_close_total{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"outbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -1659,7 +1657,7 @@ data:
                   "expr": "tcp_open_connections{namespace=\"$namespace\", k8s_job=\"$job\", direction=\"outbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -1848,7 +1846,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", k8s_job=\"$job\", dst_k8s_job=\"$outbound\", direction=\"outbound\"}[30s])) by (dst_k8s_job) / sum(irate(response_total{namespace=\"$namespace\", k8s_job=\"$job\", dst_k8s_job=\"$outbound\", direction=\"outbound\"}[30s])) by (dst_k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "job/{{dst_k8s_job}}",
+              "legendFormat": "job/{{`{{dst_k8s_job}}`}}",
               "refId": "A"
             }
           ],
@@ -1934,14 +1932,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", k8s_job=\"$job\", dst_k8s_job=\"$outbound\", direction=\"outbound\", tls=\"true\"}[30s])) by (dst_k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒job/{{dst_k8s_job}}",
+              "legendFormat": "🔒job/{{`{{dst_k8s_job}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", k8s_job=\"$job\", dst_k8s_job=\"$outbound\", direction=\"outbound\", tls!=\"true\"}[30s])) by (dst_k8s_job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "job/{{dst_k8s_job}}",
+              "legendFormat": "job/{{`{{dst_k8s_job}}`}}",
               "refId": "B"
             }
           ],
@@ -2026,21 +2024,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", k8s_job=\"$job\", dst_k8s_job=\"$outbound\", direction=\"outbound\"}[30s])) by (le, dst_k8s_job))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 job/{{dst_k8s_job}}",
+              "legendFormat": "P50 job/{{`{{dst_k8s_job}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", k8s_job=\"$job\", dst_k8s_job=\"$outbound\", direction=\"outbound\"}[30s])) by (le, dst_k8s_job))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 job/{{dst_k8s_job}}",
+              "legendFormat": "P95 job/{{`{{dst_k8s_job}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", k8s_job=\"$job\", dst_k8s_job=\"$outbound\", direction=\"outbound\"}[30s])) by (le, dst_k8s_job))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P99 job/{{dst_k8s_job}}",
+              "legendFormat": "P99 job/{{`{{dst_k8s_job}}`}}",
               "refId": "C"
             }
           ],
@@ -2577,7 +2575,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (dst_service) / sum(irate(response_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (dst_service)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "svc/{{dst_service}}",
+              "legendFormat": "svc/{{`{{dst_service}}`}}",
               "refId": "A"
             }
           ],
@@ -2663,14 +2661,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\", tls=\"true\"}[30s])) by (dst_service)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒svc/{{dst_service}}",
+              "legendFormat": "🔒svc/{{`{{dst_service}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\", tls!=\"true\"}[30s])) by (dst_service)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "svc/{{dst_service}}",
+              "legendFormat": "svc/{{`{{dst_service}}`}}",
               "refId": "B"
             }
           ],
@@ -2756,7 +2754,7 @@ data:
               "expr": "histogram_quantile(0.5, sum(irate(response_latency_ms_bucket{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (le, dst_service))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 svc/{{dst_service}}",
+              "legendFormat": "p50 svc/{{`{{dst_service}}`}}",
               "refId": "A"
             },
             {
@@ -2764,14 +2762,14 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "p95 svc/{{dst_service}}",
+              "legendFormat": "p95 svc/{{`{{dst_service}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(irate(response_latency_ms_bucket{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (le, dst_service))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 svc/{{dst_service}}",
+              "legendFormat": "p99 svc/{{`{{dst_service}}`}}",
               "refId": "C"
             }
           ],
@@ -2872,7 +2870,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (dst_service, deployment) / sum(irate(response_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (dst_service, deployment)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "deploy/{{deployment}}",
+              "legendFormat": "deploy/{{`{{deployment}}`}}",
               "refId": "A"
             }
           ],
@@ -2958,14 +2956,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\", tls=\"true\"}[30s])) by (dst_service, deployment)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒deploy/{{deployment}}",
+              "legendFormat": "🔒deploy/{{`{{deployment}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\", tls!=\"true\"}[30s])) by (dst_service, deployment)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "deploy/{{deployment}}",
+              "legendFormat": "deploy/{{`{{deployment}}`}}",
               "refId": "B"
             }
           ],
@@ -3050,7 +3048,7 @@ data:
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (le, dst_service, deployment))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 deploy/{{deployment}}",
+              "legendFormat": "P95 deploy/{{`{{deployment}}`}}",
               "refId": "A"
             }
           ],
@@ -3150,7 +3148,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (dst_service, pod) / sum(irate(response_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (dst_service, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -3236,14 +3234,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\", tls=\"true\"}[30s])) by (dst_service, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒po/{{pod}}",
+              "legendFormat": "🔒po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\", tls!=\"true\"}[30s])) by (dst_service, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "B"
             }
           ],
@@ -3328,7 +3326,7 @@ data:
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", dst_service=\"$service\", direction=\"outbound\"}[30s])) by (le, dst_service, pod))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 po/{{pod}}",
+              "legendFormat": "P95 po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -3943,7 +3941,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\"}[30s])) by (statefulset) / sum(irate(response_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\"}[30s])) by (statefulset)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sts/{{statefulset}}",
+              "legendFormat": "sts/{{`{{statefulset}}`}}",
               "refId": "A"
             }
           ],
@@ -4029,14 +4027,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\", tls=\"true\"}[30s])) by (statefulset)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒sts/{{statefulset}}",
+              "legendFormat": "🔒sts/{{`{{statefulset}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\", tls!=\"true\"}[30s])) by (statefulset)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sts/{{statefulset}}",
+              "legendFormat": "sts/{{`{{statefulset}}`}}",
               "refId": "B"
             }
           ],
@@ -4122,7 +4120,7 @@ data:
               "expr": "histogram_quantile(0.5, sum(irate(response_latency_ms_bucket{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\"}[30s])) by (le, statefulset))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p50 sts/{{statefulset}}",
+              "legendFormat": "p50 sts/{{`{{statefulset}}`}}",
               "refId": "A"
             },
             {
@@ -4130,14 +4128,14 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "p95 sts/{{statefulset}}",
+              "legendFormat": "p95 sts/{{`{{statefulset}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(irate(response_latency_ms_bucket{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\"}[30s])) by (le, statefulset))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p99 sts/{{statefulset}}",
+              "legendFormat": "p99 sts/{{`{{statefulset}}`}}",
               "refId": "C"
             }
           ],
@@ -4233,7 +4231,7 @@ data:
                   "expr": "tcp_close_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\",errno!=\"\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}} {{errno}}",
+                  "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4318,7 +4316,7 @@ data:
                   "expr": "tcp_open_connections{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"inbound\"}",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "{{peer}}",
+                  "legendFormat": "{{`{{peer}}`}}",
                   "refId": "A"
                 }
               ],
@@ -4468,7 +4466,6 @@ data:
           "type": "row"
         },
         {
-        {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
@@ -4509,7 +4506,7 @@ data:
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -4595,14 +4592,14 @@ data:
               "expr": "sum(irate(request_total{statefulset!=\"\", statefulset=\"$inbound\", dst_namespace=\"$namespace\", dst_statefulset=\"$statefulset\", direction=\"outbound\", tls=\"true\"}[30s])) by (statefulset, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒po/{{pod}}",
+              "legendFormat": "🔒po/{{`{{pod}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{statefulset!=\"\", statefulset=\"$inbound\", dst_namespace=\"$namespace\", dst_statefulset=\"$statefulset\", direction=\"outbound\", tls!=\"true\"}[30s])) by (statefulset, pod)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "po/{{pod}}",
+              "legendFormat": "po/{{`{{pod}}`}}",
               "refId": "B"
             }
           ],
@@ -4688,21 +4685,21 @@ data:
               "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{statefulset!=\"\", statefulset=\"$inbound\", dst_namespace=\"$namespace\", dst_statefulset=\"$statefulset\", direction=\"outbound\"}[30s])) by (le, statefulset))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P50 sts/{{statefulset}}",
+              "legendFormat": "P50 sts/{{`{{statefulset}}`}}",
               "refId": "A"
             },
             {
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{statefulset!=\"\", statefulset=\"$inbound\", dst_namespace=\"$namespace\", dst_statefulset=\"$statefulset\", direction=\"outbound\"}[30s])) by (le, statefulset))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 sts/{{statefulset}}",
+              "legendFormat": "P95 sts/{{`{{statefulset}}`}}",
               "refId": "B"
             },
             {
               "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{statefulset!=\"\", statefulset=\"$inbound\", dst_namespace=\"$namespace\", dst_statefulset=\"$statefulset\", direction=\"outbound\"}[30s])) by (le, statefulset))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P99 sts/{{statefulset}}",
+              "legendFormat": "P99 sts/{{`{{statefulset}}`}}",
               "refId": "C"
             }
           ],
@@ -4816,7 +4813,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"outbound\"}[30s])) by (dst_statefulset) / sum(irate(response_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"outbound\"}[30s])) by (dst_statefulset)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sts/{{dst_statefulset}}",
+              "legendFormat": "sts/{{`{{dst_statefulset}}`}}",
               "refId": "A"
             }
           ],
@@ -4902,14 +4899,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"outbound\", tls=\"true\"}[30s])) by (dst_statefulset)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒sts/{{dst_statefulset}}",
+              "legendFormat": "🔒sts/{{`{{dst_statefulset}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"outbound\", tls!=\"true\"}[30s])) by (dst_statefulset)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "sts/{{dst_statefulset}}",
+              "legendFormat": "sts/{{`{{dst_statefulset}}`}}",
               "refId": "B"
             }
           ],
@@ -4994,7 +4991,7 @@ data:
               "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"outbound\"}[30s])) by (le, dst_statefulset))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "P95 sts/{{dst_statefulset}}",
+              "legendFormat": "P95 sts/{{`{{dst_statefulset}}`}}",
               "refId": "A"
             }
           ],
@@ -5092,7 +5089,7 @@ data:
               "expr": "tcp_close_total{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"outbound\",errno!=\"\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{peer}} {{errno}}",
+              "legendFormat": "{{`{{peer}}`}} {{`{{errno}}`}}",
               "refId": "A"
             }
           ],
@@ -5178,7 +5175,7 @@ data:
               "expr": "tcp_open_connections{namespace=\"$namespace\", statefulset=\"$statefulset\", direction=\"outbound\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{peer}}",
+              "legendFormat": "{{`{{peer}}`}}",
               "refId": "A"
             }
           ],
@@ -5360,7 +5357,7 @@ data:
                   "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", statefulset=\"$statefulset\", dst_statefulset=\"$outbound\", direction=\"outbound\"}[30s])) by (dst_statefulset) / sum(irate(response_total{namespace=\"$namespace\", statefulset=\"$statefulset\", dst_statefulset=\"$outbound\", direction=\"outbound\"}[30s])) by (dst_statefulset)",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "sts/{{dst_statefulset}}",
+                  "legendFormat": "sts/{{`{{dst_statefulset}}`}}",
                   "refId": "A"
                 }
               ],
@@ -5445,14 +5442,14 @@ data:
                   "expr": "sum(irate(request_total{namespace=\"$namespace\", statefulset=\"$statefulset\", dst_statefulset=\"$outbound\", direction=\"outbound\", tls=\"true\"}[30s])) by (dst_statefulset)",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "🔒sts/{{dst_statefulset}}",
+                  "legendFormat": "🔒sts/{{`{{dst_statefulset}}`}}",
                   "refId": "A"
                 },
                 {
                   "expr": "sum(irate(request_total{namespace=\"$namespace\", statefulset=\"$statefulset\", dst_statefulset=\"$outbound\", direction=\"outbound\", tls!=\"true\"}[30s])) by (dst_statefulset)",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "sts/{{dst_statefulset}}",
+                  "legendFormat": "sts/{{`{{dst_statefulset}}`}}",
                   "refId": "B"
                 }
               ],
@@ -5536,21 +5533,21 @@ data:
                   "expr": "histogram_quantile(0.5, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", statefulset=\"$statefulset\", dst_statefulset=\"$outbound\", direction=\"outbound\"}[30s])) by (le, dst_statefulset))",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "P50 sts/{{dst_statefulset}}",
+                  "legendFormat": "P50 sts/{{`{{dst_statefulset}}`}}",
                   "refId": "A"
                 },
                 {
                   "expr": "histogram_quantile(0.95, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", statefulset=\"$statefulset\", dst_statefulset=\"$outbound\", direction=\"outbound\"}[30s])) by (le, dst_statefulset))",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "P95 sts/{{dst_statefulset}}",
+                  "legendFormat": "P95 sts/{{`{{dst_statefulset}}`}}",
                   "refId": "B"
                 },
                 {
                   "expr": "histogram_quantile(0.99, sum(rate(response_latency_ms_bucket{namespace=\"$namespace\", statefulset=\"$statefulset\", dst_statefulset=\"$outbound\", direction=\"outbound\"}[30s])) by (le, dst_statefulset))",
                   "format": "time_series",
                   "intervalFactor": 1,
-                  "legendFormat": "P99 sts/{{dst_statefulset}}",
+                  "legendFormat": "P99 sts/{{`{{dst_statefulset}}`}}",
                   "refId": "C"
                 }
               ],
@@ -6152,7 +6149,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=~\"$namespace\", direction=\"inbound\"}[30s])) by (namespace) / sum(irate(response_total{namespace=~\"$namespace\", direction=\"inbound\"}[30s])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "ns/{{namespace}}",
+              "legendFormat": "ns/{{`{{namespace}}`}}",
               "refId": "A"
             }
           ],
@@ -6237,14 +6234,14 @@ data:
               "expr": "sum(irate(request_total{namespace=~\"$namespace\", direction=\"inbound\", tls=\"true\"}[30s])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒ns/{{namespace}}",
+              "legendFormat": "🔒ns/{{`{{namespace}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=~\"$namespace\", direction=\"inbound\", tls!=\"true\"}[30s])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "ns/{{namespace}}",
+              "legendFormat": "ns/{{`{{namespace}}`}}",
               "refId": "B"
             }
           ],
@@ -6329,7 +6326,7 @@ data:
               "expr": "histogram_quantile(0.95, sum(irate(response_latency_ms_bucket{namespace=~\"$namespace\", direction=\"inbound\"}[30s])) by (le, namespace))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "p95 ns/{{namespace}}",
+              "legendFormat": "p95 ns/{{`{{namespace}}`}}",
               "refId": "A"
             }
           ],
@@ -6458,7 +6455,7 @@ data:
               "expr": "sum(irate(response_total{classification=\"success\", namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment) / sum(irate(response_total{namespace=\"$namespace\", direction=\"inbound\"}[30s])) by (deployment)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "deploy/{{deployment}}",
+              "legendFormat": "deploy/{{`{{deployment}}`}}",
               "refId": "A"
             }
           ],
@@ -6550,14 +6547,14 @@ data:
               "expr": "sum(irate(request_total{namespace=\"$namespace\", direction=\"inbound\", tls=\"true\"}[30s])) by (deployment)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "🔒deploy/{{deployment}}",
+              "legendFormat": "🔒deploy/{{`{{deployment}}`}}",
               "refId": "A"
             },
             {
               "expr": "sum(irate(request_total{namespace=\"$namespace\", direction=\"inbound\", tls!=\"true\"}[30s])) by (deployment)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "deploy/{{deployment}}",
+              "legendFormat": "deploy/{{`{{deployment}}`}}",
               "refId": "B"
             }
           ],
@@ -6650,7 +6647,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "p95 deploy/{{deployment}}",
+              "legendFormat": "p95 deploy/{{`{{deployment}}`}}",
               "refId": "A"
             }
           ],
@@ -6792,4 +6789,3 @@ data:
       "uid": "linkerd-top-line",
       "version": 1
     }
----
