@@ -54,7 +54,7 @@ module "volume" {
 }
 
 module "basic" {
-  source = "./module/basic-deployment"
+  source = "./module/basic-deployments"
 
   cluster_config    = local.cluster_config
   config_path       = local.config_path
@@ -63,7 +63,7 @@ module "basic" {
 }
 
 module "monitoring" {
-  source = "./module/cluster-monitoring"
+  source = "./module/monitoring-tools"
 
   cluster_config    = local.cluster_config
   config_path       = local.config_path
