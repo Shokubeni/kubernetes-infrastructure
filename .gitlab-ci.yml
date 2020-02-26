@@ -9,7 +9,6 @@ k8s-cluster:
   image: alpine/terragrunt:0.12.21
   when: manual
   only:
-    - develop
     - master
   artifacts:
     paths:
@@ -25,7 +24,6 @@ deployments:
   image: alpine/terragrunt:0.12.21
   when: manual
   only:
-    - develop
     - master
   cache:
     paths:
