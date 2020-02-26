@@ -1738,14 +1738,6 @@ items:
     - name: v1
       served: true
       storage: true
-- apiVersion: v1
-  kind: Namespace
-  metadata:
-    creationTimestamp: null
-    labels:
-      component: velero
-    name: velero
-  spec: {}
 - apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRoleBinding
   metadata:
@@ -1760,7 +1752,7 @@ items:
   subjects:
   - kind: ServiceAccount
     name: velero
-    namespace: velero
+    namespace: kube-system
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
@@ -1768,7 +1760,7 @@ items:
     labels:
       component: velero
     name: velero
-    namespace: velero
+    namespace: kube-system
 - apiVersion: v1
   data:
     cloud: ${backup_access}
@@ -1778,7 +1770,7 @@ items:
     labels:
       component: velero
     name: cloud-credentials
-    namespace: velero
+    namespace: kube-system
   type: Opaque
 - apiVersion: velero.io/v1
   kind: BackupStorageLocation
@@ -1787,7 +1779,7 @@ items:
     labels:
       component: velero
     name: default
-    namespace: velero
+    namespace: kube-system
   spec:
     config:
       region: ${bucket_region}
@@ -1801,7 +1793,7 @@ items:
     labels:
       component: velero
     name: default
-    namespace: velero
+    namespace: kube-system
   spec:
     config:
       region: ${bucket_region}
@@ -1813,12 +1805,12 @@ items:
     labels:
       component: velero
     name: velero
-    namespace: velero
+    namespace: kube-system
   spec:
     selector:
       matchLabels:
         deploy: velero
-    strategy: {}
+    replicas: 1
     template:
       metadata:
         annotations:
@@ -1830,6 +1822,7 @@ items:
           component: velero
           deploy: velero
       spec:
+        priorityClassName: system-cluster-critical
         containers:
         - args:
           - server
@@ -1852,10 +1845,10 @@ items:
             name: metrics
           resources:
             limits:
-              cpu: "1"
+              cpu: 100m
               memory: 256Mi
             requests:
-              cpu: 500m
+              cpu: 25m
               memory: 128Mi
           volumeMounts:
           - mountPath: /plugins
@@ -1883,4 +1876,3 @@ items:
         nodeSelector:
           node-role.kubernetes.io/master: ""
 kind: List
-

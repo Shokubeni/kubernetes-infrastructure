@@ -1,0 +1,36 @@
+image: alpine:3.4
+
+stages:
+  - kubernetes-cluster
+  - basic-deployments
+
+k8s-cluster:
+  stage: kubernetes-cluster
+  image: alpine/terragrunt:0.12.21
+  when: manual
+  only:
+    - develop
+    - master
+  artifacts:
+    paths:
+      - output
+  script:
+    - printenv
+    - cd environment/us-east-1/kubernetes-cluster
+    - echo "yes" | terragrunt apply
+
+
+deployments:
+  stage: basic-deployments
+  image: alpine/terragrunt:0.12.21
+  when: manual
+  only:
+    - develop
+    - master
+  cache:
+    paths:
+      - output
+  script:
+    - cd environment/us-east-1/basic-deployments
+    - echo "yes" | terragrunt apply
+

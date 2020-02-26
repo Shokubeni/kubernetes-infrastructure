@@ -12,10 +12,20 @@ data "terraform_remote_state" "kubernetes" {
   }
 }
 
+provider "helm" {
+  kubernetes {
+    config_path = local.config_path
+  }
+}
+
+provider "kubernetes" {
+  config_path = local.config_path
+}
+
 provider "aws" {
   profile = var.provider_profile
   region  = var.provider_region
-  version = ">= 1.50.0"
+  version = ">= 2.0"
 }
 
 locals {
@@ -35,7 +45,7 @@ module "dns" {
 }
 
 module "volume" {
-  source = "./module/volume-provision"
+  source = "./module/volume-provisions"
 
   cluster_config    = local.cluster_config
   network_data      = local.network_data
@@ -44,7 +54,7 @@ module "volume" {
 }
 
 module "basic" {
-  source = "./module/basic-deployment"
+  source = "./module/basic-deployments"
 
   cluster_config    = local.cluster_config
   config_path       = local.config_path
@@ -53,7 +63,7 @@ module "basic" {
 }
 
 module "monitoring" {
-  source = "./module/cluster-monitoring"
+  source = "./module/monitoring-tools"
 
   cluster_config    = local.cluster_config
   config_path       = local.config_path

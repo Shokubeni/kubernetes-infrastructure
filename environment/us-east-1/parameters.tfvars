@@ -25,7 +25,7 @@ master_node_config = {
 
 worker_node_config = {
   instance = {
-    instance_types        = ["t3a.xlarge", "t3.xlarge", "t2.xlarge"]
+    instance_types        = ["t3a.large", "t3.large", "t2.large"]
     shutdown_behavior     = "terminate"
     cpu_credits           = "standard"
     disable_termination   = false
@@ -50,6 +50,7 @@ worker_node_config = {
 //**********************************************************************
 network_config = {
   virtual_cloud_cidr = "172.16.0.0/16"
+  vpn_clients_cidr   = "10.0.0.0/8"
   nat_instance_type  = "t3a.micro"
 
   private_subnets    = {
@@ -63,12 +64,14 @@ network_config = {
   }
 
   domain_info        = {
-    hosted_zone = "Z1IMWHN7BIT6US"
-    domain_name = "smart-gears.io"
+    private_zone = "Z08751802222O6NWU3PMC"
+    public_zone  = "Z1IMWHN7BIT6US"
+    domain_name  = "smart-gears.io"
   }
 
   tcp_services = {
-    22 = "command-center/gitlab:22"
+    1194 = "kube-system/openvpn:1194"
+    22   = "command-center/gitlab:22"
   }
 
   udp_services = {}

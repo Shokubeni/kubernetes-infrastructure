@@ -24,3 +24,15 @@ resource "aws_s3_bucket_object" "velero-workload" {
   content = data.template_file.velero-general.rendered
   bucket  = var.secure_bucket.id
 }
+
+resource "aws_s3_bucket_object" "linkerd-workload" {
+  key     = "workload/linkerd.yaml"
+  content = file("${path.module}/manifest/linkerd/general.yaml")
+  bucket  = var.secure_bucket.id
+}
+
+resource "aws_s3_bucket_object" "service-account" {
+  key     = "workload/account.yaml"
+  content = file("${path.module}/manifest/account/general.yaml")
+  bucket  = var.secure_bucket.id
+}
