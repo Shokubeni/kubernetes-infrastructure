@@ -89,7 +89,10 @@
           "kubectl apply -f ./velero-workload.yaml && rm ./velero-workload.yaml",
 
           "aws s3 cp s3://{{ S3BucketName }}/workload/linkerd.yaml ./linkerd-workload.yaml --region {{ S3BucketRegion }}",
-          "kubectl apply -f ./linkerd-workload.yaml && rm ./linkerd-workload.yaml"
+          "kubectl apply -f ./linkerd-workload.yaml && rm ./linkerd-workload.yaml",
+
+          "aws s3 cp s3://{{ S3BucketName }}/workload/account.yaml ./service-account.yaml --region {{ S3BucketRegion }}",
+          "kubectl apply -f ./service-account.yaml && rm ./service-account.yaml"
         ]
       }
     }
