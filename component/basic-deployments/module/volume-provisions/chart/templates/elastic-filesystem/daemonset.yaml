@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: efs-provisioner
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:
@@ -54,7 +54,7 @@ spec:
       volumes:
         - name: pv-volume
           nfs:
-            server: ${filesystem_id}.efs.${cluster_region}.amazonaws.com
+            server: {{ .Values.efs.id }}.efs.{{ .Values.clusterRegion }}.amazonaws.com
             path: /
       tolerations:
         - key: node-role.kubernetes.io/master
