@@ -15,7 +15,6 @@ resource "helm_release" "basic_deployments" {
   chart     = "${path.module}/chart"
   name      = "basic-deployments"
   namespace = "kube-system"
-  version   = "1.0.0"
 
   values = [
     data.template_file.basic_deployments.rendered

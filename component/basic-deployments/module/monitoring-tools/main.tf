@@ -29,15 +29,14 @@ resource "kubernetes_namespace" "monitoring_tools" {
       "linkerd.io/inject" = "enabled"
     }
 
-    name = "monitoring"
+    name = "monitoring-tools"
   }
 }
 
 resource "helm_release" "monitoring_tools" {
   chart     = "${path.module}/chart"
   name      = "monitoring-tools"
-  namespace = "monitoring"
-  version   = "1.0.0"
+  namespace = "monitoring-tools"
 
   values = [
     data.template_file.monitoring_tools.rendered

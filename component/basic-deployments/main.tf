@@ -45,7 +45,7 @@ module "dns" {
 }
 
 module "volume" {
-  source = "./module/volume-provision"
+  source = "./module/volume-provisions"
 
   cluster_config    = local.cluster_config
   network_data      = local.network_data
