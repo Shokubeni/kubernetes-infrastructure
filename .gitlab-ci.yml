@@ -17,7 +17,7 @@ k8s-cluster:
   script:
     - printenv
     - cd environment/us-east-1/kubernetes-cluster
-    - terragrunt apply --terragrunt-non-interactive
+    - echo "yes" | terragrunt apply
 
 
 deployments:
@@ -32,5 +32,5 @@ deployments:
       - output
   script:
     - cd environment/us-east-1/basic-deployments
-    - terragrunt apply --terragrunt-non-interactive
+    - echo "yes" | terragrunt apply
 
