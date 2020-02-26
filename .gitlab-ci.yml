@@ -1,29 +1,62 @@
 image: alpine:3.4
 
 stages:
-  - kubernetes-cluster
-  - basic-deployments
+  - check-revision
+  - apply-cluster
+  - apply-deploy
 
-k8s-cluster:
-  stage: kubernetes-cluster
+plan-k8s-cluster:
+  stage: check-revision
   image: alpine/terragrunt:0.12.21
-  when: manual
+  allow_failure: false
+  when: always
   only:
+    - develop
     - master
   artifacts:
     paths:
       - output
   script:
-    - printenv
+    - cd environment/us-east-1/kubernetes-cluster
+    - terragrunt plan
+
+plan-deployments:
+  stage: check-revision
+  image: alpine/terragrunt:0.12.21
+  allow_failure: false
+  when: always
+  only:
+    - develop
+    - master
+  artifacts:
+    paths:
+      - output
+  script:
+    - cd environment/us-east-1/basic-deployments
+    - terragrunt plan
+
+apply-k8s-cluster:
+  stage: apply-cluster
+  image: alpine/terragrunt:0.12.21
+  allow_failure: false
+  when: manual
+  only:
+    - develop
+    - master
+  artifacts:
+    paths:
+      - output
+  script:
     - cd environment/us-east-1/kubernetes-cluster
     - echo "yes" | terragrunt apply
 
 
-deployments:
-  stage: basic-deployments
+apply-deployments:
+  stage: apply-deploy
   image: alpine/terragrunt:0.12.21
-  when: manual
+  when: on_success
   only:
+    - develop
     - master
   cache:
     paths:

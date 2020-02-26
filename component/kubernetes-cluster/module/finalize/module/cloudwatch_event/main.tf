@@ -5,21 +5,21 @@ resource "null_resource" "dependency_getter" {
 }
 
 resource "aws_cloudwatch_event_rule" "cluster_backup" {
-  depends_on = ["null_resource.dependency_getter"]
+  depends_on = [null_resource.dependency_getter]
 
   name                = "${var.cluster_config.label}-cluster-backup_${var.cluster_config.id}"
   schedule_expression = var.runtime_config.backups.schedule
 }
 
 resource "aws_cloudwatch_event_target" "cluster_backup" {
-  depends_on = ["null_resource.dependency_getter"]
+  depends_on = [null_resource.dependency_getter]
 
   rule  = aws_cloudwatch_event_rule.cluster_backup.name
   arn   = var.backup_function.arn
 }
 
 resource "aws_lambda_permission" "cluster_backup" {
-  depends_on = ["null_resource.dependency_getter"]
+  depends_on = [null_resource.dependency_getter]
 
   function_name = var.backup_function.arn
   source_arn    = aws_cloudwatch_event_rule.cluster_backup.arn
@@ -28,21 +28,21 @@ resource "aws_lambda_permission" "cluster_backup" {
 }
 
 resource "aws_cloudwatch_event_rule" "renew_token" {
-  depends_on = ["null_resource.dependency_getter"]
+  depends_on = [null_resource.dependency_getter]
 
   name                = "${var.cluster_config.label}-renew-token_${var.cluster_config.id}"
   schedule_expression = var.runtime_config.token_schedule
 }
 
 resource "aws_cloudwatch_event_target" "renew_token" {
-  depends_on = ["null_resource.dependency_getter"]
+  depends_on = [null_resource.dependency_getter]
 
   rule  = aws_cloudwatch_event_rule.renew_token.name
   arn   = var.renew_function.arn
 }
 
 resource "aws_lambda_permission" "renew_token" {
-  depends_on = ["null_resource.dependency_getter"]
+  depends_on = [null_resource.dependency_getter]
 
   function_name = var.renew_function.arn
   source_arn    = aws_cloudwatch_event_rule.renew_token.arn
