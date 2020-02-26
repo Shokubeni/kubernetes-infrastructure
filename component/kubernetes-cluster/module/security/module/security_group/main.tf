@@ -66,7 +66,7 @@ resource "aws_security_group" "master" {
   }
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {
@@ -132,7 +132,7 @@ resource "aws_security_group" "worker" {
   }
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {
@@ -197,7 +197,7 @@ resource "aws_security_group" "balancer" {
   }
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {
@@ -229,7 +229,7 @@ resource "aws_security_group" "nat" {
   }
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {
