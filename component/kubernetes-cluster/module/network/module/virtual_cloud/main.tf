@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {
@@ -18,7 +18,7 @@ resource "aws_default_route_table" "default" {
   default_route_table_id = aws_vpc.main.default_route_table_id
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {
@@ -47,7 +47,7 @@ resource "aws_default_security_group" "default" {
   }
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {
@@ -78,7 +78,7 @@ resource "aws_default_network_acl" "default" {
   }
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 
   tags = {

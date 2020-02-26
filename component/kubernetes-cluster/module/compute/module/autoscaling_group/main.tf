@@ -65,7 +65,7 @@ resource "aws_autoscaling_group" "autoscaling" {
   ]
 
   lifecycle {
-    ignore_changes = ["*"]
+    ignore_changes = all
   }
 }
 
