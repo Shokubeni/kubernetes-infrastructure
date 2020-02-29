@@ -143,3 +143,7 @@ variable "grafana_client_id" {
 variable "grafana_secret" {
   type = string
 }
+
+variable "root_dir" {
+  type = string
+}

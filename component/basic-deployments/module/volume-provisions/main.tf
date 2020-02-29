@@ -57,7 +57,7 @@ data "template_file" "volume_provisions" {
 }
 
 resource "helm_release" "volume_provisions" {
-  chart     = "${path.module}/chart"
+  chart     = "${var.root_dir}/component/basic-deployments/module/volume-provisions/chart"
   name      = "volume-provisions"
   namespace = "kube-system"
 

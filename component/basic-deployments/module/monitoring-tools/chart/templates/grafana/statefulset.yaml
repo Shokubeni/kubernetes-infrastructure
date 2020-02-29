@@ -1,13 +1,14 @@
 ---
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   namespace: {{ .Release.Namespace }}
   name: grafana
   labels:
     app: grafana
 spec:
+  serviceName: grafana
   replicas: 1
   selector:
     matchLabels:

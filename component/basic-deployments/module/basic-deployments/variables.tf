@@ -33,3 +33,7 @@ variable "config_path" {
 variable "admin_role" {
   type = string
 }
+
+variable "root_dir" {
+  type = string
+}
