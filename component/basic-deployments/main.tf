@@ -51,6 +51,7 @@ module "volume" {
   network_data      = local.network_data
   config_path       = local.config_path
   network_config    = var.network_config
+  root_dir          = var.root_dir
 }
 
 module "basic" {
@@ -60,6 +61,7 @@ module "basic" {
   config_path       = local.config_path
   network_config    = var.network_config
   admin_role        = var.admin_role
+  root_dir          = var.root_dir
 }
 
 module "monitoring" {
@@ -72,6 +74,7 @@ module "monitoring" {
   grafana_client_id = var.grafana_client_id
   grafana_secret    = var.grafana_secret
   network_config    = var.network_config
+  root_dir          = var.root_dir
   smtp_config       = {
     host         = var.smtp_host
     port         = var.smtp_port
