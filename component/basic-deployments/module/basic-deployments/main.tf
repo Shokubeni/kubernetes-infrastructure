@@ -12,7 +12,7 @@ data "template_file" "basic_deployments" {
 }
 
 resource "helm_release" "basic_deployments" {
-  chart     = "${path.module}/chart"
+  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/chart"
   name      = "basic-deployments"
   namespace = "kube-system"
 

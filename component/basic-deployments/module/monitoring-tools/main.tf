@@ -34,7 +34,7 @@ resource "kubernetes_namespace" "monitoring_tools" {
 }
 
 resource "helm_release" "monitoring_tools" {
-  chart     = "${path.module}/chart"
+  chart     = "${var.root_dir}/component/basic-deployments/module/monitoring-tools/chart"
   name      = "monitoring-tools"
   namespace = "monitoring-tools"
 

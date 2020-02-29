@@ -1,13 +1,14 @@
 ---
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: openvpn
   namespace: {{ .Release.Namespace }}
   labels:
     app: openvpn
 spec:
+  serviceName: openvpn
   replicas: 1
   selector:
     matchLabels:

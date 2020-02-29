@@ -38,3 +38,7 @@ variable "cluster_config" {
 variable "config_path" {
   type = string
 }
+
+variable "root_dir" {
+  type = string
+}
