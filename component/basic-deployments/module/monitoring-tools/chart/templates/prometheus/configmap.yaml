@@ -57,9 +57,9 @@ data:
         - alert: High Memory Usage of Container
           annotations:
             summary: High Memory Usage of Container
-            description: Container named "{{`{{$labels.container}}`}}" in "{{`{{$labels.pod}}`}}" pod is using more than 75% of Memory Limit
+            description: Container named "{{`{{$labels.container}}`}}" in "{{`{{$labels.pod}}`}}" pod is using more than 85% of Memory Limit
           expr: |
-            ((( sum(container_memory_working_set_bytes{image!="",container!="POD", container!="prometheus", namespace!="kube-system"}) by (namespace,container,pod)  / sum(container_spec_memory_limit_bytes{image!="",container!="POD", container!="prometheus",namespace!="kube-system"}) by (namespace,container,pod) ) * 100 ) < +Inf ) > 75
+            ((( sum(container_memory_working_set_bytes{image!="",container!="POD", container!="prometheus", namespace!="kube-system"}) by (namespace,container,pod)  / sum(container_spec_memory_limit_bytes{image!="",container!="POD", container!="prometheus",namespace!="kube-system"}) by (namespace,container,pod) ) * 100 ) < +Inf ) > 85
           for: 5m
           labels:
             severity: warning
@@ -68,9 +68,9 @@ data:
         - alert: High CPU Usage of Container
           annotations:
             summary: High CPU Usage of Container
-            description: Container named "{{`{{$labels.container}}`}}" in "{{`{{$labels.pod}}`}}" pod is using more than 75% of CPU Limit
+            description: Container named "{{`{{$labels.container}}`}}" in "{{`{{$labels.pod}}`}}" pod is using more than 85% of CPU Limit
           expr: |
-            ((sum(irate(container_cpu_usage_seconds_total{image!="",container!="POD", namespace!="kube-system"}[30s])) by (namespace,container,pod) / sum(container_spec_cpu_quota{image!="",container!="POD", namespace!="kube-system"} / container_spec_cpu_period{image!="",container!="POD", namespace!="kube-system"}) by (namespace,container,pod) ) * 100)  > 75
+            ((sum(irate(container_cpu_usage_seconds_total{image!="",container!="POD", namespace!="kube-system"}[30s])) by (namespace,container,pod) / sum(container_spec_cpu_quota{image!="",container!="POD", namespace!="kube-system"} / container_spec_cpu_period{image!="",container!="POD", namespace!="kube-system"}) by (namespace,container,pod) ) * 100)  > 85
           for: 5m
           labels:
             severity: warning
@@ -81,9 +81,9 @@ data:
         - alert: High Node Memory Usage
           annotations:
             summary: High Node Memory Usage
-            description: Node "{{`{{$labels.hostname}}`}}" has more than 80% memory used. Plan Capcity
+            description: Node "{{`{{$labels.hostname}}`}}" has more than 85% memory used. Plan Capcity
           expr: |
-            (sum (container_memory_working_set_bytes{id="/",container!="POD"}) by (hostname) / sum (machine_memory_bytes{}) by (hostname) * 100) > 80
+            (sum (container_memory_working_set_bytes{id="/",container!="POD"}) by (hostname) / sum (machine_memory_bytes{}) by (hostname) * 100) > 85
           for: 5m
           labels:
             severity: warning
@@ -92,9 +92,9 @@ data:
         - alert: High Node CPU Usage
           annotations:
             summary: High Node CPU Usage
-            description: Node "{{`{{$labels.hostname}}`}}" has more than 80% allocatable cpu used. Plan Capacity.
+            description: Node "{{`{{$labels.hostname}}`}}" has more than 85% allocatable cpu used. Plan Capacity.
           expr: |
-            (sum(rate(container_cpu_usage_seconds_total{id="/", container!="POD"}[1m])) by (hostname) / sum(machine_cpu_cores) by (hostname)  * 100) > 80
+            (sum(rate(container_cpu_usage_seconds_total{id="/", container!="POD"}[1m])) by (hostname) / sum(machine_cpu_cores) by (hostname)  * 100) > 85
           for: 5m
           labels:
             severity: warning
