@@ -12,9 +12,13 @@ data:
     clusterID: {{ .Values.clusterId }}
     server:
       mapRoles:
-      - roleARN: {{ .Values.auth.adminRole }}
-        username: kubernetes-admin
+      {{- range $value := .Values.auth }}
+      - roleARN: {{ $value.roleARN }}
+        username: {{ $value.username }}
         groups:
-        - system:masters
+        {{- range $group := $value.groups }}
+        - {{ $group }}
+        {{- end }}
+      {{- end }}
 
 ---

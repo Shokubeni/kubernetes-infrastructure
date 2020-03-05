@@ -1,11 +1,11 @@
 domainName: ${domain_name}
 clusterId: ${cluster_id}
 
-auth:
-  adminRole: ${auth_admin_role}
-
 ingress:
   tcpServices:
     ${ingress_tcp_services}
   udpServices:
     ${ingress_udp_services}
+
+auth:
+  ${iam_authentication}

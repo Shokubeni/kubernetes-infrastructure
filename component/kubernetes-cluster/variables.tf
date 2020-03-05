@@ -51,6 +51,12 @@ variable "nodes_runtime_config" {
     token_schedule = string
     prod_cluster   = bool
 
+    iam_access = list(object({
+      groups = list(string)
+      role   = string
+      name   = string
+    }))
+
     backups = object({
       schedule     = string
       lifetime     = string

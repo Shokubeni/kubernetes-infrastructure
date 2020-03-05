@@ -15,7 +15,6 @@ terraform {
       "-var", "slack_channel=${get_env("TF_VAR_SLACK_CHANNEL", false)}",
       "-var", "slack_hook=${get_env("TF_VAR_SLACK_ALERTS_URL", false)}",
       "-var", "kube_config=${get_env("TF_VAR_KUBE_CONFIG", false)}",
-      "-var", "admin_role=${get_env("TF_VAR_AWS_ROLE", false)}",
       "-var", "grafana_client_id=${get_env("TF_VAR_GRAFANA_CLIENT_ID", false)}",
       "-var", "grafana_secret=${get_env("TF_VAR_GRAFANA_SECRET", false)}",
       "-var", "root_dir=${get_terragrunt_dir()}/../../..",

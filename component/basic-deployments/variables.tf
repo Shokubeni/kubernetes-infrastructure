@@ -49,6 +49,12 @@ variable "nodes_runtime_config" {
     token_schedule = string
     prod_cluster   = bool
 
+    iam_access = list(object({
+      groups = list(string)
+      role   = string
+      name   = string
+    }))
+
     backups = object({
       schedule     = string
       lifetime     = string
@@ -129,10 +135,6 @@ variable "slack_hook" {
 }
 
 variable "kube_config" {
-  type = string
-}
-
-variable "admin_role" {
   type = string
 }
 
