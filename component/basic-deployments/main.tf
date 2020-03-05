@@ -26,6 +26,7 @@ provider "helm" {
 }
 
 provider "kubernetes" {
+  config_context = "kubernetes-admin@${data.terraform_remote_state.kubernetes.outputs.cluster_config.id}"
   config_path = local.config_path
 }
 
@@ -57,10 +58,10 @@ module "volume" {
 module "basic" {
   source = "./module/basic-deployments"
 
+  runtime_config    = var.nodes_runtime_config
   cluster_config    = local.cluster_config
   config_path       = local.config_path
   network_config    = var.network_config
-  admin_role        = var.admin_role
   root_dir          = var.root_dir
 }
 

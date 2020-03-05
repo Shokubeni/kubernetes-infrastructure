@@ -25,7 +25,6 @@ These environment variables must be configured before you start installation.
 ```sh
 TF_VAR_GRAFANA_CLIENT_ID = <string>`Google OAuth application client ID`
 TF_VAR_GRAFANA_SECRET    = <string>`Google OAuth application secret`
-TF_VAR_AWS_ROLE          = <string>`AWS cluster operator role arn`
 TF_VAR_AWS_PROFILE       = <string>`AWS cluster operator profile name`
 TF_VAR_CLUSTER_NAME      = <string>[Kubernetes]
 TF_VAR_CLUSTER_LABEL     = <string>[kubernetes]

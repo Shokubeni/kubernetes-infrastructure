@@ -1,4 +1,41 @@
 //**********************************************************************
+//*                              Runtime                               *
+//**********************************************************************
+nodes_runtime_config = {
+  iam_access = [
+    {
+      role   = "arn:aws:iam::121055255948:role/OCPProductionAdministrator",
+      name   = "ocp-prod-admin"
+      groups = [
+        "ocp-prod:admin"
+      ]
+    },
+    {
+      role   = "arn:aws:iam::121055255948:role/KubernetesClusterOperator",
+      name   = "cluster-operator"
+      groups = [
+        "system:masters"
+      ]
+    }
+  ]
+
+  token_schedule = "rate(12 hours)"
+  prod_cluster   = true
+
+  backups = {
+    schedule     = "cron(0 0 ? * * *)"
+    lifetime     = "360h0m0s"
+    namespaces   = ["*"]
+    resources    = ["*"]
+  }
+
+  cluster = {
+    kubernetes   = "1.17.0"
+    docker       = "5:19.03.0"
+  }
+}
+
+//**********************************************************************
 //*                               Nodes                                *
 //**********************************************************************
 master_node_config = {
@@ -75,24 +112,4 @@ network_config = {
   }
 
   udp_services = {}
-}
-
-//**********************************************************************
-//*                              Runtime                               *
-//**********************************************************************
-nodes_runtime_config = {
-  token_schedule = "rate(12 hours)"
-  prod_cluster   = true
-
-  backups = {
-    schedule     = "cron(0 0 ? * * *)"
-    lifetime     = "360h0m0s"
-    namespaces   = ["*"]
-    resources    = ["*"]
-  }
-
-  cluster = {
-    kubernetes   = "1.17.0"
-    docker       = "5:19.03.0"
-  }
 }
