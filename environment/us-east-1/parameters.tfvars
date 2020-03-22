@@ -108,10 +108,18 @@ network_config = {
     domain_name  = "smart-gears.io"
   }
 
-  tcp_services = {
-    1194 = "kube-system/openvpn:1194"
-    22   = "command-center/gitlab:22"
-  }
+  tcp_services = [
+    {
+      namespace = "command-center"
+      workload  = "gitlab"
+      port      = 22
+    },
+    {
+      namespace = "kube-system"
+      workload  = "openvpn"
+      port      = 1194
+    },
+  ]
 
-  udp_services = {}
+  udp_services = []
 }
