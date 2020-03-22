@@ -32,6 +32,7 @@ module "security" {
   master_queue       = module.common.master_queue
   worker_queue       = module.common.worker_queue
   network_data       = module.network.network_data
+  network_config     = var.network_config
 }
 
 module "workload" {

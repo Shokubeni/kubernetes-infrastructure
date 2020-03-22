@@ -13,6 +13,12 @@
     },
     "ClusterId": {
       "type": "String"
+    },
+    "VeleroVersion": {
+      "type": "String"
+    },
+    "AuthVersion": {
+      "type": "String"
     }
   },
   "mainSteps": [
@@ -22,11 +28,10 @@
       "inputs": {
         "runCommand": [
           "sudo su",
-          "export PATH=/root/.linkerd2/bin:/root/bin:$PATH",
           "export HOME=/root",
           "mkdir -p /root/bin",
 
-          "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator",
+          "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/{{ AuthVersion }}/bin/linux/amd64/aws-iam-authenticator",
           "chmod +x ./aws-iam-authenticator && cp ./aws-iam-authenticator /root/bin/aws-iam-authenticator && aws-iam-authenticator init --cluster-id {{ ClusterId }}",
           "mkdir -p /etc/kubernetes/aws-iam-authenticator /var/aws-iam-authenticator",
           "mv cert.pem key.pem /var/aws-iam-authenticator/ && mv aws-iam-authenticator.kubeconfig /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml",
@@ -81,18 +86,15 @@
           "aws s3 cp ./join-command s3://{{ S3BucketName }}/commands/join-command --region {{ S3BucketRegion }} --content-type \"text/plain\"",
           "rm ./join-command",
 
-          "wget https://github.com/vmware-tanzu/velero/releases/download/v1.3.1/velero-v1.3.1-linux-amd64.tar.gz -O velero.tar.gz",
-          "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v1.3.1-linux-amd64/velero /root/bin",
+          "wget https://github.com/vmware-tanzu/velero/releases/download/v{{ VeleroVersion }}/velero-v{{ VeleroVersion }}-linux-amd64.tar.gz -O velero.tar.gz",
+          "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v{{ VeleroVersion }}-linux-amd64/velero /root/bin",
           "velero client config set namespace=kube-system",
           "rm velero.tar.gz && rm -rf velero",
           "aws s3 cp s3://{{ S3BucketName }}/workload/velero.yaml ./velero-workload.yaml --region {{ S3BucketRegion }}",
           "kubectl apply -f ./velero-workload.yaml && rm ./velero-workload.yaml",
 
           "aws s3 cp s3://{{ S3BucketName }}/workload/linkerd.yaml ./linkerd-workload.yaml --region {{ S3BucketRegion }}",
-          "kubectl apply -f ./linkerd-workload.yaml && rm ./linkerd-workload.yaml",
-
-          "aws s3 cp s3://{{ S3BucketName }}/workload/account.yaml ./service-account.yaml --region {{ S3BucketRegion }}",
-          "kubectl apply -f ./service-account.yaml && rm ./service-account.yaml"
+          "kubectl apply -f ./linkerd-workload.yaml && rm ./linkerd-workload.yaml"
         ]
       }
     }

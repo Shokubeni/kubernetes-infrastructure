@@ -136,7 +136,7 @@ data:
       kubernetes_sd_configs:
       - role: pod
         namespaces:
-          names: ['linkerd']
+          names: ['linkerd-service']
 
       relabel_configs:
       - source_labels:

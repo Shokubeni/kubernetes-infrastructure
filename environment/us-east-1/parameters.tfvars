@@ -19,19 +19,21 @@ nodes_runtime_config = {
     }
   ]
 
-  token_schedule = "rate(12 hours)"
-  prod_cluster   = true
+  token_schedule  = "rate(12 hours)"
+  prod_cluster    = true
 
   backups = {
-    schedule     = "cron(0 0 ? * * *)"
-    lifetime     = "360h0m0s"
-    namespaces   = ["*"]
-    resources    = ["*"]
+    schedule      = "cron(0 0 ? * * *)"
+    lifetime      = "360h0m0s"
+    namespaces    = ["*"]
+    resources     = ["*"]
   }
 
   cluster = {
-    kubernetes   = "1.17.0"
-    docker       = "5:19.03.0"
+    authenticator = "1.14.6/2019-08-22"
+    kubernetes    = "1.17.0"
+    docker        = "5:19.03.0"
+    velero        = "1.3.1"
   }
 }
 

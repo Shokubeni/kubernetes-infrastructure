@@ -28,6 +28,8 @@ declare var process : {
     BACKUP_NAMESPACES: string,
     BACKUP_RESOURCES: string,
     DOCKER_VERSION: string,
+    VELERO_VERSION: string,
+    AUTH_VERSION: string,
     S3_BACKUP_BUCKET: string,
     S3_BUCKET_REGION: string,
     S3_BUCKET_NAME: string,
@@ -85,6 +87,8 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       await runCommand(event, process.env.STACKED_MASTER_INIT_COMMAND, {
         S3BucketRegion: [process.env.S3_BUCKET_REGION],
         S3BucketName: [process.env.S3_BUCKET_NAME],
+        VeleroVersion: [process.env.VELERO_VERSION],
+        AuthVersion: [process.env.AUTH_VERSION],
         ClusterId: [process.env.CLUSTER_ID],
       });
       await completeLifecycle(event, LifecycleResult.Continue);
@@ -98,6 +102,8 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
           S3BucketRegion: [process.env.S3_BUCKET_REGION],
           S3BucketName: [process.env.S3_BUCKET_NAME],
           BalancerDNS: [process.env.LOAD_BALANCER_DNS],
+          VeleroVersion: [process.env.VELERO_VERSION],
+          AuthVersion: [process.env.AUTH_VERSION],
           ClusterId: [process.env.CLUSTER_ID],
         });
 

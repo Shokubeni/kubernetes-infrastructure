@@ -54,6 +54,8 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             yield manager_1.runCommand(event, process.env.STACKED_MASTER_INIT_COMMAND, {
                 S3BucketRegion: [process.env.S3_BUCKET_REGION],
                 S3BucketName: [process.env.S3_BUCKET_NAME],
+                VeleroVersion: [process.env.VELERO_VERSION],
+                AuthVersion: [process.env.AUTH_VERSION],
                 ClusterId: [process.env.CLUSTER_ID],
             });
             yield autoscaling_1.completeLifecycle(event, types_1.LifecycleResult.Continue);
@@ -66,6 +68,8 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
                     S3BucketRegion: [process.env.S3_BUCKET_REGION],
                     S3BucketName: [process.env.S3_BUCKET_NAME],
                     BalancerDNS: [process.env.LOAD_BALANCER_DNS],
+                    VeleroVersion: [process.env.VELERO_VERSION],
+                    AuthVersion: [process.env.AUTH_VERSION],
                     ClusterId: [process.env.CLUSTER_ID],
                 });
             }

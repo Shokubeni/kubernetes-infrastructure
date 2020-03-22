@@ -33,7 +33,7 @@ spec:
   commonName: metrics.{{ .Values.general.domainName }}
   secretName: grafana-ingress
   issuerRef:
-    name: letsencrypt-{{ .Values.general.certIssuer }}
+    name: dns-letsencrypt-{{ .Values.general.certIssuer }}
     kind: ClusterIssuer
   dnsNames:
     - metrics.{{ .Values.general.domainName }}
