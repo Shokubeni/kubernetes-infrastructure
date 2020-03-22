@@ -2,6 +2,7 @@ data "template_file" "master" {
   template = file("${path.module}/master-policy.json")
 
   vars = {
+    hosted_zone    = var.network_config.domain_info.public_zone
     cluster_bucket = var.cluster_bucket
     backup_bucket  = var.backup_bucket
   }

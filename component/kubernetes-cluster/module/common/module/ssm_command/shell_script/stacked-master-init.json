@@ -10,6 +10,12 @@
     },
     "ClusterId": {
       "type": "String"
+    },
+    "VeleroVersion": {
+      "type": "String"
+    },
+    "AuthVersion": {
+      "type": "String"
     }
   },
   "mainSteps": [
@@ -19,7 +25,6 @@
       "inputs": {
         "runCommand": [
           "sudo su",
-          "export PATH=/root/.linkerd2/bin:/root/bin:$PATH",
           "export HOME=/root",
           "mkdir -p /root/bin",
 
@@ -27,7 +32,7 @@
           "KUBELET_EXTRA_ARGS=--cloud-provider=aws",
           "EOF",
 
-          "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator",
+          "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/{{ AuthVersion }}/bin/linux/amd64/aws-iam-authenticator",
           "chmod +x ./aws-iam-authenticator && cp ./aws-iam-authenticator /root/bin/aws-iam-authenticator",
           "mkdir -p /etc/kubernetes/aws-iam-authenticator /var/aws-iam-authenticator",
           "aws s3 cp s3://{{ S3BucketName }}/configs/authenticator.conf /etc/kubernetes/aws-iam-authenticator/kubeconfig.yaml --region {{ S3BucketRegion }}",
@@ -50,11 +55,10 @@
           "export KUBECONFIG=/root/.kube/config",
           "$(cat ./join-command) --control-plane && m ./join-command",
 
-          "wget https://github.com/vmware-tanzu/velero/releases/download/v1.2.0/velero-v1.2.0-linux-amd64.tar.gz -O velero.tar.gz",
-          "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v1.2.0-linux-amd64/velero /root/bin",
-          "rm velero.tar.gz && rm -rf velero",
-
-          "curl -sL https://run.linkerd.io/install | sh"
+          "wget https://github.com/vmware-tanzu/velero/releases/download/v{{ VeleroVersion }}/velero-v{{ VeleroVersion }}-linux-amd64.tar.gz -O velero.tar.gz",
+          "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v{{ VeleroVersion }}-linux-amd64/velero /root/bin",
+          "velero client config set namespace=kube-system",
+          "rm velero.tar.gz && rm -rf velero"
         ]
       }
     }

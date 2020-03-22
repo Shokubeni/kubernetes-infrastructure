@@ -7,6 +7,8 @@ data "template_file" "basic_deployments" {
     ingress_tcp_services = join("\n    ", [for port, service in var.network_config.tcp_services : "${port}: ${service}"])
     ingress_udp_services = join("\n    ", [for port, service in var.network_config.udp_services : "${port}: ${service}"])
     domain_name          = var.network_config.domain_info.domain_name
+    public_zone          = var.network_config.domain_info.public_zone
+    cluster_region       = var.cluster_config.region
     cluster_id           = var.cluster_config.id
   }
 }

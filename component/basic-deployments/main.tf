@@ -13,10 +13,10 @@ data "terraform_remote_state" "kubernetes" {
 }
 
 locals {
-  config_path       = var.kube_config == "false" ? data.terraform_remote_state.kubernetes.outputs.config_path : var.kube_config
-  cluster_config    = data.terraform_remote_state.kubernetes.outputs.cluster_config
-  balancer_data     = data.terraform_remote_state.kubernetes.outputs.balancer_data
-  network_data      = data.terraform_remote_state.kubernetes.outputs.network_data
+  config_path    = var.kube_config == "false" ? data.terraform_remote_state.kubernetes.outputs.config_path : var.kube_config
+  cluster_config = data.terraform_remote_state.kubernetes.outputs.cluster_config
+  balancer_data  = data.terraform_remote_state.kubernetes.outputs.balancer_data
+  network_data   = data.terraform_remote_state.kubernetes.outputs.network_data
 }
 
 provider "helm" {
@@ -27,7 +27,7 @@ provider "helm" {
 
 provider "kubernetes" {
   config_context = "kubernetes-admin@${data.terraform_remote_state.kubernetes.outputs.cluster_config.id}"
-  config_path = local.config_path
+  config_path    = local.config_path
 }
 
 provider "aws" {

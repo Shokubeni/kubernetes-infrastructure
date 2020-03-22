@@ -70,6 +70,8 @@ resource "aws_lambda_function" "master_lifecycle" {
       COMMON_WORKER_INIT_COMMAND     = var.system_commands.common_worker_init
       KUBERNETES_VERSION             = var.runtime_config.cluster.kubernetes
       DOCKER_VERSION                 = var.runtime_config.cluster.docker
+      VELERO_VERSION                 = var.runtime_config.cluster.velero
+      AUTH_VERSION                   = var.runtime_config.cluster.authenticator
       BACKUP_NAMESPACES              = join(",", var.runtime_config.backups.namespaces)
       BACKUP_RESOURCES               = join(",", var.runtime_config.backups.resources)
       LOAD_BALANCER_DNS              = var.balancer_data.dns

@@ -30,9 +30,3 @@ resource "aws_s3_bucket_object" "linkerd-workload" {
   content = file("${path.module}/manifest/linkerd/general.yaml")
   bucket  = var.secure_bucket.id
 }
-
-resource "aws_s3_bucket_object" "service-account" {
-  key     = "workload/account.yaml"
-  content = file("${path.module}/manifest/account/general.yaml")
-  bucket  = var.secure_bucket.id
-}

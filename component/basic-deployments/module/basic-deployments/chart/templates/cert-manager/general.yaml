@@ -688,6 +688,13 @@ spec:
       annotations:
     spec:
       serviceAccountName: cert-manager-cainjector
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+        - key: CriticalAddonsOnly
+          operator: Exists
       containers:
         - name: cert-manager
           image: "quay.io/jetstack/cert-manager-cainjector:v0.13.0"
@@ -737,6 +744,13 @@ spec:
         prometheus.io/port: '9402'
     spec:
       serviceAccountName: cert-manager
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+        - key: CriticalAddonsOnly
+          operator: Exists
       containers:
         - name: cert-manager
           image: "quay.io/jetstack/cert-manager-controller:v0.13.0"
@@ -745,6 +759,8 @@ spec:
             - --v=2
             - --cluster-resource-namespace=$(POD_NAMESPACE)
             - --leader-election-namespace={{ .Release.Namespace }}
+            - --dns01-recursive-nameservers-only
+            - --dns01-self-check-nameservers=8.8.8.8:53,1.1.1.1:53
             - --webhook-namespace=$(POD_NAMESPACE)
             - --webhook-ca-secret=cert-manager-webhook-ca
             - --webhook-serving-secret=cert-manager-webhook-tls
@@ -791,6 +807,13 @@ spec:
       annotations:
     spec:
       serviceAccountName: cert-manager-webhook
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+        - key: CriticalAddonsOnly
+          operator: Exists
       containers:
         - name: cert-manager
           image: "quay.io/jetstack/cert-manager-webhook:v0.13.0"

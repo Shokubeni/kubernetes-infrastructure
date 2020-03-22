@@ -18,6 +18,7 @@ module "instance_role" {
   cluster_config   = var.cluster_config
   cluster_bucket   = var.secure_bucket.id
   backup_bucket    = var.backup_bucket.id
+  network_config   = var.network_config
 }
 
 module "lambda_role" {

@@ -10,15 +10,17 @@ variable "runtime_config" {
     }))
 
     backups = object({
-      schedule     = string
-      lifetime     = string
-      namespaces   = list(string)
-      resources    = list(string)
+      schedule   = string
+      lifetime   = string
+      namespaces = list(string)
+      resources  = list(string)
     })
 
     cluster = object({
-      kubernetes   = string
-      docker       = string
+      authenticator = string
+      kubernetes    = string
+      docker        = string
+      velero        = string
     })
   })
 }

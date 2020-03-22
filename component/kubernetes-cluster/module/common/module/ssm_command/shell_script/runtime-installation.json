@@ -16,7 +16,6 @@
       "inputs": {
         "runCommand": [
           "sudo su",
-          "echo \"export PATH=/root/.linkerd2/bin:/root/bin:$PATH\" >> /root/.bashrc",
           "echo \"export KUBECONFIG=/root/.kube/config\" >> /root/.bashrc",
           "hostnamectl set-hostname $(ec2metadata --local-hostname)",
 
