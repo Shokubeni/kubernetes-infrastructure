@@ -16,7 +16,7 @@
       "inputs": {
         "runCommand": [
           "sudo su",
-          "export PATH=/root/.linkerd2/bin:/root/bin:$PATH",
+          "export PATH=/root/bin:$PATH",
           "export HOME=/root",
 
           "kubeadm token create --print-join-command > join-command",

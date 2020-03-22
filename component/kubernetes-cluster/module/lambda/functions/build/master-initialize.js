@@ -79,6 +79,8 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
                     BackupResources: [process.env.BACKUP_RESOURCES],
                     S3BucketRegion: [process.env.S3_BUCKET_REGION],
                     S3BucketName: [process.env.S3_BUCKET_NAME],
+                    VeleroVersion: [process.env.VELERO_VERSION],
+                    AuthVersion: [process.env.AUTH_VERSION],
                     ClusterId: [process.env.CLUSTER_ID],
                     SnapshotName: [snapshotName],
                 });
