@@ -1,0 +1,3 @@
+clusterId: ${cluster_id}
+authRoles:
+  ${auth_roles}

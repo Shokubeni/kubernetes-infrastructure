@@ -45,8 +45,28 @@ resource "aws_efs_mount_target" "efs" {
   security_groups = [aws_security_group.efs.id]
 }
 
-data "template_file" "volume_provisions" {
-  template = file("${path.module}/chart/values.yaml")
+resource "kubernetes_namespace" "volume_provisions" {
+  metadata {
+    annotations = {
+      "linkerd.io/inject" = "enabled"
+    }
+
+    name = "volume-provisions"
+  }
+}
+
+resource "helm_release" "ebs_block_storage" {
+  chart     = "${var.root_dir}/component/basic-deployments/module/volume-provisions/charts/ebs-block-storage"
+  name      = "ebs-block-storage"
+  namespace = "volume-provisions"
+
+  depends_on = [
+    kubernetes_namespace.volume_provisions
+  ]
+}
+
+data "template_file" "elastic-filesystem" {
+  template = file("${path.module}/charts/elastic-filesystem/values.yaml")
 
   vars = {
     domain_name    = var.network_config.domain_info.domain_name
@@ -56,12 +76,16 @@ data "template_file" "volume_provisions" {
   }
 }
 
-resource "helm_release" "volume_provisions" {
-  chart     = "${var.root_dir}/component/basic-deployments/module/volume-provisions/chart"
-  name      = "volume-provisions"
-  namespace = "kube-system"
+resource "helm_release" "elastic_filesystem" {
+  chart     = "${var.root_dir}/component/basic-deployments/module/volume-provisions/charts/elastic-filesystem"
+  name      = "elastic-filesystem"
+  namespace = "volume-provisions"
 
   values = [
-    data.template_file.volume_provisions.rendered
+    data.template_file.elastic-filesystem.rendered
+  ]
+
+  depends_on = [
+    kubernetes_namespace.volume_provisions
   ]
 }

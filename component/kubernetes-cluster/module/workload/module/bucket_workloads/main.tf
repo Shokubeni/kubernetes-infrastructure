@@ -19,14 +19,26 @@ data "template_file" "velero-general" {
   }
 }
 
-resource "aws_s3_bucket_object" "velero-workload" {
-  key     = "workload/velero.yaml"
+resource "aws_s3_bucket_object" "velero-crd-list" {
+  key     = "workload/velero-crd-list.yaml"
+  content = file("${path.module}/manifest/velero/crd-list.yaml")
+  bucket  = var.secure_bucket.id
+}
+
+resource "aws_s3_bucket_object" "velero-general" {
+  key     = "workload/velero-general.yaml"
   content = data.template_file.velero-general.rendered
   bucket  = var.secure_bucket.id
 }
 
-resource "aws_s3_bucket_object" "linkerd-workload" {
-  key     = "workload/linkerd.yaml"
+resource "aws_s3_bucket_object" "linkerd-crd-list" {
+  key     = "workload/linkerd-crd-list.yaml"
+  content = file("${path.module}/manifest/linkerd/crd-list.yaml")
+  bucket  = var.secure_bucket.id
+}
+
+resource "aws_s3_bucket_object" "linkerd-general" {
+  key     = "workload/linkerd-general.yaml"
   content = file("${path.module}/manifest/linkerd/general.yaml")
   bucket  = var.secure_bucket.id
 }

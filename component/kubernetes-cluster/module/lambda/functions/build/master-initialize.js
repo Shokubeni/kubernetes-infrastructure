@@ -13,7 +13,6 @@ const types_1 = require("./helper/autoscaling/types");
 const queue_1 = require("./helper/queue");
 const manager_1 = require("./helper/manager");
 const messages_1 = require("./constant/messages");
-const s3_1 = require("./helper/s3");
 exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* () {
     try {
         const { Event } = JSON.parse(event.Records[0].body);
@@ -61,30 +60,30 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
             yield autoscaling_1.completeLifecycle(event, types_1.LifecycleResult.Continue);
         }
         else {
-            const snapshotName = yield s3_1.getLastSnapshot(process.env.S3_BACKUP_BUCKET);
+            // const snapshotName = await getLastSnapshot(process.env.S3_BACKUP_BUCKET);
             yield autoscaling_1.completeLifecycle(event, types_1.LifecycleResult.Continue);
-            if (!snapshotName) {
-                yield manager_1.runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
-                    S3BucketRegion: [process.env.S3_BUCKET_REGION],
-                    S3BucketName: [process.env.S3_BUCKET_NAME],
-                    BalancerDNS: [process.env.LOAD_BALANCER_DNS],
-                    VeleroVersion: [process.env.VELERO_VERSION],
-                    AuthVersion: [process.env.AUTH_VERSION],
-                    ClusterId: [process.env.CLUSTER_ID],
-                });
-            }
-            else {
-                yield manager_1.runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
-                    BackupNamespaces: [process.env.BACKUP_NAMESPACES],
-                    BackupResources: [process.env.BACKUP_RESOURCES],
-                    S3BucketRegion: [process.env.S3_BUCKET_REGION],
-                    S3BucketName: [process.env.S3_BUCKET_NAME],
-                    VeleroVersion: [process.env.VELERO_VERSION],
-                    AuthVersion: [process.env.AUTH_VERSION],
-                    ClusterId: [process.env.CLUSTER_ID],
-                    SnapshotName: [snapshotName],
-                });
-            }
+            // if (!snapshotName) {
+            yield manager_1.runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
+                KubernetesVersion: [process.env.KUBERNETES_VERSION],
+                S3BucketRegion: [process.env.S3_BUCKET_REGION],
+                S3BucketName: [process.env.S3_BUCKET_NAME],
+                BalancerDNS: [process.env.LOAD_BALANCER_DNS],
+                VeleroVersion: [process.env.VELERO_VERSION],
+                AuthVersion: [process.env.AUTH_VERSION],
+                ClusterId: [process.env.CLUSTER_ID],
+            });
+            // } else {
+            //   await runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
+            //     BackupNamespaces: [process.env.BACKUP_NAMESPACES],
+            //     BackupResources: [process.env.BACKUP_RESOURCES],
+            //     S3BucketRegion: [process.env.S3_BUCKET_REGION],
+            //     S3BucketName: [process.env.S3_BUCKET_NAME],
+            //     VeleroVersion: [process.env.VELERO_VERSION],
+            //     AuthVersion: [process.env.AUTH_VERSION],
+            //     ClusterId: [process.env.CLUSTER_ID],
+            //     SnapshotName: [snapshotName],
+            //   });
+            // }
         }
         yield autoscaling_1.setInstanceTags(event, [
             { Key: types_1.TagName.NodeState, Value: types_1.NodeState.InitFinished },

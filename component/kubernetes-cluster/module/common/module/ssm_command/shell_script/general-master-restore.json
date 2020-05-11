@@ -58,7 +58,6 @@
 
           "kubeadm init --config=kubeadm-config.yaml",
           "mkdir -p /root/.kube && cp -i /etc/kubernetes/admin.conf /root/.kube/config && chown $(id -u):$(id -g) /root/.kube/config",
-          "export KUBECONFIG=/root/.kube/config",
           "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\\n')\"",
 
           "kubeadm token create --print-join-command > join-command",
@@ -69,13 +68,16 @@
           "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v{{ VeleroVersion }}-linux-amd64/velero /root/bin",
           "velero client config set namespace=kube-system",
           "rm velero.tar.gz && rm -rf velero",
-          "aws s3 cp s3://{{ S3BucketName }}/workload/velero.yaml ./velero-workload.yaml --region {{ S3BucketRegion }}",
-          "kubectl apply -f ./velero-workload.yaml && rm ./velero-workload.yaml",
-          "sleep 60",
 
-          "aws s3 cp s3://{{ S3BucketName }}/workload/linkerd.yaml ./linkerd-workload.yaml --region {{ S3BucketRegion }}",
-          "kubectl apply -f ./linkerd-workload.yaml && rm ./linkerd-workload.yaml",
-          "sleep 60",
+          "aws s3 cp s3://{{ S3BucketName }}/workload/velero-crd-list.yaml ./velero-crd-list.yaml --region {{ S3BucketRegion }}",
+          "aws s3 cp s3://{{ S3BucketName }}/workload/velero-general.yaml ./velero-general.yaml --region {{ S3BucketRegion }}",
+          "kubectl apply -f ./velero-crd-list.yaml --wait=true && rm ./velero-crd-list.yaml",
+          "kubectl apply -f ./velero-general.yaml --wait=true && rm ./velero-general.yaml",
+
+          "aws s3 cp s3://{{ S3BucketName }}/workload/linkerd-crd-list.yaml ./linkerd-crd-list.yaml --region {{ S3BucketRegion }}",
+          "aws s3 cp s3://{{ S3BucketName }}/workload/linkerd-general.yaml ./linkerd-general.yaml --region {{ S3BucketRegion }}",
+          "kubectl apply -f ./linkerd-crd-list.yaml --wait=true && rm ./linkerd-crd-list.yaml",
+          "kubectl apply -f ./linkerd-general.yaml --wait=true && rm ./linkerd-general.yaml",
 
           "velero restore create --from-backup={{ SnapshotName }} --include-namespaces '{{ BackupNamespaces }}' --include-resources '{{ BackupResources }}' --include-cluster-resources --wait"
         ]

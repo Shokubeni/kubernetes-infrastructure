@@ -1,0 +1,3 @@
+clusterRegion: ${cluster_region}
+domainName: ${domain_name}
+publicZone: ${public_zone}

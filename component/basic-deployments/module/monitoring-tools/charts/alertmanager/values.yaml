@@ -1,0 +1,8 @@
+slack:
+  channel: ${slack_channel}
+  hook: ${slack_hook}
+smtp:
+  from: ${from_adress}
+  host: ${smtp_host}
+  user: ${smtp_user}
+  pass: ${smtp_pass}

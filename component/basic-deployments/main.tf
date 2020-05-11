@@ -45,7 +45,7 @@ module "dns" {
   network_config    = var.network_config
 }
 
-module "volume" {
+module "volume_provisions" {
   source = "./module/volume-provisions"
 
   cluster_config    = local.cluster_config
@@ -55,17 +55,23 @@ module "volume" {
   root_dir          = var.root_dir
 }
 
-module "basic" {
+module "basic_deployments" {
   source = "./module/basic-deployments"
 
   runtime_config    = var.nodes_runtime_config
   cluster_config    = local.cluster_config
-  config_path       = local.config_path
   network_config    = var.network_config
   root_dir          = var.root_dir
 }
 
-module "monitoring" {
+module "network_services" {
+  source = "./module/network-services"
+
+  network_config    = var.network_config
+  root_dir          = var.root_dir
+}
+
+module "monitoring_tolls" {
   source = "./module/monitoring-tools"
 
   cluster_config    = local.cluster_config

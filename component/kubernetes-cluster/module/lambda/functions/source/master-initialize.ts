@@ -94,31 +94,32 @@ export const handler = async (event: SQSEvent, context: Context): Promise<void> 
       await completeLifecycle(event, LifecycleResult.Continue);
 
     } else {
-      const snapshotName = await getLastSnapshot(process.env.S3_BACKUP_BUCKET);
+      // const snapshotName = await getLastSnapshot(process.env.S3_BACKUP_BUCKET);
       await completeLifecycle(event, LifecycleResult.Continue);
 
-      if (!snapshotName) {
-        await runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
-          S3BucketRegion: [process.env.S3_BUCKET_REGION],
-          S3BucketName: [process.env.S3_BUCKET_NAME],
-          BalancerDNS: [process.env.LOAD_BALANCER_DNS],
-          VeleroVersion: [process.env.VELERO_VERSION],
-          AuthVersion: [process.env.AUTH_VERSION],
-          ClusterId: [process.env.CLUSTER_ID],
-        });
+      // if (!snapshotName) {
+      await runCommand(event, process.env.GENERAL_MASTER_INIT_COMMAND, {
+        KubernetesVersion: [process.env.KUBERNETES_VERSION],
+        S3BucketRegion: [process.env.S3_BUCKET_REGION],
+        S3BucketName: [process.env.S3_BUCKET_NAME],
+        BalancerDNS: [process.env.LOAD_BALANCER_DNS],
+        VeleroVersion: [process.env.VELERO_VERSION],
+        AuthVersion: [process.env.AUTH_VERSION],
+        ClusterId: [process.env.CLUSTER_ID],
+      });
 
-      } else {
-        await runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
-          BackupNamespaces: [process.env.BACKUP_NAMESPACES],
-          BackupResources: [process.env.BACKUP_RESOURCES],
-          S3BucketRegion: [process.env.S3_BUCKET_REGION],
-          S3BucketName: [process.env.S3_BUCKET_NAME],
-          VeleroVersion: [process.env.VELERO_VERSION],
-          AuthVersion: [process.env.AUTH_VERSION],
-          ClusterId: [process.env.CLUSTER_ID],
-          SnapshotName: [snapshotName],
-        });
-      }
+      // } else {
+      //   await runCommand(event, process.env.GENERAL_MASTER_RESTORE_COMMAND, {
+      //     BackupNamespaces: [process.env.BACKUP_NAMESPACES],
+      //     BackupResources: [process.env.BACKUP_RESOURCES],
+      //     S3BucketRegion: [process.env.S3_BUCKET_REGION],
+      //     S3BucketName: [process.env.S3_BUCKET_NAME],
+      //     VeleroVersion: [process.env.VELERO_VERSION],
+      //     AuthVersion: [process.env.AUTH_VERSION],
+      //     ClusterId: [process.env.CLUSTER_ID],
+      //     SnapshotName: [snapshotName],
+      //   });
+      // }
     }
 
     await setInstanceTags(event, [

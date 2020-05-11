@@ -22,18 +22,25 @@ nodes_runtime_config = {
   token_schedule  = "rate(12 hours)"
   prod_cluster    = true
 
+  cluster = {
+    authenticator = "1.16.8/2020-04-16"
+    kubernetes    = "1.18.2"
+    docker        = "5:19.03.0"
+    velero        = "1.3.2"
+  }
+
   backups = {
     schedule      = "cron(0 0 ? * * *)"
     lifetime      = "360h0m0s"
-    namespaces    = ["*"]
     resources     = ["*"]
-  }
-
-  cluster = {
-    authenticator = "1.14.6/2019-08-22"
-    kubernetes    = "1.17.0"
-    docker        = "5:19.03.0"
-    velero        = "1.3.1"
+    namespaces    = [
+      "basic-deployments",
+      "network-services",
+      "monitoring-tools",
+      "command-center",
+      "gitlab-runners",
+      "ocp-production",
+    ]
   }
 }
 
@@ -64,7 +71,7 @@ master_node_config = {
 
 worker_node_config = {
   instance = {
-    instance_types        = ["t3a.large", "t3.large", "t2.large"]
+    instance_types        = ["t3a.xlarge", "t3.xlarge", "t2.xlarge"]
     shutdown_behavior     = "terminate"
     cpu_credits           = "standard"
     disable_termination   = false

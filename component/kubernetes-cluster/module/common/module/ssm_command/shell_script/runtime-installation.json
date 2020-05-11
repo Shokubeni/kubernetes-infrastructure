@@ -17,17 +17,27 @@
         "runCommand": [
           "sudo su",
           "echo \"export KUBECONFIG=/root/.kube/config\" >> /root/.bashrc",
+          "echo \"export PATH=/root/bin:$PATH\" >> /root/.bashrc",
+          "echo \"export HOME=/root\" >> /root/.bashrc",
+          "mkdir -p /root/bin",
           "hostnamectl set-hostname $(ec2metadata --local-hostname)",
+
+          "modprobe br_netfilter",
+          "cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf",
+          "net.bridge.bridge-nf-call-ip6tables = 1",
+          "net.bridge.bridge-nf-call-iptables = 1",
+          "EOF",
+          "sysctl --system",
 
           "apt-get update",
           "apt-get install -y awscli nfs-common dialog apt-utils apt-transport-https ca-certificates curl gnupg-agent software-properties-common",
           "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
           "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
-          "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - ",
+          "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -",
           "add-apt-repository \"deb https://apt.kubernetes.io/ kubernetes-xenial main\"",
 
           "apt-get update",
-          "apt-get install -y docker-ce={{ DockerVersion }}* kubelet={{ KubernetesVersion }}* kubeadm={{ KubernetesVersion }}* kubectl={{ KubernetesVersion }}* kubernetes-cni etcd-client",
+          "apt-get install -y docker-ce={{ DockerVersion }}* kubelet={{ KubernetesVersion }}* kubeadm={{ KubernetesVersion }}* kubectl={{ KubernetesVersion }}*",
           "apt-mark hold kubelet kubeadm kubectl",
 
           "cat > /etc/docker/daemon.json <<EOF",
@@ -40,7 +50,6 @@
             "\"storage-driver\": \"overlay2\"",
           "}",
           "EOF",
-          "mkdir -p /etc/systemd/system/docker.service.d",
           "systemctl daemon-reload",
           "systemctl restart docker"
         ]

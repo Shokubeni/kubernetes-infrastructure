@@ -53,12 +53,11 @@
           "aws s3 cp s3://{{ S3BucketName }}/commands/join-command ./join-command --region {{ S3BucketRegion }}",
 
           "mkdir -p /root/.kube && cp -i /etc/kubernetes/admin.conf /root/.kube/config && chown $(id -u):$(id -g) /root/.kube/config",
-          "export KUBECONFIG=/root/.kube/config",
-          "$(cat ./join-command) --control-plane && m ./join-command",
+          "$(cat ./join-command) --control-plane && rm ./join-command",
 
           "wget https://github.com/vmware-tanzu/velero/releases/download/v{{ VeleroVersion }}/velero-v{{ VeleroVersion }}-linux-amd64.tar.gz -O velero.tar.gz",
           "mkdir velero && tar -xvf velero.tar.gz -C ./velero && cp velero/velero-v{{ VeleroVersion }}-linux-amd64/velero /root/bin",
-          "velero client config set namespace=kube-system",
+          "velero client config set namespace=velero-backups",
           "rm velero.tar.gz && rm -rf velero"
         ]
       }
