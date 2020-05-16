@@ -2,6 +2,13 @@ resource "aws_iam_access_key" "velero" {
   user = var.backup_user.id
 }
 
+data "template_file" "autoscaler-general" {
+  template = file("${path.module}/manifest/autoscaler/general.yaml")
+  vars = {
+    cluster_id = var.cluster_config.id
+  }
+}
+
 data "template_file" "velero-credentials" {
   template = file("${path.module}/manifest/velero/credentials")
   vars = {
@@ -17,6 +24,12 @@ data "template_file" "velero-general" {
     bucket_region = var.backup_bucket.region
     bucket_name   = var.backup_bucket.id
   }
+}
+
+resource "aws_s3_bucket_object" "autoscaler-general" {
+  key     = "workload/autoscaler-general.yaml"
+  content = data.template_file.autoscaler-general.rendered
+  bucket  = var.secure_bucket.id
 }
 
 resource "aws_s3_bucket_object" "velero-crd-list" {

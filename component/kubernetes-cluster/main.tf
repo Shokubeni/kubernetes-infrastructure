@@ -5,7 +5,7 @@ terraform {
 provider "aws" {
   profile = var.provider_profile
   region  = var.provider_region
-  version = ">= 1.50.0"
+  version = "2.58"
 }
 
 module "common" {
@@ -41,6 +41,7 @@ module "workload" {
   backup_bucket      = module.common.backup_bucket
   secure_bucket      = module.common.secure_bucket
   backup_user        = module.security.backup_user
+  cluster_config     = module.common.cluster_config
 }
 
 module "balancer" {

@@ -22,13 +22,6 @@
           "mkdir -p /root/bin",
           "hostnamectl set-hostname $(ec2metadata --local-hostname)",
 
-          "modprobe br_netfilter",
-          "cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf",
-          "net.bridge.bridge-nf-call-ip6tables = 1",
-          "net.bridge.bridge-nf-call-iptables = 1",
-          "EOF",
-          "sysctl --system",
-
           "apt-get update",
           "apt-get install -y awscli nfs-common dialog apt-utils apt-transport-https ca-certificates curl gnupg-agent software-properties-common",
           "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",

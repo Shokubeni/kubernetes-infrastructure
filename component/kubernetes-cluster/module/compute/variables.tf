@@ -18,6 +18,7 @@ variable "node_config" {
       delete_on_termination = bool
       volume_type           = string
       volume_size           = number
+      iops                  = number
     })
   })
 }

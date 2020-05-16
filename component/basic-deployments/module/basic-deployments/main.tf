@@ -1,3 +1,50 @@
+locals {
+  public_subnets = var.network_data.public_subnet_ids
+}
+
+resource "aws_security_group" "efs" {
+  name   = "${var.cluster_config.label}-efs_${var.cluster_config.id}"
+  vpc_id = var.network_data.virtual_cloud_id
+
+  ingress {
+    description = "Allows NFS traffic"
+    from_port   = 2049
+    to_port     = 2049
+    protocol    = "tcp"
+    cidr_blocks = [var.network_config.virtual_cloud_cidr]
+  }
+
+  egress {
+    description = "Allows NFS traffic"
+    from_port   = 2049
+    to_port     = 2049
+    protocol    = "tcp"
+    cidr_blocks = [var.network_config.virtual_cloud_cidr]
+  }
+
+  tags = {
+    "Name" = "${var.cluster_config.name} Network Filesystem",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
+}
+
+resource "aws_efs_file_system" "efs" {
+  creation_token = "${var.cluster_config.label}.${var.cluster_config.id}"
+
+  tags = {
+    "Name" = "${var.cluster_config.name} Cluster Filesystem",
+    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
+  }
+}
+
+resource "aws_efs_mount_target" "efs" {
+  count = length(local.public_subnets)
+
+  subnet_id       = local.public_subnets[count.index]
+  file_system_id  = aws_efs_file_system.efs.id
+  security_groups = [aws_security_group.efs.id]
+}
+
 resource "kubernetes_namespace" "basic_deployments" {
   metadata {
     annotations = {
@@ -58,21 +105,34 @@ resource "helm_release" "acme_cert_manager" {
   ]
 }
 
-data "template_file" "cluster_autoscaller" {
-  template = file("${path.module}/charts/cluster-autoscaler/values.yaml")
+resource "helm_release" "ebs_block_storage" {
+  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/ebs-block-storage"
+  name      = "ebs-block-storage"
+  namespace = "basic-deployments"
+
+  depends_on = [
+    kubernetes_namespace.basic_deployments
+  ]
+}
+
+data "template_file" "elastic-filesystem" {
+  template = file("${path.module}/charts/elastic-filesystem/values.yaml")
 
   vars = {
-    cluster_id = var.cluster_config.id
+    domain_name    = var.network_config.domain_info.domain_name
+    cluster_region = var.cluster_config.region
+    efs_dns_name   = aws_efs_file_system.efs.dns_name
+    efs_id         = aws_efs_file_system.efs.id
   }
 }
 
-resource "helm_release" "cluster_autoscaller" {
-  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/cluster-autoscaler"
-  name      = "cluster-autoscaller"
+resource "helm_release" "elastic_filesystem" {
+  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/elastic-filesystem"
+  name      = "elastic-filesystem"
   namespace = "basic-deployments"
 
   values = [
-    data.template_file.cluster_autoscaller.rendered
+    data.template_file.elastic-filesystem.rendered
   ]
 
   depends_on = [

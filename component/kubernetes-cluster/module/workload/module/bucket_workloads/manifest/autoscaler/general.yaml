@@ -7,7 +7,7 @@ metadata:
     k8s-addon: cluster-autoscaler.addons.k8s.io
     k8s-app: cluster-autoscaler
   name: cluster-autoscaler
-  namespace: {{ .Release.Namespace }}
+  namespace: kube-system
 
 ---
 
@@ -72,7 +72,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: cluster-autoscaler
-  namespace: {{ .Release.Namespace }}
+  namespace: kube-system
   labels:
     k8s-addon: cluster-autoscaler.addons.k8s.io
     k8s-app: cluster-autoscaler
@@ -101,7 +101,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: cluster-autoscaler
-    namespace: {{ .Release.Namespace }}
+    namespace: kube-system
 
 ---
 
@@ -109,7 +109,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cluster-autoscaler
-  namespace: {{ .Release.Namespace }}
+  namespace: kube-system
   labels:
     k8s-addon: cluster-autoscaler.addons.k8s.io
     k8s-app: cluster-autoscaler
@@ -120,6 +120,60 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: cluster-autoscaler
-    namespace: {{ .Release.Namespace }}
+    namespace: kube-system
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+  labels:
+    app: cluster-autoscaler
+spec:
+  selector:
+    matchLabels:
+      app: cluster-autoscaler
+  template:
+    metadata:
+      labels:
+        app: cluster-autoscaler
+    spec:
+      priorityClassName: system-cluster-critical
+      serviceAccountName: cluster-autoscaler
+      containers:
+        - image: k8s.gcr.io/cluster-autoscaler:v1.18.0
+          name: cluster-autoscaler
+          resources:
+            limits:
+              cpu: 50m
+              memory: 256Mi
+            requests:
+              cpu: 25m
+              memory: 128Mi
+          command:
+            - ./cluster-autoscaler
+            - --v=4
+            - --stderrthreshold=info
+            - --cloud-provider=aws
+            - --skip-nodes-with-local-storage=false
+            - --expander=least-waste
+            - --node-group-auto-discovery=asg:tag=kubernetes.io/cluster/autoscaler,kubernetes.io/cluster/${cluster_id}
+          volumeMounts:
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs/ca-certificates.crt
+              readOnly: true
+          imagePullPolicy: "Always"
+      volumes:
+        - name: ssl-certs
+          hostPath:
+            path: "/etc/ssl/certs/ca-certificates.crt"
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
 
 ---

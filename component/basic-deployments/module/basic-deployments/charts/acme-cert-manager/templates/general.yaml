@@ -702,6 +702,7 @@ spec:
           args:
             - --v=2
             - --leader-election-namespace={{ .Release.Namespace }}
+            - --leader-elect=false
           env:
             - name: POD_NAMESPACE
               valueFrom:

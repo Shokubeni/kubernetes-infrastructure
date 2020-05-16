@@ -20,20 +20,22 @@ locals {
 }
 
 provider "helm" {
+  version = "1.1.1"
   kubernetes {
     config_path = local.config_path
   }
 }
 
 provider "kubernetes" {
+  version        = "1.11.1"
   config_context = "kubernetes-admin@${data.terraform_remote_state.kubernetes.outputs.cluster_config.id}"
   config_path    = local.config_path
 }
 
 provider "aws" {
+  version = "2.58"
   profile = var.provider_profile
   region  = var.provider_region
-  version = ">= 2.0"
 }
 
 module "dns" {
@@ -45,22 +47,13 @@ module "dns" {
   network_config    = var.network_config
 }
 
-module "volume_provisions" {
-  source = "./module/volume-provisions"
-
-  cluster_config    = local.cluster_config
-  network_data      = local.network_data
-  config_path       = local.config_path
-  network_config    = var.network_config
-  root_dir          = var.root_dir
-}
-
 module "basic_deployments" {
   source = "./module/basic-deployments"
 
   runtime_config    = var.nodes_runtime_config
   cluster_config    = local.cluster_config
   network_config    = var.network_config
+  network_data      = local.network_data
   root_dir          = var.root_dir
 }
 
@@ -71,7 +64,7 @@ module "network_services" {
   root_dir          = var.root_dir
 }
 
-module "monitoring_tolls" {
+module "monitoring_tools" {
   source = "./module/monitoring-tools"
 
   cluster_config    = local.cluster_config

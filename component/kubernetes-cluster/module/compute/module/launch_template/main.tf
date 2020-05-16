@@ -7,6 +7,7 @@ locals {
   delete_on_termination = var.node_config.volume.delete_on_termination
   volume_type           = var.node_config.volume.volume_type
   volume_size           = var.node_config.volume.volume_size
+  iops                  = var.node_config.volume.iops
   role_postfix          = contains(var.cluster_role, "controlplane") ? "master" : "worker"
   role_name             = contains(var.cluster_role, "controlplane") ? "Master" : "Worker"
 }
@@ -56,6 +57,7 @@ resource "aws_launch_template" "launch" {
       delete_on_termination = local.delete_on_termination
       volume_type           = local.volume_type
       volume_size           = local.volume_size
+      iops                  = local.iops
       encrypted             = "true"
     }
   }

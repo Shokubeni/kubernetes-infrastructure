@@ -79,6 +79,9 @@
           "kubectl apply -f ./linkerd-crd-list.yaml --wait=true && rm ./linkerd-crd-list.yaml",
           "kubectl apply -f ./linkerd-general.yaml --wait=true && rm ./linkerd-general.yaml",
 
+          "aws s3 cp s3://{{ S3BucketName }}/workload/autoscaler-general.yaml ./autoscaler-general.yaml --region {{ S3BucketRegion }}",
+          "kubectl apply -f ./autoscaler-general.yaml --wait=true && rm ./autoscaler-general.yaml",
+
           "velero restore create --from-backup={{ SnapshotName }} --include-namespaces '{{ BackupNamespaces }}' --include-resources '{{ BackupResources }}' --include-cluster-resources --wait"
         ]
       }

@@ -24,7 +24,7 @@ nodes_runtime_config = {
 
   cluster = {
     authenticator = "1.16.8/2020-04-16"
-    kubernetes    = "1.18.2"
+    kubernetes    = "1.16.9"
     docker        = "5:19.03.0"
     velero        = "1.3.2"
   }
@@ -66,6 +66,7 @@ master_node_config = {
     delete_on_termination = true
     volume_type           = "gp2"
     volume_size           = 30
+    iops                  = null
   }
 }
 
@@ -88,6 +89,7 @@ worker_node_config = {
     delete_on_termination = true
     volume_type           = "gp2"
     volume_size           = 30
+    iops                  = null
   }
 }
 
@@ -100,13 +102,13 @@ network_config = {
   nat_instance_type  = "t3a.micro"
 
   private_subnets    = {
-    "172.16.0.0/20"  = "us-east-1b"
-    "172.16.16.0/20" = "us-east-1c"
+    "172.16.0.0/20"  = "us-east-1a"
+    "172.16.16.0/20" = "us-east-1b"
   }
 
   public_subnets     = {
-    "172.16.32.0/20" = "us-east-1b"
-    "172.16.48.0/20" = "us-east-1c"
+    "172.16.32.0/20" = "us-east-1a"
+    "172.16.48.0/20" = "us-east-1b"
   }
 
   domain_info        = {
@@ -117,14 +119,14 @@ network_config = {
 
   tcp_services = [
     {
+      namespace = "network-services"
+      workload  = "openvpn"
+      port      = 1194
+    },
+    {
       namespace = "command-center"
       workload  = "gitlab"
       port      = 22
-    },
-    {
-      namespace = "kube-system"
-      workload  = "openvpn"
-      port      = 1194
     },
   ]
 

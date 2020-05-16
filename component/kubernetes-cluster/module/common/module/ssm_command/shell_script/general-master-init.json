@@ -102,7 +102,10 @@
           "aws s3 cp s3://{{ S3BucketName }}/workload/linkerd-crd-list.yaml ./linkerd-crd-list.yaml --region {{ S3BucketRegion }}",
           "aws s3 cp s3://{{ S3BucketName }}/workload/linkerd-general.yaml ./linkerd-general.yaml --region {{ S3BucketRegion }}",
           "kubectl apply -f ./linkerd-crd-list.yaml --wait=true && rm ./linkerd-crd-list.yaml",
-          "kubectl apply -f ./linkerd-general.yaml --wait=true && rm ./linkerd-general.yaml"
+          "kubectl apply -f ./linkerd-general.yaml --wait=true && rm ./linkerd-general.yaml",
+
+          "aws s3 cp s3://{{ S3BucketName }}/workload/autoscaler-general.yaml ./autoscaler-general.yaml --region {{ S3BucketRegion }}",
+          "kubectl apply -f ./autoscaler-general.yaml --wait=true && rm ./autoscaler-general.yaml"
         ]
       }
     }
