@@ -5,110 +5,66 @@ terraform {
 provider "aws" {
   profile = var.provider_profile
   region  = var.provider_region
-  version = "2.58"
+  version = "~> 2.60"
 }
 
-module "common" {
-  source = "./module/common"
+module "prebuilt" {
+  source = "./module/prebuilt"
 
-  runtime_config     = var.nodes_runtime_config
-  cluster_label      = var.cluster_label
-  cluster_name       = var.cluster_name
+  cluster_label  = var.cluster_label
+  cluster_name   = var.cluster_name
 }
 
 module "network" {
   source = "./module/network"
 
-  cluster_config     = module.common.cluster_config
-  network_config     = var.network_config
+  cluster_data   = module.prebuilt.cluster_data
+  network_config = var.network_config
 }
 
-module "security" {
-  source = "./module/security"
+module "identity" {
+  source = "./module/identity"
 
-  cluster_config     = module.common.cluster_config
-  backup_bucket      = module.common.backup_bucket
-  secure_bucket      = module.common.secure_bucket
-  master_queue       = module.common.master_queue
-  worker_queue       = module.common.worker_queue
-  network_data       = module.network.network_data
-  network_config     = var.network_config
+  cluster_data   = module.prebuilt.cluster_data
+  network_data   = module.network.network_data
+  bucket_data    = module.prebuilt.backup_bucket
 }
 
-module "workload" {
-  source = "./module/workload"
+module "gateway" {
+  source = "./module/gateway"
 
-  backup_bucket      = module.common.backup_bucket
-  secure_bucket      = module.common.secure_bucket
-  backup_user        = module.security.backup_user
-  cluster_config     = module.common.cluster_config
+  nat_instance   = module.identity.nat_instance
+  cluster_data   = module.prebuilt.cluster_data
+  network_data   = module.network.network_data
+  network_config = var.network_config
 }
 
-module "balancer" {
-  source = "./module/balancer"
+module "cluster" {
+  source = "./module/cluster"
 
-  balancer_security  = module.security.balancer
-  nat_node_security  = module.security.nat_node
-  cluster_config     = module.common.cluster_config
-  network_data       = module.network.network_data
-  network_config     = var.network_config
-}
-
-module "lambda" {
-  source = "./module/lambda"
-
-  cluster_config     = module.common.cluster_config
-  runtime_config     = var.nodes_runtime_config
-  system_commands    = module.common.system_command
-  secure_bucket      = module.common.secure_bucket
-  backup_bucket      = module.common.backup_bucket
-  balancer_data      = module.balancer.balancer_data
-  master_queue       = module.common.master_queue
-  worker_queue       = module.common.worker_queue
-  cloudwatch_role    = module.security.cloudwatch_event
-  worker_role        = module.security.worker_lifecycle
-  master_role        = module.security.master_lifecycle
-}
-
-module "master" {
-  source = "./module/compute"
-
-  cluster_role       = ["controlplane"]
-  cluster_config     = module.common.cluster_config
-  network_data       = module.network.network_data
-  balancer_data      = module.balancer.balancer_data
-  lifecycle_queue    = module.common.master_queue
-  lifecycle_function = module.lambda.master_lifecycle
-  publish_role       = module.security.master_publish
-  node_security      = module.security.master_node
-  node_config        = var.master_node_config
+  control_plane  = module.identity.control_plane
+  woker_node     = module.identity.worker_node
+  network_data   = module.network.network_data
+  cluster_data   = module.prebuilt.cluster_data
+  runtime_config = var.runtime_config
+  root_dir       = var.root_dir
 }
 
 module "worker" {
-  source = "./module/compute"
+  source = "./module/worker"
 
-  cluster_role       = ["worker"]
-  cluster_config     = module.common.cluster_config
-  network_data       = module.network.network_data
-  balancer_data      = module.balancer.balancer_data
-  lifecycle_queue    = module.common.worker_queue
-  lifecycle_function = module.lambda.worker_lifecycle
-  publish_role       = module.security.worker_publish
-  node_security      = module.security.worker_node
-  node_config        = var.worker_node_config
+  control_plane  = module.cluster.control_plane
+  worker_node    = module.identity.worker_node
+  network_data   = module.network.network_data
+  cluster_data   = module.prebuilt.cluster_data
+  runtime_config = var.runtime_config
+  worker_configs = var.worker_configs
 }
 
-module "finalize" {
-  source = "./module/finalize"
+module "deploy" {
+  source = "./module/deploy"
 
-  secure_bucket      = module.common.secure_bucket
-  cluster_config     = module.common.cluster_config
-  backup_function    = module.lambda.cluster_backup
-  renew_function     = module.lambda.renew_token
-  runtime_config     = var.nodes_runtime_config
-  root_dir           = var.root_dir
-  dependencies       = [
-    module.master.autoscaling["group_id"],
-    module.worker.autoscaling["group_id"]
-  ]
+  control_plane = module.cluster.control_plane
+  bucket_data   = module.prebuilt.backup_bucket
+  root_dir      = var.root_dir
 }

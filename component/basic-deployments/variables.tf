@@ -1,60 +1,46 @@
-variable "master_node_config" {
-  type = object({
+variable "worker_configs" {
+  type = list(object({
     instance = object({
-      instance_types        = list(string)
-      shutdown_behavior     = string
-      cpu_credits           = string
-      disable_termination   = bool
-      ebs_optimized         = bool
-      monitoring            = bool
-      max_price             = number
-      min_size              = number
-      max_size              = number
-      on_demand_capasity    = number
-      desired_capacity      = number
+      node_group_label    = string
+      instance_types      = list(string)
+      shutdown_behavior   = string
+      cpu_credits         = string
+      disable_termination = bool
+      ebs_optimized       = bool
+      monitoring          = bool
+      max_price           = number
+      min_size            = number
+      max_size            = number
+      on_demand_capasity  = number
+      desired_capacity    = number
+      kubelet_extra_args  = map(list(string))
     })
+
     volume = object({
-      delete_on_termination = bool
-      volume_type           = string
-      volume_size           = number
-      iops                  = number
+      termination = bool
+      volume_type = string
+      volume_size = number
+      iops        = number
     })
-  })
+  }))
 }
 
-variable "worker_node_config" {
+variable "runtime_config" {
   type = object({
-    instance = object({
-      instance_types        = list(string)
-      shutdown_behavior     = string
-      cpu_credits           = string
-      disable_termination   = bool
-      ebs_optimized         = bool
-      monitoring            = bool
-      max_price             = number
-      min_size              = number
-      max_size              = number
-      on_demand_capasity    = number
-      desired_capacity      = number
-    })
-    volume = object({
-      delete_on_termination = bool
-      volume_type           = string
-      volume_size           = number
-      iops                  = number
-    })
-  })
-}
+    k8s_version = string
 
-variable "nodes_runtime_config" {
-  type = object({
-    token_schedule = string
-    prod_cluster   = bool
+    auth_accounts = list(string)
 
-    iam_access = list(object({
-      groups = list(string)
-      role   = string
-      name   = string
+    auth_users = list(object({
+      userarn  = string
+      username = string
+      groups   = list(string)
+    }))
+
+    auth_roles = list(object({
+      rolearn  = string
+      username = string
+      groups   = list(string)
     }))
 
     backups = object({
@@ -64,11 +50,9 @@ variable "nodes_runtime_config" {
       resources  = list(string)
     })
 
-    cluster = object({
-      authenticator = string
-      kubernetes    = string
-      docker        = string
-      velero        = string
+    logs = object({
+      retention = number
+      types     = list(string)
     })
   })
 }
@@ -80,16 +64,7 @@ variable "network_config" {
     nat_instance_type  = string
     private_subnets    = map(string)
     public_subnets     = map(string)
-    tcp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
-    udp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
+
     domain_info        = object({
       private_zone = string
       public_zone  = string

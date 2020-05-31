@@ -1,0 +1,10 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  components:
+    ingressGateways:
+      - name: ingressgateway
+        enabled: true
+        k8s:
+          serviceAnnotations:
+            service.beta.kubernetes.io/aws-load-balancer-type: "nlb"

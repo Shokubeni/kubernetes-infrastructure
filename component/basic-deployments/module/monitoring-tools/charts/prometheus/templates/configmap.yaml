@@ -132,25 +132,22 @@ data:
           static_configs:
             - targets: ['alertmanager:9093']
     scrape_configs:
-    - job_name: 'linkerd'
-      kubernetes_sd_configs:
-      - role: pod
-        namespaces:
-          names: ['linkerd-service']
-
-      relabel_configs:
-      - source_labels:
-        - __meta_kubernetes_pod_container_name
-        action: keep
-        regex: ^prometheus$
-
+    - job_name: 'istio-prometheus'
       honor_labels: true
       metrics_path: '/federate'
-
+      kubernetes_sd_configs:
+        - role: pod
+          namespaces:
+            names: ['istio-system']
+      metric_relabel_configs:
+        - source_labels: [__name__]
+          regex: 'workload:(.*)'
+          target_label: __name__
+          action: replace
       params:
         'match[]':
-          - '{job="linkerd-proxy"}'
-          - '{job="linkerd-controller"}'
+          - '{__name__=~"workload:(.*)"}'
+          - '{__name__=~"pilot(.*)"}'
 
     - job_name: kubernetes-cadvisers
       scheme: https

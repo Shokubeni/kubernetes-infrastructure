@@ -5,33 +5,25 @@ variable "network_config" {
     nat_instance_type  = string
     private_subnets    = map(string)
     public_subnets     = map(string)
-    tcp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
-    udp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
-    domain_info        = object({
-      private_zone = string
-      public_zone  = string
-      domain_name  = string
-    })
   })
 }
 
 variable "runtime_config" {
   type = object({
-    token_schedule = string
-    prod_cluster   = bool
+    k8s_version = string
 
-    iam_access = list(object({
-      groups = list(string)
-      role   = string
-      name   = string
+    auth_accounts = list(string)
+
+    auth_users = list(object({
+      userarn  = string
+      username = string
+      groups   = list(string)
+    }))
+
+    auth_roles = list(object({
+      rolearn  = string
+      username = string
+      groups   = list(string)
     }))
 
     backups = object({
@@ -41,23 +33,20 @@ variable "runtime_config" {
       resources  = list(string)
     })
 
-    cluster = object({
-      authenticator = string
-      kubernetes    = string
-      docker        = string
-      velero        = string
+    logs = object({
+      retention = number
+      types     = list(string)
     })
   })
 }
 
 variable "cluster_config" {
   type = object({
-    id         = string
-    name       = string
-    label      = string
-    account    = string
-    region     = string
-    prod       = bool
+    id      = string
+    name    = string
+    label   = string
+    account = string
+    region  = string
   })
 }
 

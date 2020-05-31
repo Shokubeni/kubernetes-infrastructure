@@ -5,17 +5,8 @@ variable "network_config" {
     nat_instance_type  = string
     private_subnets    = map(string)
     public_subnets     = map(string)
-    tcp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
-    udp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
-    domain_info        = object({
+
+    domain_info = object({
       private_zone = string
       public_zone  = string
       domain_name  = string
@@ -23,13 +14,12 @@ variable "network_config" {
   })
 }
 
-variable "cluster_config" {
+variable "cluster_data" {
   type = object({
-    id         = string
-    name       = string
-    label      = string
-    account    = string
-    region     = string
-    prod       = bool
+    id      = string
+    name    = string
+    label   = string
+    account = string
+    region  = string
   })
 }

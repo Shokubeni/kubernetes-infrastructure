@@ -5,16 +5,7 @@ variable "network_config" {
     nat_instance_type  = string
     private_subnets    = map(string)
     public_subnets     = map(string)
-    tcp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
-    udp_services       = list(object({
-      namespace = string
-      workload  = string
-      port      = number
-    }))
+
     domain_info        = object({
       private_zone = string
       public_zone  = string

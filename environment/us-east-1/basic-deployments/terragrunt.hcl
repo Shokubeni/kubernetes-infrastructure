@@ -5,7 +5,7 @@ terraform {
     optional_var_files = ["${get_terragrunt_dir()}/${find_in_parent_folders("parameters.tfvars", "ignore")}"]
     commands = get_terraform_commands_that_need_vars()
     arguments = [
-      "-var", "provider_profile=${get_env("TF_VAR_AWS_PROFILE", "cluster_operator")}",
+      "-var", "provider_profile=${get_env("TF_VAR_AWS_PROFILE", "k8s_operations")}",
       "-var", "smtp_alerts_user=${get_env("TF_VAR_SMTP_ALERTS_USER", false)}",
       "-var", "smtp_alerts_pass=${get_env("TF_VAR_SMTP_ALERTS_PASS", false)}",
       "-var", "smtp_metrics_user=${get_env("TF_VAR_SMTP_METRICS_USER", false)}",
