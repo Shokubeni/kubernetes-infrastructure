@@ -6,7 +6,7 @@ variable "network_config" {
     private_subnets    = map(string)
     public_subnets     = map(string)
 
-    domain_info        = object({
+    domain_info = object({
       private_zone = string
       public_zone  = string
       domain_name  = string
@@ -14,18 +14,6 @@ variable "network_config" {
   })
 }
 
-variable "balancer_data" {
-  type = object({
-    dns  = string
-    id   = string
-    zone = string
-  })
-}
-
-variable "provider_profile" {
-  type = string
-}
-
-variable "provider_region" {
+variable "balancer_host" {
   type = string
 }

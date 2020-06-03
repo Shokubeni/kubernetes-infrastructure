@@ -6,7 +6,7 @@ metadata:
   labels:
     k8s-app: kube-state-metrics
   name: kube-state-metrics
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
 spec:
   selector:
     matchLabels:
@@ -17,10 +17,9 @@ spec:
       labels:
         k8s-app: kube-state-metrics
     spec:
-      serviceAccountName: kube-state-metrics
       containers:
         - name: kube-state-metrics
-          image: quay.io/coreos/kube-state-metrics:v1.9.5
+          image: quay.io/coreos/kube-state-metrics:v1.9.7
           ports:
             - name: http-metrics
               containerPort: 8080
@@ -39,5 +38,3 @@ spec:
             limits:
               memory: 256Mi
               cpu: 50m
-        
----

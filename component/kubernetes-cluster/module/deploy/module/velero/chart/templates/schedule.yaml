@@ -1,0 +1,29 @@
+{{- range $backup := $.Values.backups }}
+---
+
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: {{ $backup.name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  schedule: {{ $backup.schedule }}
+  template:
+    ttl: {{ $backup.lifetime }}
+    includedNamespaces:
+      {{- range $namespace := $backup.includeNamespaces }}
+      - "{{ $namespace }}"
+      {{- end }}
+    includedResources:
+      {{- range $resource := $backup.includeResources }}
+      - "{{ $resource }}"
+      {{- end }}
+    excludedNamespaces:
+      {{- range $namespace := $backup.excludeNamespaces }}
+      - "{{ $namespace }}"
+      {{- end }}
+    excludedResources:
+      {{- range $resource := $backup.excludeResources }}
+      - "{{ $resource }}"
+      {{- end }}
+{{- end }}

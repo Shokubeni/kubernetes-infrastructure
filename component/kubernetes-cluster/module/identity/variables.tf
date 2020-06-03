@@ -16,12 +16,3 @@ variable "cluster_data" {
     region  = string
   })
 }
-
-variable "bucket_data" {
-  type = object({
-    id     = string
-    arn    = string
-    name   = string
-    region = string
-  })
-}

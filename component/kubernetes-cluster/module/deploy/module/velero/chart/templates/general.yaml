@@ -1,0 +1,135 @@
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  creationTimestamp: null
+  labels:
+    component: velero
+  name: velero
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: velero
+  namespace: {{ $.Release.Namespace }}
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: {{ $.Values.roleArn }}
+  creationTimestamp: null
+  labels:
+    component: velero
+  name: velero
+  namespace: {{ $.Release.Namespace }}
+---
+
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  creationTimestamp: null
+  labels:
+    component: velero
+  name: default
+  namespace: {{ $.Release.Namespace }}
+spec:
+  config:
+    region: {{ $.Values.bucketRegion }}
+  objectStorage:
+    bucket: {{ $.Values.bucketName }}
+  provider: aws
+---
+
+apiVersion: velero.io/v1
+kind: VolumeSnapshotLocation
+metadata:
+  creationTimestamp: null
+  labels:
+    component: velero
+  name: default
+  namespace: {{ $.Release.Namespace }}
+spec:
+  config:
+    region: {{ $.Values.bucketRegion }}
+  provider: aws
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    component: velero
+  name: velero
+  namespace: {{ $.Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      deploy: velero
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8085"
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        component: velero
+        deploy: velero
+    spec:
+      securityContext:
+        fsGroup: 65534
+      containers:
+      - args:
+        - server
+        - --features=
+        command:
+        - /velero
+        env:
+        - name: VELERO_SCRATCH_DIR
+          value: /scratch
+        - name: VELERO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: LD_LIBRARY_PATH
+          value: /plugins
+        image: velero/velero:v1.4.0
+        imagePullPolicy: IfNotPresent
+        name: velero
+        ports:
+        - containerPort: 8085
+          name: metrics
+        resources:
+          limits:
+            cpu: "1"
+            memory: 256Mi
+          requests:
+            cpu: 500m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /plugins
+          name: plugins
+        - mountPath: /scratch
+          name: scratch
+      initContainers:
+      - image: velero/velero-plugin-for-aws:v1.0.1
+        imagePullPolicy: IfNotPresent
+        name: velero-plugin-for-aws
+        resources: {}
+        volumeMounts:
+        - mountPath: /target
+          name: plugins
+      restartPolicy: Always
+      serviceAccountName: velero
+      volumes:
+      - emptyDir: {}
+        name: plugins
+      - emptyDir: {}
+        name: scratch

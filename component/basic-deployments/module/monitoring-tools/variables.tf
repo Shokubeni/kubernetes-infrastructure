@@ -25,20 +25,6 @@ variable "smtp_config" {
   })
 }
 
-variable "cluster_config" {
-  type = object({
-    id      = string
-    name    = string
-    label   = string
-    account = string
-    region  = string
-  })
-}
-
-variable "config_path" {
-  type = string
-}
-
 variable "slack_channel" {
   type = string
 }

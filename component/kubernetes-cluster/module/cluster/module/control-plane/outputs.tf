@@ -2,7 +2,7 @@ output "control_plane_authority" {
   value = aws_eks_cluster.control_plane.certificate_authority[0].data
 
   depends_on = [
-    aws_eks_cluster.control_plane
+    aws_eks_cluster.control_plane,
   ]
 }
 

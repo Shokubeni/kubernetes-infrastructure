@@ -22,10 +22,3 @@ output "nat_instance" {
     group_arn = module.security_group.nat_instance_group_arn
   }
 }
-
-output "backup_user" {
-  value = {
-    user_id  = module.entity_iam_user.backup_user_id
-    user_arn = module.entity_iam_user.backup_user_arn
-  }
-}

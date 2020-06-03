@@ -5,42 +5,16 @@ variable "network_config" {
     nat_instance_type  = string
     private_subnets    = map(string)
     public_subnets     = map(string)
-  })
-}
 
-variable "runtime_config" {
-  type = object({
-    k8s_version = string
-
-    auth_accounts = list(string)
-
-    auth_users = list(object({
-      userarn  = string
-      username = string
-      groups   = list(string)
-    }))
-
-    auth_roles = list(object({
-      rolearn  = string
-      username = string
-      groups   = list(string)
-    }))
-
-    backups = object({
-      schedule   = string
-      lifetime   = string
-      namespaces = list(string)
-      resources  = list(string)
-    })
-
-    logs = object({
-      retention = number
-      types     = list(string)
+    domain_info = object({
+      private_zone = string
+      public_zone  = string
+      domain_name  = string
     })
   })
 }
 
-variable "cluster_config" {
+variable "cluster_data" {
   type = object({
     id      = string
     name    = string
@@ -50,12 +24,10 @@ variable "cluster_config" {
   })
 }
 
-variable "network_data" {
+variable "openid_provider" {
   type = object({
-    internet_gateway_id = string
-    private_subnet_ids  = list(string)
-    public_subnet_ids   = list(string)
-    virtual_cloud_id    = string
+    arn = string
+    url = string
   })
 }
 

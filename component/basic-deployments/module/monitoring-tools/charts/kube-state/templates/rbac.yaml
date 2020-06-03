@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kube-state-metrics
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
 
 ---
 
@@ -19,12 +19,11 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kube-state-metrics
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ $.Release.Namespace }}
 
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
-# kubernetes versions before 1.8.0 should use rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: kube-state-metrics
@@ -83,5 +82,3 @@ rules:
     resources:
       - verticalpodautoscalers
     verbs: ["list", "watch"]
-
----

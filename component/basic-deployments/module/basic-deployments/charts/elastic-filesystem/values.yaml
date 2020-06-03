@@ -1,6 +1,0 @@
-clusterRegion: ${cluster_region}
-domainName: ${domain_name}
-
-efs:
-  dnsName: ${efs_dns_name}
-  id: ${efs_id}

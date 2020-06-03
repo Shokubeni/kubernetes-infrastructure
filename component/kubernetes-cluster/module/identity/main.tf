@@ -5,13 +5,6 @@ module "security_group" {
   cluster_data     = var.cluster_data
 }
 
-module "entity_iam_user" {
-  source = "./module/entity-iam-user"
-
-  cluster_data = var.cluster_data
-  bucket_data = var.bucket_data
-}
-
 module "entity_iam_role" {
   source = "./module/entity-iam-role"
 

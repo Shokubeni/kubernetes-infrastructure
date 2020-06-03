@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   name: grafana
   labels:
     app: grafana
@@ -55,14 +55,10 @@ spec:
               mountPath: "/etc/grafana/"
             - name: cluster-dashboard
               mountPath: "/var/lib/grafana/dashboards/cluster"
-            - name: ingress-dashboard
-              mountPath: "/var/lib/grafana/dashboards/ingress"
-            - name: linkerd-dashboard-first
-              mountPath: "/var/lib/grafana/dashboards/linkerd-first"
-            - name: linkerd-dashboard-second
-              mountPath: "/var/lib/grafana/dashboards/linkerd-second"
-            - name: linkerd-dashboard-third
-              mountPath: "/var/lib/grafana/dashboards/linkerd-third"
+#            - name: istio-dashboard-first
+#              mountPath: "/var/lib/grafana/dashboards/istio-first"
+#            - name: istio-dashboard-second
+#              mountPath: "/var/lib/grafana/dashboards/istio-second"
             - name: datasources
               mountPath: "/etc/grafana/provisioning/datasources/"
             - name: providers
@@ -82,18 +78,12 @@ spec:
         - name: cluster-dashboard
           configMap:
             name: cluster-dashboard
-        - name: ingress-dashboard
-          configMap:
-            name: ingress-dashboard
-        - name: linkerd-dashboard-first
-          configMap:
-            name: linkerd-dashboard-first
-        - name: linkerd-dashboard-second
-          configMap:
-            name: linkerd-dashboard-second
-        - name: linkerd-dashboard-third
-          configMap:
-            name: linkerd-dashboard-third
+#        - name: istio-dashboard-first
+#          configMap:
+#            name: istio-dashboard-first
+#        - name: istio-dashboard-second
+#          configMap:
+#            name: istio-dashboard-second
         - name: grafana-data
           persistentVolumeClaim:
             claimName: grafana-data

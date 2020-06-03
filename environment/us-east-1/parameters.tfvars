@@ -23,18 +23,25 @@ runtime_config = {
     }
   ]
 
-  backups = {
-    schedule   = "cron(0 0 ? * * *)"
-    lifetime   = "360h0m0s"
-    resources  = ["*"]
-    namespaces = [
-      "basic-deployments",
-      "monitoring-tools",
-      "command-center",
-      "gitlab-runners",
-      "ocp-production",
-    ]
-  }
+  backups = [{
+    name     = "all-cluster"
+    schedule = "0 3 * * *"
+    lifetime = "360h0m0s"
+    include  = {
+      resources  = ["*"]
+      namespaces = [
+        "basic-deployments",
+        "monitoring-tools",
+        "command-center",
+        "gitlab-runners",
+        "ocp-production",
+      ]
+    }
+    exclude = {
+      resources  = []
+      namespaces = []
+    }
+  }]
 
   logs = {
     retention = 7,
@@ -63,7 +70,7 @@ worker_configs = [{
     min_size            = 1
     max_size            = 5
     on_demand_capasity  = 0
-    desired_capacity    = 3
+    desired_capacity    = 2
     kubelet_extra_args  = {
       "--node-labels" = [
         "node.smart-gears.io/lifecycle=spot",

@@ -16,13 +16,19 @@ variable "runtime_config" {
       groups   = list(string)
     }))
 
-    backups = object({
-      schedule   = string
-      lifetime   = string
-      namespaces = list(string)
-      resources  = list(string)
-    })
-
+    backups = list(object({
+      name     = string
+      schedule = string
+      lifetime = string
+      include = object({
+        namespaces = list(string)
+        resources  = list(string)
+      })
+      exclude = object({
+        namespaces = list(string)
+        resources  = list(string)
+      })
+    }))
     logs = object({
       retention = number
       types     = list(string)

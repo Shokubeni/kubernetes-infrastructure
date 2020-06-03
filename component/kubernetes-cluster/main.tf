@@ -5,7 +5,7 @@ terraform {
 provider "aws" {
   profile = var.provider_profile
   region  = var.provider_region
-  version = "~> 2.60"
+  version = "2.60"
 }
 
 module "prebuilt" {
@@ -27,7 +27,6 @@ module "identity" {
 
   cluster_data   = module.prebuilt.cluster_data
   network_data   = module.network.network_data
-  bucket_data    = module.prebuilt.backup_bucket
 }
 
 module "gateway" {
@@ -64,7 +63,9 @@ module "worker" {
 module "deploy" {
   source = "./module/deploy"
 
-  control_plane = module.cluster.control_plane
-  bucket_data   = module.prebuilt.backup_bucket
-  root_dir      = var.root_dir
+  openid_provider = module.cluster.openid_provider
+  control_plane   = module.cluster.control_plane
+  cluster_data    = module.prebuilt.cluster_data
+  runtime_config  = var.runtime_config
+  root_dir        = var.root_dir
 }

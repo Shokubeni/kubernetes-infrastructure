@@ -1,115 +1,104 @@
-locals {
-  public_subnets = var.network_data.public_subnet_ids
-}
-
-resource "aws_security_group" "efs" {
-  name   = "${var.cluster_config.label}-efs_${var.cluster_config.id}"
-  vpc_id = var.network_data.virtual_cloud_id
-
-  ingress {
-    description = "Allows NFS traffic"
-    from_port   = 2049
-    to_port     = 2049
-    protocol    = "tcp"
-    cidr_blocks = [var.network_config.virtual_cloud_cidr]
-  }
-
-  egress {
-    description = "Allows NFS traffic"
-    from_port   = 2049
-    to_port     = 2049
-    protocol    = "tcp"
-    cidr_blocks = [var.network_config.virtual_cloud_cidr]
-  }
-
-  tags = {
-    "Name" = "${var.cluster_config.name} Network Filesystem",
-    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
-  }
-}
-
-resource "aws_efs_file_system" "efs" {
-  creation_token = "${var.cluster_config.label}.${var.cluster_config.id}"
-
-  tags = {
-    "Name" = "${var.cluster_config.name} Cluster Filesystem",
-    "kubernetes.io/cluster/${var.cluster_config.id}" = "owned"
-  }
-}
-
-resource "aws_efs_mount_target" "efs" {
-  count = length(local.public_subnets)
-
-  subnet_id       = local.public_subnets[count.index]
-  file_system_id  = aws_efs_file_system.efs.id
-  security_groups = [aws_security_group.efs.id]
-}
-
 resource "kubernetes_namespace" "basic_deployments" {
   metadata {
-    annotations = {
-      "linkerd.io/inject" = "enabled"
+    labels = {
+      "istio-injection" = "enabled"
     }
 
     name = "basic-deployments"
   }
 }
 
-data "template_file" "acme_cert_manager" {
-  template = file("${path.module}/charts/acme-cert-manager/values.yaml")
+data "aws_iam_policy_document" "cert_manager_assume_role" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
 
-  vars = {
-    domain_name    = var.network_config.domain_info.domain_name
-    public_zone    = var.network_config.domain_info.public_zone
-    cluster_region = var.cluster_config.region
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(var.openid_provider.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:basic-deployments:cert-manager"]
+    }
+
+    principals {
+      identifiers = [var.openid_provider.arn]
+      type        = "Federated"
+    }
   }
 }
 
-resource "helm_release" "acme_cert_manager" {
-  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/acme-cert-manager"
-  name      = "acme-cert-manager"
-  namespace = "basic-deployments"
-
-  values = [
-    data.template_file.acme_cert_manager.rendered
-  ]
-
-  depends_on = [
-    kubernetes_namespace.basic_deployments
-  ]
+resource "aws_iam_role" "cert_manager" {
+  name               = "${var.cluster_data.name}CertManager_${var.cluster_data.id}"
+  assume_role_policy = data.aws_iam_policy_document.cert_manager_assume_role.json
+  description        = "Provides appropriate rights for CertManager deployment"
 }
 
-resource "helm_release" "ebs_block_storage" {
-  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/ebs-block-storage"
-  name      = "ebs-block-storage"
-  namespace = "basic-deployments"
-
-  depends_on = [
-    kubernetes_namespace.basic_deployments
-  ]
-}
-
-data "template_file" "elastic-filesystem" {
-  template = file("${path.module}/charts/elastic-filesystem/values.yaml")
+data "template_file" "cert_manager" {
+  template = file("${path.module}/charts/cert-manager/policy/route53.json")
 
   vars = {
-    domain_name    = var.network_config.domain_info.domain_name
-    cluster_region = var.cluster_config.region
-    efs_dns_name   = aws_efs_file_system.efs.dns_name
-    efs_id         = aws_efs_file_system.efs.id
+    hosted_zone = var.network_config.domain_info.public_zone
   }
 }
 
-resource "helm_release" "elastic_filesystem" {
-  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/elastic-filesystem"
-  name      = "elastic-filesystem"
-  namespace = "basic-deployments"
+resource "aws_iam_role_policy" "cert_manager_policy" {
+  policy = data.template_file.cert_manager.rendered
+  role   = aws_iam_role.cert_manager.id
+  name   = "CertManagerPolicy"
+}
 
-  values = [
-    data.template_file.elastic-filesystem.rendered
+resource "helm_release" "cert_manager" {
+  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/cert-manager"
+  namespace = "basic-deployments"
+  name      = "cert-manager"
+
+  set {
+    name  = "clusterRegion"
+    value = var.cluster_data.region
+  }
+
+  set {
+    name  = "publicZone"
+    value = var.network_config.domain_info.public_zone
+  }
+
+  set {
+    name  = "domainName"
+    value = var.network_config.domain_info.domain_name
+  }
+
+  set {
+    name  = "roleArn"
+    value = aws_iam_role.cert_manager.arn
+  }
+
+  depends_on = [
+    kubernetes_namespace.basic_deployments,
+    aws_iam_role_policy.cert_manager_policy
   ]
+}
+
+resource "helm_release" "ebs_storage" {
+  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/ebs-storage"
+  namespace = "basic-deployments"
+  name      = "ebs-storage"
 
   depends_on = [
     kubernetes_namespace.basic_deployments
+  ]
+}
+
+resource "helm_release" "open_vpn" {
+  chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/charts/open-vpn"
+  namespace = "basic-deployments"
+  name      = "open-vpn"
+
+  set {
+    name  = "domainName"
+    value = var.network_config.domain_info.domain_name
+  }
+
+  depends_on = [
+    kubernetes_namespace.basic_deployments,
+    helm_release.cert_manager,
   ]
 }

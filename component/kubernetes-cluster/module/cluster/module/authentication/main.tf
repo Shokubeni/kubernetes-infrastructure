@@ -14,7 +14,6 @@ provider "kubernetes" {
   version                = "~> 1.10"
 }
 
-
 resource "null_resource" "wait_for_cluster" {
   provisioner "local-exec" {
     interpreter = ["/bin/sh", "-c"]
@@ -65,8 +64,8 @@ locals {
 
 resource "aws_iam_openid_connect_provider" "oidc_provider" {
   url             = var.control_plane_iossuer
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
   client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = []
 }
 
 resource "local_file" "kubeconfig" {

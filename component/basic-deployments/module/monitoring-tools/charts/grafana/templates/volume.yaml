@@ -3,7 +3,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   name: grafana-data
 spec:
   storageClassName: aws-ebs-gp2

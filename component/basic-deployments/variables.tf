@@ -43,12 +43,19 @@ variable "runtime_config" {
       groups   = list(string)
     }))
 
-    backups = object({
-      schedule   = string
-      lifetime   = string
-      namespaces = list(string)
-      resources  = list(string)
-    })
+    backups = list(object({
+      name     = string
+      schedule = string
+      lifetime = string
+      include = object({
+        namespaces = list(string)
+        resources  = list(string)
+      })
+      exclude = object({
+        namespaces = list(string)
+        resources  = list(string)
+      })
+    }))
 
     logs = object({
       retention = number
@@ -65,7 +72,7 @@ variable "network_config" {
     private_subnets    = map(string)
     public_subnets     = map(string)
 
-    domain_info        = object({
+    domain_info = object({
       private_zone = string
       public_zone  = string
       domain_name  = string

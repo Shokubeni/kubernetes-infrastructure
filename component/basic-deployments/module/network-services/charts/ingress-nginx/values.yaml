@@ -1,4 +1,0 @@
-tcpServices:
-  ${ingress_tcp_services}
-udpServices:
-  ${ingress_udp_services}
