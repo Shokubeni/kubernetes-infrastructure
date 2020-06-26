@@ -1,0 +1,89 @@
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  serviceName: grafana
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+      containers:
+        - name: grafana
+          image: grafana/grafana:7.0.4
+          ports:
+            - containerPort: 3000
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 514Mi
+          env:
+            - name: GF_SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: host
+            - name: GF_SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: user
+            - name: GF_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp
+                  key: pass
+          volumeMounts:
+            - name: config-ini
+              mountPath: "/etc/grafana/"
+            - name: cluster-dashboard
+              mountPath: "/var/lib/grafana/dashboards/cluster"
+            - name: istio-dashboard-1
+              mountPath: "/var/lib/grafana/dashboards/istio-1"
+            - name: istio-dashboard-2
+              mountPath: "/var/lib/grafana/dashboards/istio-2"
+            - name: datasources
+              mountPath: "/etc/grafana/provisioning/datasources/"
+            - name: providers
+              mountPath: "/etc/grafana/provisioning/dashboards/"
+            - name: grafana-data
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: config-ini
+          configMap:
+            name: grafana-ini
+        - name: datasources
+          configMap:
+            name: grafana-datasources
+        - name: providers
+          configMap:
+            name: grafana-providers
+        - name: cluster-dashboard
+          configMap:
+            name: cluster-dashboard
+        - name: istio-dashboard-1
+          configMap:
+            name: istio-dashboard-1
+        - name: istio-dashboard-2
+          configMap:
+            name: istio-dashboard-2
+        - name: grafana-data
+          persistentVolumeClaim:
+            claimName: grafana-data

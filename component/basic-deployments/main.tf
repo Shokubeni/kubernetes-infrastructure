@@ -57,21 +57,21 @@ module "basic_deployments" {
   root_dir        = var.root_dir
 }
 
-//module "monitoring_tools" {
-//  source = "./module/monitoring-tools"
-//
-//  slack_channel     = var.slack_channel
-//  slack_hook        = var.slack_hook
-//  grafana_client_id = var.grafana_client_id
-//  grafana_secret    = var.grafana_secret
-//  network_config    = var.network_config
-//  root_dir          = var.root_dir
-//  smtp_config       = {
-//    host         = var.smtp_host
-//    port         = var.smtp_port
-//    metrics_user = var.smtp_metrics_user
-//    metrics_pass = var.smtp_metrics_pass
-//    alerts_user  = var.smtp_alerts_user
-//    alerts_pass  = var.smtp_alerts_pass
-//  }
-//}
+module "monitoring_tools" {
+  source = "./module/monitoring-tools"
+
+  slack_channel     = var.slack_channel
+  slack_hook        = var.slack_hook
+  grafana_client_id = var.grafana_client_id
+  grafana_secret    = var.grafana_secret
+  network_config    = var.network_config
+  root_dir          = var.root_dir
+  smtp_config       = {
+    host         = var.smtp_host
+    port         = var.smtp_port
+    metrics_user = var.smtp_metrics_user
+    metrics_pass = var.smtp_metrics_pass
+    alerts_user  = var.smtp_alerts_user
+    alerts_pass  = var.smtp_alerts_pass
+  }
+}

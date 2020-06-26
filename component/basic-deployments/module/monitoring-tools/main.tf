@@ -8,127 +8,47 @@ resource "kubernetes_namespace" "monitoring_tools" {
   }
 }
 
-resource "helm_release" "alertmanager" {
-  chart     = "${var.root_dir}/component/basic-deployments/module/monitoring-tools/charts/alertmanager"
-  name      = "alertmanager"
-  namespace = "monitoring-tools"
+module "alertmanager" {
+  source = "./module/alertmanager"
 
-  set {
-    name  = "smtp.from"
-    value = "alerts@${var.network_config.domain_info.domain_name}"
-  }
-
-  set {
-    name  = "smtp.host"
-    value = "${var.smtp_config["host"]}:${var.smtp_config["port"]}"
-  }
-
-  set {
-    name  = "smtp.user"
-    value = var.smtp_config.alerts_user
-  }
-
-  set {
-    name  = "smtp.pass"
-    value = var.smtp_config.alerts_pass
-  }
-
-  set {
-    name  = "slack.channel"
-    value = var.slack_channel
-  }
-
-  set {
-    name  = "slack.hook"
-    value = var.slack_hook
-  }
-
-  depends_on = [
-    kubernetes_namespace.monitoring_tools
-  ]
+  chart_namespace = kubernetes_namespace.monitoring_tools.metadata[0].name
+  network_config  = var.network_config
+  smtp_config     = var.smtp_config
+  slack_channel   = var.slack_channel
+  slack_hook      = var.slack_hook
+  root_dir        = var.root_dir
 }
 
-resource "helm_release" "grafana" {
-  chart     = "${var.root_dir}/component/basic-deployments/module/monitoring-tools/charts/grafana"
-  name      = "grafana"
-  namespace = "monitoring-tools"
+module "grafana" {
+  source = "./module/grafana"
 
-  set {
-    name  = "domainName"
-    value = var.network_config.domain_info.domain_name
-  }
 
-  set {
-    name  = "serverUrl"
-    value = "https://metrics.${var.network_config.domain_info.domain_name}"
-  }
-
-  set {
-    name  = "vpnCidr"
-    value = var.network_config.vpn_clients_cidr
-  }
-
-  set {
-    name  = "auth.clientId"
-    value = var.grafana_client_id
-  }
-
-  set {
-    name  = "auth.secret"
-    value = var.grafana_secret
-  }
-
-  set {
-    name  = "smtp.from"
-    value = "metrics@${var.network_config.domain_info.domain_name}"
-  }
-
-  set {
-    name  = "smtp.host"
-    value = base64encode("${var.smtp_config.host}:${var.smtp_config.port}")
-  }
-
-  set {
-    name  = "smtp.user"
-    value = base64encode(var.smtp_config.metrics_user)
-  }
-
-  set {
-    name  = "smtp.pass"
-    value = base64encode(var.smtp_config.metrics_pass)
-  }
-
-  depends_on = [
-    kubernetes_namespace.monitoring_tools
-  ]
+  chart_namespace   = kubernetes_namespace.monitoring_tools.metadata[0].name
+  grafana_client_id = var.grafana_client_id
+  grafana_secret    = var.grafana_secret
+  network_config    = var.network_config
+  smtp_config       = var.smtp_config
+  root_dir          = var.root_dir
 }
 
-resource "helm_release" "kube_state" {
-  chart        = "${var.root_dir}/component/basic-deployments/module/monitoring-tools/charts/kube-state"
-  name         = "kube-state"
-  namespace    = "monitoring-tools"
+module "kube_state" {
+  source = "./module/kube-state"
 
-  depends_on = [
-    kubernetes_namespace.monitoring_tools
-  ]
+
+  chart_namespace = kubernetes_namespace.monitoring_tools.metadata[0].name
+  root_dir        = var.root_dir
 }
 
-resource "helm_release" "node_exporter" {
-  chart        = "${var.root_dir}/component/basic-deployments/module/monitoring-tools/charts/node-exporter"
-  name         = "node-exporter"
-  namespace    = "monitoring-tools"
+module "node_exporter" {
+  source = "./module/node-exporter"
 
-  depends_on = [
-    kubernetes_namespace.monitoring_tools
-  ]
+  chart_namespace = kubernetes_namespace.monitoring_tools.metadata[0].name
+  root_dir        = var.root_dir
 }
 
-resource "helm_release" "prometheus" {
-  chart        = "${var.root_dir}/component/basic-deployments/module/monitoring-tools/charts/prometheus"
-  name         = "prometheus"
-  namespace    = "monitoring-tools"
+module "prometheus" {
+  source = "./module/prometheus"
 
-  depends_on = [
-    kubernetes_namespace.monitoring_tools
-  ]
+  chart_namespace = kubernetes_namespace.monitoring_tools.metadata[0].name
+  root_dir        = var.root_dir
 }

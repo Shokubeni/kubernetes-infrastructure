@@ -6,7 +6,7 @@ variable "network_config" {
     private_subnets    = map(string)
     public_subnets     = map(string)
 
-    domain_info = object({
+    domain_info        = object({
       private_zone = string
       public_zone  = string
       domain_name  = string
@@ -14,21 +14,27 @@ variable "network_config" {
   })
 }
 
-variable "cluster_data" {
+variable "smtp_config" {
   type = object({
-    id      = string
-    name    = string
-    label   = string
-    account = string
-    region  = string
+    host         = string
+    port         = string
+    metrics_user = string
+    metrics_pass = string
+    alerts_user  = string
+    alerts_pass  = string
   })
 }
 
-variable "openid_provider" {
-  type = object({
-    arn = string
-    url = string
-  })
+variable "grafana_client_id" {
+  type = string
+}
+
+variable "grafana_secret" {
+  type = string
+}
+
+variable "chart_namespace" {
+  type = string
 }
 
 variable "root_dir" {

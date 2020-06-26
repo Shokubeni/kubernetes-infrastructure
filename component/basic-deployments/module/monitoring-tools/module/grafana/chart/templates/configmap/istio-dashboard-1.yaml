@@ -1,0 +1,14 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: istio-dashboard-1
+data:
+  istio-control-plane.json: |-
+    {{ $.Files.Get "dashboards/istio-control-plane.json" | nindent 4 }}
+  istio-galley.json: |-
+    {{ $.Files.Get "dashboards/istio-galley.json" | nindent 4 }}
+  istio-mesh.json: |-
+    {{ $.Files.Get "dashboards/istio-mesh.json" | nindent 4 }}

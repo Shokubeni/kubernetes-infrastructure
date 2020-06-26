@@ -1,0 +1,14 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: istio-dashboard-2
+data:
+  istio-workload.json: |-
+    {{ $.Files.Get "dashboards/istio-workload.json" | nindent 4 }}
+  istio-service.json: |-
+    {{ $.Files.Get "dashboards/istio-service.json" | nindent 4 }}
+  istio-mixer.json: |-
+    {{ $.Files.Get "dashboards/istio-mixer.json" | nindent 4 }}
