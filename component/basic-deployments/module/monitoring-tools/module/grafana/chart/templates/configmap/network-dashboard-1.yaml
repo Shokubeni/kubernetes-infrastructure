@@ -1,0 +1,14 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: network-dashboard-1
+data:
+  cluster-total.json: |-
+    {{ $.Files.Get "dashboards/cluster/network/cluster-total.json" | nindent 4 }}
+  ns-workloads.json: |-
+    {{ $.Files.Get "dashboards/cluster/network/ns-workloads.json" | nindent 4 }}
+  ns-pods.json: |-
+    {{ $.Files.Get "dashboards/cluster/network/ns-pods.json" | nindent 4 }}

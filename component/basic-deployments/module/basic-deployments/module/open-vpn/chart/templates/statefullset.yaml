@@ -3,29 +3,32 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: openvpn
   namespace: {{ $.Release.Namespace }}
+  name: openvpn
   labels:
+    version: v{{ $.Chart.AppVersion }}
     app: openvpn
 spec:
   serviceName: openvpn
   replicas: 1
   selector:
     matchLabels:
+      version: v{{ $.Chart.AppVersion }}
       app: openvpn
   template:
     metadata:
       labels:
+        version: v{{ $.Chart.AppVersion }}
         app: openvpn
     spec:
       containers:
         - name: openvpn
-          image: "jfelten/openvpn-docker:1.1.0"
+          image: jfelten/openvpn-docker:1.1.0
           imagePullPolicy: IfNotPresent
           command: ["/etc/openvpn/setup/configure.sh"]
           ports:
-            - containerPort: 1194
-              name: openvpn
+            - name: tcp-server
+              containerPort: 1194
           securityContext:
             capabilities:
               add:

@@ -6,16 +6,19 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   name: grafana
   labels:
+    version: v{{ $.Chart.AppVersion }}
     app: grafana
 spec:
   serviceName: grafana
   replicas: 1
   selector:
     matchLabels:
+      version: v{{ $.Chart.AppVersion }}
       app: grafana
   template:
     metadata:
       labels:
+        version: v{{ $.Chart.AppVersion }}
         app: grafana
     spec:
       securityContext:
@@ -53,12 +56,26 @@ spec:
           volumeMounts:
             - name: config-ini
               mountPath: "/etc/grafana/"
-            - name: cluster-dashboard
-              mountPath: "/var/lib/grafana/dashboards/cluster"
+            - name: component-dashboard-1
+              mountPath: "/var/lib/grafana/dashboards/component/component-1"
+            - name: component-dashboard-2
+              mountPath: "/var/lib/grafana/dashboards/component/component-2"
+            - name: component-dashboard-3
+              mountPath: "/var/lib/grafana/dashboards/component/component-3"
+            - name: component-dashboard-4
+              mountPath: "/var/lib/grafana/dashboards/component/component-4"
+            - name: compute-dashboard-1
+              mountPath: "/var/lib/grafana/dashboards/compute/compute-1"
+            - name: compute-dashboard-2
+              mountPath: "/var/lib/grafana/dashboards/compute/compute-2"
+            - name: network-dashboard-1
+              mountPath: "/var/lib/grafana/dashboards/network/network-1"
+            - name: network-dashboard-2
+              mountPath: "/var/lib/grafana/dashboards/network/network-2"
             - name: istio-dashboard-1
-              mountPath: "/var/lib/grafana/dashboards/istio-1"
+              mountPath: "/var/lib/grafana/dashboards/istio/istio-1"
             - name: istio-dashboard-2
-              mountPath: "/var/lib/grafana/dashboards/istio-2"
+              mountPath: "/var/lib/grafana/dashboards/istio/istio-2"
             - name: datasources
               mountPath: "/etc/grafana/provisioning/datasources/"
             - name: providers
@@ -75,9 +92,30 @@ spec:
         - name: providers
           configMap:
             name: grafana-providers
-        - name: cluster-dashboard
+        - name: component-dashboard-1
           configMap:
-            name: cluster-dashboard
+            name: component-dashboard-1
+        - name: component-dashboard-2
+          configMap:
+            name: component-dashboard-2
+        - name: component-dashboard-3
+          configMap:
+            name: component-dashboard-3
+        - name: component-dashboard-4
+          configMap:
+            name: component-dashboard-4
+        - name: compute-dashboard-1
+          configMap:
+            name: compute-dashboard-1
+        - name: compute-dashboard-2
+          configMap:
+            name: compute-dashboard-2
+        - name: network-dashboard-1
+          configMap:
+            name: network-dashboard-1
+        - name: network-dashboard-2
+          configMap:
+            name: network-dashboard-2
         - name: istio-dashboard-1
           configMap:
             name: istio-dashboard-1

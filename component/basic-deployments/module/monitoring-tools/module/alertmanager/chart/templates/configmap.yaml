@@ -44,7 +44,7 @@ data:
         text: >-
           {{`{{ range .Alerts }}`}}
             *Alert:* {{`{{ .Annotations.summary }}`}} - \`{{`{{ .Labels.severity }}`}}\`
-            *Description:* {{`{{ .Annotations.description }}`}}
+            *Description:* {{`{{ .Annotations.description }}`}}{{`{{ .Annotations.message }}`}}
             *Details:*
             {{`{{ range .Labels.SortedPairs }}`}} • *{{`{{ .Name }}`}}:* \`{{`{{ .Value }}`}}\`
             {{`{{ end }}`}}
@@ -58,7 +58,7 @@ data:
         text: >-
           {{`{{ range .Alerts }}`}}
             *Alert:* {{`{{ .Annotations.summary }}`}} - \`{{`{{ .Labels.severity }}`}}\`
-            *Description:* {{`{{ .Annotations.description }}`}}
+            *Description:* {{`{{ .Annotations.description }}`}}{{`{{ .Annotations.message }}`}}
             *Details:*
             {{`{{ range .Labels.SortedPairs }}`}} • *{{`{{ .Name }}`}}:* \`{{`{{ .Value }}`}}\`
             {{`{{ end }}`}}

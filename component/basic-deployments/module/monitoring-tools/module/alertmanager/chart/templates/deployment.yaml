@@ -6,15 +6,18 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   name: alertmanager
   labels:
+    version: v{{ $.Chart.AppVersion }}
     app: alertmanager
 spec:
   replicas: 1
   selector:
     matchLabels:
+      version: v{{ $.Chart.AppVersion }}
       app: alertmanager
   template:
     metadata:
       labels:
+        version: v{{ $.Chart.AppVersion }}
         app: alertmanager
     spec:
       containers:
@@ -31,7 +34,8 @@ spec:
           - '--config.file=/etc/alertmanager/config.yml'
           - '--storage.path=/alertmanager'
         ports:
-        - containerPort: 9093
+          - name: http-metrics
+            containerPort: 9093
         volumeMounts:
         - name: alertmanager-config
           mountPath: /etc/alertmanager

@@ -22,7 +22,6 @@ module "alertmanager" {
 module "grafana" {
   source = "./module/grafana"
 
-
   chart_namespace   = kubernetes_namespace.monitoring_tools.metadata[0].name
   grafana_client_id = var.grafana_client_id
   grafana_secret    = var.grafana_secret
@@ -33,7 +32,6 @@ module "grafana" {
 
 module "kube_state" {
   source = "./module/kube-state"
-
 
   chart_namespace = kubernetes_namespace.monitoring_tools.metadata[0].name
   root_dir        = var.root_dir

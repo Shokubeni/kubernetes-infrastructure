@@ -3,36 +3,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cert-manager-cainjector
   namespace: {{ $.Release.Namespace }}
+  name: cert-manager-cainjector
   labels:
-    app: cainjector
-    app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "cainjector"
-    helm.sh/chart: cert-manager-v0.15.1
+    version: v{{ $.Chart.AppVersion }}
+    app: cert-manager-cainjector
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: cainjector
-      app.kubernetes.io/instance: cert-manager
-      app.kubernetes.io/component: "cainjector"
+      version: v{{ $.Chart.AppVersion }}
+      app: cert-manager-cainjector
   template:
     metadata:
       labels:
-        app: cainjector
-        app.kubernetes.io/name: cainjector
-        app.kubernetes.io/instance: cert-manager
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: "cainjector"
-        helm.sh/chart: cert-manager-v0.15.1
+        version: v{{ $.Chart.AppVersion }}
+        app: cert-manager-cainjector
     spec:
       serviceAccountName: cert-manager-cainjector
       containers:
         - name: cert-manager
-          image: "quay.io/jetstack/cert-manager-cainjector:v0.15.1"
+          image: quay.io/jetstack/cert-manager-cainjector:v0.15.1
           imagePullPolicy: IfNotPresent
           args:
             - --v=2
@@ -49,48 +40,35 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cert-manager
   namespace: {{ $.Release.Namespace }}
+  name: cert-manager
   labels:
+    version: v{{ $.Chart.AppVersion }}
     app: cert-manager
-    app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "controller"
-    helm.sh/chart: cert-manager-v0.15.1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: cert-manager
-      app.kubernetes.io/instance: cert-manager
-      app.kubernetes.io/component: "controller"
+      version: v{{ $.Chart.AppVersion }}
+      app: cert-manager
   template:
     metadata:
       labels:
+        version: v{{ $.Chart.AppVersion }}
         app: cert-manager
-        app.kubernetes.io/name: cert-manager
-        app.kubernetes.io/instance: cert-manager
-        app.kubernetes.io/component: "controller"
-        app.kubernetes.io/managed-by: Helm
-        helm.sh/chart: cert-manager-v0.15.1
-      annotations:
-        prometheus.io/path: "/metrics"
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '9402'
     spec:
       serviceAccountName: cert-manager
       containers:
         - name: cert-manager
-          image: "quay.io/jetstack/cert-manager-controller:v0.15.1"
+          image: quay.io/jetstack/cert-manager-controller:v0.15.1
           imagePullPolicy: IfNotPresent
           args:
             - --v=2
             - --cluster-resource-namespace=$(POD_NAMESPACE)
             - --leader-election-namespace=kube-system
           ports:
-            - containerPort: 9402
-              protocol: TCP
+            - name: http-metrics
+              containerPort: 9402
           env:
             - name: POD_NAMESPACE
               valueFrom:
@@ -103,36 +81,27 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cert-manager-webhook
   namespace: {{ $.Release.Namespace }}
+  name: cert-manager-webhook
   labels:
-    app: webhook
-    app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "webhook"
-    helm.sh/chart: cert-manager-v0.15.1
+    version: v{{ $.Chart.AppVersion }}
+    app: cert-manager-webhook
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: webhook
-      app.kubernetes.io/instance: cert-manager
-      app.kubernetes.io/component: "webhook"
+      version: v{{ $.Chart.AppVersion }}
+      app: cert-manager-webhook
   template:
     metadata:
       labels:
-        app: webhook
-        app.kubernetes.io/name: webhook
-        app.kubernetes.io/instance: cert-manager
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: "webhook"
-        helm.sh/chart: cert-manager-v0.15.1
+        version: v{{ $.Chart.AppVersion }}
+        app: cert-manager-webhook
     spec:
       serviceAccountName: cert-manager-webhook
       containers:
         - name: cert-manager
-          image: "quay.io/jetstack/cert-manager-webhook:v0.15.1"
+          image: quay.io/jetstack/cert-manager-webhook:v0.15.1
           imagePullPolicy: IfNotPresent
           args:
             - --v=2
@@ -141,7 +110,7 @@ spec:
             - --dynamic-serving-ca-secret-name=cert-manager-webhook-ca
             - --dynamic-serving-dns-names=cert-manager-webhook,cert-manager-webhook.{{ $.Release.Namespace }},cert-manager-webhook.{{ $.Release.Namespace }}.svc
           ports:
-            - name: https
+            - name: https-client
               containerPort: 10250
           livenessProbe:
             httpGet:

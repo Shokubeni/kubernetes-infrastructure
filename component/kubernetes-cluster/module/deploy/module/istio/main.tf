@@ -1,9 +1,5 @@
 resource "kubernetes_namespace" "istio" {
   metadata {
-    labels = {
-      "istio-injection" = "enabled"
-    }
-
     name = "istio-system"
   }
 }

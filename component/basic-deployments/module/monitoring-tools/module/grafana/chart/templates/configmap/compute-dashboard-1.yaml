@@ -1,0 +1,14 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: compute-dashboard-1
+data:
+  cluster-total.json: |-
+    {{ $.Files.Get "dashboards/cluster/compute/cluster-total.json" | nindent 4 }}
+  knode-pods.json: |-
+    {{ $.Files.Get "dashboards/cluster/compute/node-pods.json" | nindent 4 }}
+  ns-pods.json: |-
+    {{ $.Files.Get "dashboards/cluster/compute/ns-pods.json" | nindent 4 }}

@@ -1,0 +1,14 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: component-dashboard-3
+data:
+  prometheus.json: |-
+    {{ $.Files.Get "dashboards/cluster/component/prometheus.json" | nindent 4 }}
+  scheduler.json: |-
+    {{ $.Files.Get "dashboards/cluster/component/scheduler.json" | nindent 4 }}
+  proxy.json: |-
+    {{ $.Files.Get "dashboards/cluster/component/proxy.json" | nindent 4 }}

@@ -4,8 +4,8 @@
 apiVersion: velero.io/v1
 kind: Schedule
 metadata:
-  name: {{ $backup.name }}
   namespace: {{ $.Release.Namespace }}
+  name: {{ $backup.name }}
 spec:
   schedule: {{ $backup.schedule }}
   template:

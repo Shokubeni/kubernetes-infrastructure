@@ -7,9 +7,12 @@ metadata:
   name: alertmanager
   annotations:
     prometheus.io/scrape: 'true'
+  labels:
+    app: alertmanager
 spec:
   ports:
-    - targetPort: 9093
+    - name: http-metrics
+      targetPort: 9093
       port: 9093
   selector:
     app: alertmanager

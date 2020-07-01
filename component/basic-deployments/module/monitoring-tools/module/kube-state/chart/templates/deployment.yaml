@@ -3,31 +3,73 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    k8s-app: kube-state-metrics
-  name: kube-state-metrics
   namespace: {{ $.Release.Namespace }}
+  name: kube-state
+  labels:
+    version: v{{ $.Chart.AppVersion }}
+    app: kube-state
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      k8s-app: kube-state-metrics
-  replicas: 1
+      version: v{{ $.Chart.AppVersion }}
+      app: kube-state
   template:
     metadata:
       labels:
-        k8s-app: kube-state-metrics
+        version: v{{ $.Chart.AppVersion }}
+        app: kube-state
     spec:
+      serviceAccountName: kube-state
+      hostNetwork: false
+      securityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsUser: 65534
       containers:
-        - name: kube-state-metrics
+        - name: kube-state
+          args:
+            - --collectors=certificatesigningrequests
+            - --collectors=configmaps
+            - --collectors=cronjobs
+            - --collectors=daemonsets
+            - --collectors=deployments
+            - --collectors=endpoints
+            - --collectors=horizontalpodautoscalers
+            - --collectors=ingresses
+            - --collectors=jobs
+            - --collectors=limitranges
+            - --collectors=mutatingwebhookconfigurations
+            - --collectors=namespaces
+            - --collectors=networkpolicies
+            - --collectors=nodes
+            - --collectors=persistentvolumeclaims
+            - --collectors=persistentvolumes
+            - --collectors=poddisruptionbudgets
+            - --collectors=pods
+            - --collectors=replicasets
+            - --collectors=replicationcontrollers
+            - --collectors=resourcequotas
+            - --collectors=secrets
+            - --collectors=services
+            - --collectors=statefulsets
+            - --collectors=storageclasses
+            - --collectors=validatingwebhookconfigurations
+            - --collectors=volumeattachments
+          imagePullPolicy: IfNotPresent
           image: quay.io/coreos/kube-state-metrics:v1.9.7
           ports:
             - name: http-metrics
               containerPort: 8080
-            - name: telemetry
-              containerPort: 8081
-          readinessProbe:
+          livenessProbe:
             httpGet:
               path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
               port: 8080
             initialDelaySeconds: 5
             timeoutSeconds: 5

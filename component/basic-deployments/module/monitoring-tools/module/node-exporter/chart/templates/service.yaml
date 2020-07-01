@@ -7,11 +7,12 @@ metadata:
   name: node-exporter
   annotations:
     prometheus.io/scrape: "true"
+  labels:
+    app: node-exporter
 spec:
   ports:
-    - name: metrics
-      port: 9100
-      protocol: TCP
+    - name: http-metrics
       targetPort: 9100
+      port: 9100
   selector:
     app: node-exporter

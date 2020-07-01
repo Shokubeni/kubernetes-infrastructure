@@ -47,7 +47,6 @@ metadata:
 spec:
   ports:
     - name: tcp-server
-      protocol: TCP
       targetPort: 1194
       port: 1194
   selector:

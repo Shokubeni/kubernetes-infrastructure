@@ -1,3 +1,4 @@
 apiVersion: v2
 name: alertmanager
+appVersion: 0.20.0
 version: 1.0.0

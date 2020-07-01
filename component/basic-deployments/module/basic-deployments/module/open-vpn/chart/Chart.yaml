@@ -1,3 +1,4 @@
 apiVersion: v2
 name: open-vpn
+appVersion: 1.1.0
 version: 1.0.0

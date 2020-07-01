@@ -6,16 +6,19 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   name: prometheus
   labels:
+    version: v{{ $.Chart.AppVersion }}
     app: prometheus
 spec:
   serviceName: prometheus
   replicas: 1
   selector:
     matchLabels:
+      version: v{{ $.Chart.AppVersion }}
       app: prometheus
   template:
     metadata:
       labels:
+        version: v{{ $.Chart.AppVersion }}
         app: prometheus
     spec:
       serviceAccountName: prometheus
@@ -23,7 +26,7 @@ spec:
         fsGroup: 9090
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.19.1
+          image: quay.io/prometheus/prometheus:v2.19.2
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
@@ -32,7 +35,8 @@ spec:
             - "--storage.tsdb.retention.time=5d"
             - "--storage.tsdb.retention.size=5GB"
           ports:
-            - containerPort: 9090
+            - name: http-client
+              containerPort: 9090
           resources:
             requests:
               cpu: 150m

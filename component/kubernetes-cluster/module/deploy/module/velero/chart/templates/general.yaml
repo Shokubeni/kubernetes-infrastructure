@@ -1,42 +1,33 @@
 ---
 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: velero
+  annotations:
+    eks.amazonaws.com/role-arn: {{ $.Values.roleArn }}
+---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  creationTimestamp: null
-  labels:
-    component: velero
   name: velero
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
 subjects:
-- kind: ServiceAccount
-  name: velero
-  namespace: {{ $.Release.Namespace }}
----
-
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  annotations:
-    eks.amazonaws.com/role-arn: {{ $.Values.roleArn }}
-  creationTimestamp: null
-  labels:
-    component: velero
-  name: velero
-  namespace: {{ $.Release.Namespace }}
+  - kind: ServiceAccount
+    name: velero
+    namespace: {{ .Release.Namespace }}
 ---
 
 apiVersion: velero.io/v1
 kind: BackupStorageLocation
 metadata:
-  creationTimestamp: null
-  labels:
-    component: velero
-  name: default
   namespace: {{ $.Release.Namespace }}
+  name: default
 spec:
   config:
     region: {{ $.Values.bucketRegion }}
@@ -48,11 +39,8 @@ spec:
 apiVersion: velero.io/v1
 kind: VolumeSnapshotLocation
 metadata:
-  creationTimestamp: null
-  labels:
-    component: velero
-  name: default
   namespace: {{ $.Release.Namespace }}
+  name: default
 spec:
   config:
     region: {{ $.Values.bucketRegion }}
@@ -62,26 +50,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    component: velero
-  name: velero
   namespace: {{ $.Release.Namespace }}
+  name: velero
+  labels:
+    version: v{{ $.Chart.AppVersion }}
+    app: velero
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      deploy: velero
-  strategy: {}
+      version: v{{ $.Chart.AppVersion }}
+      app: velero
   template:
     metadata:
-      annotations:
-        prometheus.io/path: /metrics
-        prometheus.io/port: "8085"
-        prometheus.io/scrape: "true"
-      creationTimestamp: null
       labels:
-        component: velero
-        deploy: velero
+        version: v{{ $.Chart.AppVersion }}
+        app: velero
     spec:
       securityContext:
         fsGroup: 65534
@@ -104,14 +88,14 @@ spec:
         imagePullPolicy: IfNotPresent
         name: velero
         ports:
-        - containerPort: 8085
-          name: metrics
+        - name: http-metrics
+          containerPort: 8085
         resources:
           limits:
-            cpu: "1"
+            cpu: 200m
             memory: 256Mi
           requests:
-            cpu: 500m
+            cpu: 100m
             memory: 128Mi
         volumeMounts:
         - mountPath: /plugins
@@ -133,3 +117,22 @@ spec:
         name: plugins
       - emptyDir: {}
         name: scratch
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: velero
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '8085'
+  labels:
+    app: velero
+spec:
+  ports:
+    - name: http-metrics
+      targetPort: 8085
+      port: 8085
+  selector:
+    app: velero

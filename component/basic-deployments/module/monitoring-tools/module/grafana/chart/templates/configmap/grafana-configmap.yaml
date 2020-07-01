@@ -59,24 +59,32 @@ data:
     - disableDeletion: true
       editable: true
       folder: "Istio"
-      name: istio-1
+      name: istio
       options:
-        path: /var/lib/grafana/dashboards/istio-1
+        path: /var/lib/grafana/dashboards/istio
       orgId: 1
       type: file
     - disableDeletion: true
       editable: true
-      folder: "Istio"
-      name: istio-2
+      folder: "Component"
+      name: component
       options:
-        path: /var/lib/grafana/dashboards/istio-2
+        path: /var/lib/grafana/dashboards/component
       orgId: 1
       type: file
     - disableDeletion: true
       editable: true
-      folder: "Cluster"
-      name: cluster
+      folder: "Compute"
+      name: compute
       options:
-        path: /var/lib/grafana/dashboards/cluster
+        path: /var/lib/grafana/dashboards/compute
+      orgId: 1
+      type: file
+    - disableDeletion: true
+      editable: true
+      folder: "Network"
+      name: network
+      options:
+        path: /var/lib/grafana/dashboards/network
       orgId: 1
       type: file
