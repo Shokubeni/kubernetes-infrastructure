@@ -5,7 +5,7 @@ kind: CustomResourceDefinition
 metadata:
   name: certificaterequests.cert-manager.io
   annotations:
-    cert-manager.io/inject-ca-from-secret: 'basic-deployments/cert-manager-webhook-ca'
+    cert-manager.io/inject-ca-from-secret: 'kube-system/cert-manager-webhook-ca'
   labels:
     app: 'cert-manager'
     app.kubernetes.io/name: 'cert-manager'
@@ -40,7 +40,7 @@ spec:
     # webhookClientConfig is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
     webhookClientConfig:
       service:
-        namespace: 'basic-deployments'
+        namespace: 'kube-system'
         name: 'cert-manager-webhook'
         path: /convert
   names:
@@ -216,7 +216,7 @@ kind: CustomResourceDefinition
 metadata:
   name: certificates.cert-manager.io
   annotations:
-    cert-manager.io/inject-ca-from-secret: 'basic-deployments/cert-manager-webhook-ca'
+    cert-manager.io/inject-ca-from-secret: 'kube-system/cert-manager-webhook-ca'
   labels:
     app: 'cert-manager'
     app.kubernetes.io/name: 'cert-manager'
@@ -254,7 +254,7 @@ spec:
     # webhookClientConfig is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
     webhookClientConfig:
       service:
-        namespace: 'basic-deployments'
+        namespace: 'kube-system'
         name: 'cert-manager-webhook'
         path: /convert
   names:
@@ -972,7 +972,7 @@ kind: CustomResourceDefinition
 metadata:
   name: challenges.acme.cert-manager.io
   annotations:
-    cert-manager.io/inject-ca-from-secret: 'basic-deployments/cert-manager-webhook-ca'
+    cert-manager.io/inject-ca-from-secret: 'kube-system/cert-manager-webhook-ca'
   labels:
     app: 'cert-manager'
     app.kubernetes.io/name: 'cert-manager'
@@ -1006,7 +1006,7 @@ spec:
     # webhookClientConfig is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
     webhookClientConfig:
       service:
-        namespace: 'basic-deployments'
+        namespace: 'kube-system'
         name: 'cert-manager-webhook'
         path: /convert
   names:
@@ -2425,7 +2425,7 @@ kind: CustomResourceDefinition
 metadata:
   name: clusterissuers.cert-manager.io
   annotations:
-    cert-manager.io/inject-ca-from-secret: 'basic-deployments/cert-manager-webhook-ca'
+    cert-manager.io/inject-ca-from-secret: 'kube-system/cert-manager-webhook-ca'
   labels:
     app: 'cert-manager'
     app.kubernetes.io/name: 'cert-manager'
@@ -2456,7 +2456,7 @@ spec:
     # webhookClientConfig is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
     webhookClientConfig:
       service:
-        namespace: 'basic-deployments'
+        namespace: 'kube-system'
         name: 'cert-manager-webhook'
         path: /convert
   names:
@@ -4232,7 +4232,7 @@ kind: CustomResourceDefinition
 metadata:
   name: issuers.cert-manager.io
   annotations:
-    cert-manager.io/inject-ca-from-secret: 'basic-deployments/cert-manager-webhook-ca'
+    cert-manager.io/inject-ca-from-secret: 'kube-system/cert-manager-webhook-ca'
   labels:
     app: 'cert-manager'
     app.kubernetes.io/name: 'cert-manager'
@@ -4263,7 +4263,7 @@ spec:
     # webhookClientConfig is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
     webhookClientConfig:
       service:
-        namespace: 'basic-deployments'
+        namespace: 'kube-system'
         name: 'cert-manager-webhook'
         path: /convert
   names:
@@ -6039,7 +6039,7 @@ kind: CustomResourceDefinition
 metadata:
   name: orders.acme.cert-manager.io
   annotations:
-    cert-manager.io/inject-ca-from-secret: 'basic-deployments/cert-manager-webhook-ca'
+    cert-manager.io/inject-ca-from-secret: 'kube-system/cert-manager-webhook-ca'
   labels:
     app: 'cert-manager'
     app.kubernetes.io/name: 'cert-manager'
@@ -6074,7 +6074,7 @@ spec:
     # webhookClientConfig is required when strategy is `Webhook` and it configures the webhook endpoint to be called by API server.
     webhookClientConfig:
       service:
-        namespace: 'basic-deployments'
+        namespace: 'kube-system'
         name: 'cert-manager-webhook'
         path: /convert
   names:

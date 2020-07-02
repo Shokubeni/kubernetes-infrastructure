@@ -155,7 +155,7 @@ data:
 
 
 
-
+    push "redirect-gateway def1"
     push "route NETWORK NETMASK"
 
 

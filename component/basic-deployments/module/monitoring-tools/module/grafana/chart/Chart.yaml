@@ -1,4 +1,4 @@
 apiVersion: v2
 name: grafana
-appVersion: 7.0.4
+appVersion: 7.1.3
 version: 1.0.0

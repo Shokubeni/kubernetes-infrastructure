@@ -1,0 +1,20 @@
+title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
+text: >-
+  {{ range .Alerts }}
+    *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
+    {{- if .Annotations.summary }}
+    *Summary:* {{ .Annotations.summary }}
+    {{- end }}
+    {{- if .Annotations.message }}
+    *Message:* {{ .Annotations.message }}
+    {{- end }}
+    {{- if gt (len .Labels.SortedPairs) 2 }}
+    *Labels:*
+      {{- range .Labels.SortedPairs }}
+        {{- if and (ne .Name "alertname") (ne .Name "severity") }}
+        • *{{ .Name }}:* `{{ .Value }}`
+        {{- end }}
+      {{- end }}
+    {{- end }}
+
+  {{ end }}

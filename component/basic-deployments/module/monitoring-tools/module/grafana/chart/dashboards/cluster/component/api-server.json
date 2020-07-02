@@ -2129,11 +2129,35 @@
   ],
   "schemaVersion": 14,
   "style": "dark",
-  "tags": [
-    "kubernetes-mixin"
-  ],
   "templating": {
     "list": [
+      {
+        "allValue": null,
+        "current": {
+          "text": "prod",
+          "value": "prod"
+        },
+        "datasource": "prometheus",
+        "hide": 2,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster",
+        "options": [
+
+        ],
+        "query": "label_values(apiserver_request_total, cluster)",
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [
+
+        ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
       {
         "allValue": null,
         "current": {
@@ -2163,7 +2187,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

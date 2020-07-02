@@ -17,6 +17,8 @@ spec:
       app: openvpn
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
       labels:
         version: v{{ $.Chart.AppVersion }}
         app: openvpn
@@ -35,11 +37,11 @@ spec:
                 - NET_ADMIN
           resources:
             requests:
-              cpu: 150m
-              memory: 128Mi
+              cpu: 10m
+              memory: 64Mi
             limits:
-              cpu: 300m
-              memory: 256Mi
+              cpu: 100m
+              memory: 128Mi
           volumeMounts:
             - mountPath: /etc/openvpn/setup
               name: openvpn

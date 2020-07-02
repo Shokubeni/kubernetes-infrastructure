@@ -8,7 +8,7 @@ metadata:
 data:
   api-server.json: |-
     {{ $.Files.Get "dashboards/cluster/component/api-server.json" | nindent 4 }}
-  controller.json: |-
-    {{ $.Files.Get "dashboards/cluster/component/controller.json" | nindent 4 }}
   coredns.json: |-
     {{ $.Files.Get "dashboards/cluster/component/coredns.json" | nindent 4 }}
+  volumes.json: |-
+    {{ $.Files.Get "dashboards/cluster/component/volumes.json" | nindent 4 }}

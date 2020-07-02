@@ -56,7 +56,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\", cluster=\"$cluster\"}[$__interval]))",
+              "expr": "sum (rate (container_cpu_usage_seconds_total{id=\"/\"}[$__interval])) / sum (machine_cpu_cores)",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -2448,9 +2448,6 @@
   ],
   "schemaVersion": 14,
   "style": "dark",
-  "tags": [
-    "kubernetes-mixin"
-  ],
   "templating": {
     "list": [
       {
@@ -2510,7 +2507,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -2539,7 +2536,7 @@
     ]
   },
   "timezone": "",
-  "title": "Cluster",
+  "title": "Cluster Total",
   "uid": "efa86fd1d0c121a26444b636a3f509a8",
   "version": 0
 }

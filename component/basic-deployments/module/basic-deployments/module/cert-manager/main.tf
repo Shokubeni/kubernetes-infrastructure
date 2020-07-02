@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "cert_manager_assume_role" {
     condition {
       test     = "StringEquals"
       variable = "${replace(var.openid_provider.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:${var.chart_namespace}:cert-manager"]
+      values   = ["system:serviceaccount:kube-system:cert-manager"]
     }
 
     principals {
@@ -38,7 +38,7 @@ resource "aws_iam_role_policy" "cert_manager_policy" {
 
 resource "helm_release" "cert_manager" {
   chart     = "${var.root_dir}/component/basic-deployments/module/basic-deployments/module/cert-manager/chart"
-  namespace = var.chart_namespace
+  namespace = "kube-system"
   name      = "cert-manager"
 
   set {
@@ -62,7 +62,6 @@ resource "helm_release" "cert_manager" {
   }
 
   depends_on = [
-    aws_iam_role_policy.cert_manager_policy,
-    var.chart_namespace
+    aws_iam_role_policy.cert_manager_policy
   ]
 }

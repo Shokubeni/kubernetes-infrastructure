@@ -2,7 +2,7 @@
 //*                              Runtime                               *
 //**********************************************************************
 runtime_config = {
-  k8s_version = "1.16"
+  k8s_version = "1.17"
 
   auth_accounts = []
   auth_users    = []
@@ -79,8 +79,8 @@ worker_configs = [{
     }
     instance_types = [
       "t3a.xlarge",
-      "t3.xlarge",
-      "t2.xlarge"
+      "t3a.large",
+      "t3a.medium",
     ]
   }
 
@@ -100,6 +100,11 @@ network_config = {
   vpn_clients_cidr   = "10.0.0.0/8"
   nat_instance_type  = "t3a.micro"
 
+  domain_info = {
+    public_zone = "Z1IMWHN7BIT6US"
+    domain_name = "smart-gears.io"
+  }
+
   private_subnets = {
     "172.16.0.0/20"  = "us-east-1a"
     "172.16.16.0/20" = "us-east-1b"
@@ -110,9 +115,19 @@ network_config = {
     "172.16.48.0/20" = "us-east-1b"
   }
 
-  domain_info = {
-    private_zone = "Z08751802222O6NWU3PMC"
-    public_zone  = "Z1IMWHN7BIT6US"
-    domain_name  = "smart-gears.io"
-  }
+  private_services = [{
+    name: "gitlab"
+    ports: {
+      gateway: 30022
+      service: 22
+    }
+  }]
+
+  public_services = [{
+    name: "open-vpn"
+    ports: {
+      gateway: 31194
+      service: 1194
+    }
+  }]
 }

@@ -6,8 +6,23 @@ variable "network_config" {
     private_subnets    = map(string)
     public_subnets     = map(string)
 
-    domain_info        = object({
-      private_zone = string
+    private_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
+    public_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
+    domain_info = object({
       public_zone  = string
       domain_name  = string
     })
@@ -20,8 +35,6 @@ variable "smtp_config" {
     port         = string
     metrics_user = string
     metrics_pass = string
-    alerts_user  = string
-    alerts_pass  = string
   })
 }
 

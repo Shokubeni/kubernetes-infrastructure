@@ -1025,9 +1025,6 @@
   ],
   "schemaVersion": 14,
   "style": "dark",
-  "tags": [
-    "kubernetes-mixin"
-  ],
   "templating": {
     "list": [
       {
@@ -1059,7 +1056,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

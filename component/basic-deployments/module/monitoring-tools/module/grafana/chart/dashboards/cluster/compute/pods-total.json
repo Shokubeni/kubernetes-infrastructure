@@ -72,7 +72,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", cluster=\"$cluster\"}) by (container)",
+              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", container!=\"\", cluster=\"$cluster\"}) by (container)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{container}}",
@@ -186,7 +186,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(container_cpu_cfs_throttled_periods_total{namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", cluster=\"$cluster\"}[5m])) by (container) /sum(increase(container_cpu_cfs_periods_total{namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", cluster=\"$cluster\"}[5m])) by (container)",
+              "expr": "sum(increase(container_cpu_cfs_throttled_periods_total{namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", container!=\"\", cluster=\"$cluster\"}[5m])) by (container) /sum(increase(container_cpu_cfs_periods_total{namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", cluster=\"$cluster\"}[5m])) by (container)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{container}}",
@@ -200,7 +200,7 @@
               "fill": true,
               "line": true,
               "op": "gt",
-              "value": 0.25,
+              "value": 0.35,
               "yaxis": "left"
             }
           ],
@@ -422,7 +422,7 @@
           ],
           "targets": [
             {
-              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\"}) by (container)",
+              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", container!=\"\"}) by (container)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1588,9 +1588,6 @@
   ],
   "schemaVersion": 14,
   "style": "dark",
-  "tags": [
-    "kubernetes-mixin"
-  ],
   "templating": {
     "list": [
       {
@@ -1677,7 +1674,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

@@ -1,4 +1,4 @@
 apiVersion: v2
 name: prometheus
-appVersion: 2.19.2
-version: 1.4.0
+appVersion: 2.20.1
+version: 1.0.0

@@ -66,6 +66,7 @@ module "deploy" {
   openid_provider = module.cluster.openid_provider
   control_plane   = module.cluster.control_plane
   cluster_data    = module.prebuilt.cluster_data
+  network_config  = var.network_config
   runtime_config  = var.runtime_config
   root_dir        = var.root_dir
 }

@@ -14,16 +14,6 @@ resource "helm_release" "alertmanager" {
   }
 
   set {
-    name  = "smtp.user"
-    value = var.smtp_config.alerts_user
-  }
-
-  set {
-    name  = "smtp.pass"
-    value = var.smtp_config.alerts_pass
-  }
-
-  set {
     name  = "slack.channel"
     value = var.slack_channel
   }

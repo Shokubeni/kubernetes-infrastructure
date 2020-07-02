@@ -6,14 +6,41 @@ variable "network_config" {
     private_subnets    = map(string)
     public_subnets     = map(string)
 
+    private_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
+    public_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
     domain_info = object({
-      private_zone = string
-      public_zone  = string
-      domain_name  = string
+      public_zone = string
+      domain_name = string
     })
   })
 }
 
-variable "balancer_host" {
-  type = string
+variable "network_data" {
+  type = object({
+    internet_gateway_id = string
+    private_subnet_ids  = list(string)
+    public_subnet_ids   = list(string)
+    virtual_cloud_id    = string
+  })
+}
+
+variable "balancer_data" {
+  type = object({
+    external_hostname = string
+    internal_hostname = string
+  })
 }

@@ -26,24 +26,24 @@ spec:
         fsGroup: 9090
       containers:
         - name: prometheus
-          image: quay.io/prometheus/prometheus:v2.19.2
+          image: quay.io/prometheus/prometheus:v2.20.1
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
             - "--web.enable-lifecycle"
             - "--storage.tsdb.no-lockfile"
-            - "--storage.tsdb.retention.time=5d"
+            - "--storage.tsdb.retention.time=3d"
             - "--storage.tsdb.retention.size=5GB"
           ports:
             - name: http-client
               containerPort: 9090
           resources:
             requests:
-              cpu: 150m
-              memory: 1024Mi
+              cpu: 500m
+              memory: 512Mi
             limits:
-              cpu: 300m
-              memory: 2048Mi
+              cpu: 1000m
+              memory: 1024Mi
           securityContext:
             privileged: true
           volumeMounts:

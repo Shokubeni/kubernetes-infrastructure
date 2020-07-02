@@ -7,7 +7,7 @@ metadata:
   name: grafana
 spec:
   selector:
-    istio: ingressgateway
+    istio: internal-ingressgateway
   servers:
     - port:
         protocol: HTTP
@@ -58,7 +58,7 @@ spec:
   commonName: metrics.{{ $.Values.domainName }}
   secretName: grafana-cert
   issuerRef:
-    name: dns-letsencrypt-staging
+    name: dns-letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
     - metrics.{{ $.Values.domainName }}

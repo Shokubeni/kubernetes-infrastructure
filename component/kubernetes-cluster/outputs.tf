@@ -1,5 +1,5 @@
-output "balancer_hostname" {
-  value = module.deploy.balancer_hostname
+output "balancer_data" {
+  value = module.deploy.balancer_data
 }
 
 output "openid_provider" {

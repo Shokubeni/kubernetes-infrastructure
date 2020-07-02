@@ -28,7 +28,6 @@ module "autoscaler" {
   source = "./module/autoscaler"
 
   openid_provider = var.openid_provider
-  control_plane   = var.control_plane
   cluster_data    = var.cluster_data
   root_dir        = var.root_dir
 }
@@ -46,6 +45,7 @@ module "velero" {
 module "istio" {
   source = "./module/istio"
 
-  control_plane = var.control_plane
-  root_dir      = var.root_dir
+  network_config = var.network_config
+  control_plane  = var.control_plane
+  root_dir       = var.root_dir
 }

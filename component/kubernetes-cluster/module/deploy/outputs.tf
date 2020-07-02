@@ -1,3 +1,3 @@
-output "balancer_hostname" {
-  value = module.istio.balancer_hostname
+output "balancer_data" {
+  value = module.istio.balancer
 }

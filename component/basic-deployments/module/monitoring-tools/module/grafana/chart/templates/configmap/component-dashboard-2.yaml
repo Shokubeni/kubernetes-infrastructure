@@ -6,9 +6,9 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   name: component-dashboard-2
 data:
-  kubelete.json: |-
+  prometheus.json: |-
+    {{ $.Files.Get "dashboards/cluster/component/prometheus.json" | nindent 4 }}
+  kubelet.json: |-
     {{ $.Files.Get "dashboards/cluster/component/kubelet.json" | nindent 4 }}
   nodes.json: |-
     {{ $.Files.Get "dashboards/cluster/component/nodes.json" | nindent 4 }}
-  etcd.json: |-
-    {{ $.Files.Get "dashboards/cluster/component/etcd.json" | nindent 4 }}

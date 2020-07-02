@@ -1,5 +1,8 @@
-output "balancer_hostname" {
-  value = data.kubernetes_service.example.load_balancer_ingress.0.hostname
+output "balancer" {
+  value = {
+    internal_hostname = data.kubernetes_service.internal.load_balancer_ingress.0.hostname
+    external_hostname = data.kubernetes_service.external.load_balancer_ingress.0.hostname
+  }
 }
 
 output "istio" {

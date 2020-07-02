@@ -14,7 +14,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: http-metrics
+    - name: metrics
       targetPort: 9402
       port: 9402
   selector:
@@ -31,7 +31,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: https-client
+    - name: client
       targetPort: 10250
       port: 443
   selector:

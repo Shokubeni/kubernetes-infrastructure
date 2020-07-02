@@ -44,7 +44,8 @@ provider "aws" {
 module "dns_configuration" {
   source = "./module/dns-configuration"
 
-  balancer_host  = data.terraform_remote_state.kubernetes.outputs.balancer_hostname
+  balancer_data  = data.terraform_remote_state.kubernetes.outputs.balancer_data
+  network_data   = data.terraform_remote_state.kubernetes.outputs.network_data
   network_config = var.network_config
 }
 
@@ -71,7 +72,5 @@ module "monitoring_tools" {
     port         = var.smtp_port
     metrics_user = var.smtp_metrics_user
     metrics_pass = var.smtp_metrics_pass
-    alerts_user  = var.smtp_alerts_user
-    alerts_pass  = var.smtp_alerts_pass
   }
 }

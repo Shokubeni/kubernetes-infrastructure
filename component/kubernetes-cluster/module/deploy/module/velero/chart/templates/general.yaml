@@ -84,17 +84,17 @@ spec:
               fieldPath: metadata.namespace
         - name: LD_LIBRARY_PATH
           value: /plugins
-        image: velero/velero:v1.4.0
+        image: velero/velero:v1.4.2
         imagePullPolicy: IfNotPresent
         name: velero
         ports:
         - name: http-metrics
           containerPort: 8085
         resources:
-          limits:
-            cpu: 200m
-            memory: 256Mi
           requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
             cpu: 100m
             memory: 128Mi
         volumeMounts:
@@ -103,7 +103,7 @@ spec:
         - mountPath: /scratch
           name: scratch
       initContainers:
-      - image: velero/velero-plugin-for-aws:v1.0.1
+      - image: velero/velero-plugin-for-aws:v1.1.0
         imagePullPolicy: IfNotPresent
         name: velero-plugin-for-aws
         resources: {}

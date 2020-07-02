@@ -34,7 +34,12 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           resources:
-            {}
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 30m
+              memory: 64Mi
 ---
 
 apiVersion: apps/v1
@@ -58,6 +63,8 @@ spec:
         app: cert-manager
     spec:
       serviceAccountName: cert-manager
+      securityContext:
+        fsGroup: 65534
       containers:
         - name: cert-manager
           image: quay.io/jetstack/cert-manager-controller:v0.15.1
@@ -66,6 +73,8 @@ spec:
             - --v=2
             - --cluster-resource-namespace=$(POD_NAMESPACE)
             - --leader-election-namespace=kube-system
+            - --dns01-recursive-nameservers="8.8.8.8:53"
+            - --dns01-recursive-nameservers-only
           ports:
             - name: http-metrics
               containerPort: 9402
@@ -75,7 +84,12 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           resources:
-            {}
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 30m
+              memory: 64Mi
 ---
 
 apiVersion: apps/v1
@@ -132,4 +146,9 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           resources:
-            {}
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi

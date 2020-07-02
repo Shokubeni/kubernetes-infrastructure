@@ -6,10 +6,25 @@ variable "network_config" {
     private_subnets    = map(string)
     public_subnets     = map(string)
 
+    private_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
+    public_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
     domain_info = object({
-      private_zone = string
-      public_zone  = string
-      domain_name  = string
+      public_zone = string
+      domain_name = string
     })
   })
 }
@@ -29,10 +44,6 @@ variable "openid_provider" {
     arn = string
     url = string
   })
-}
-
-variable "chart_namespace" {
-  type = string
 }
 
 variable "root_dir" {

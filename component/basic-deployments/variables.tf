@@ -72,10 +72,25 @@ variable "network_config" {
     private_subnets    = map(string)
     public_subnets     = map(string)
 
+    private_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
+    public_services = list(object({
+      name: string
+      ports: object({
+        gateway: number
+        service: number
+      })
+    }))
+
     domain_info = object({
-      private_zone = string
-      public_zone  = string
-      domain_name  = string
+      public_zone = string
+      domain_name = string
     })
   })
 }
@@ -104,14 +119,6 @@ variable "smtp_port" {
   type = string
 }
 
-variable "smtp_alerts_user" {
-  type = string
-}
-
-variable "smtp_alerts_pass" {
-  type = string
-}
-
 variable "smtp_metrics_user" {
   type = string
 }
@@ -125,10 +132,6 @@ variable "slack_channel" {
 }
 
 variable "slack_hook" {
-  type = string
-}
-
-variable "kube_config" {
   type = string
 }
 

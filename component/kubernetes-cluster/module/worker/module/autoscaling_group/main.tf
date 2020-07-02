@@ -13,7 +13,6 @@ resource "aws_autoscaling_group" "autoscaling" {
       launch_template_specification {
         launch_template_id = var.template_ids[count.index]
         version = "$Latest"
-
       }
 
       dynamic "override" {
@@ -33,14 +32,14 @@ resource "aws_autoscaling_group" "autoscaling" {
 
   tags = [
     {
-      "key"   = "kubernetes.io/cluster/${var.cluster_data.label}_${var.cluster_data.id}"
-      "value" = "owned"
-      "propagate_at_launch" = false
+      key   = "kubernetes.io/cluster/${var.cluster_data.label}_${var.cluster_data.id}"
+      value = "owned"
+      propagate_at_launch = false
     },
     {
-      "key"   = "kubernetes.io/cluster/autoscaler"
-      "value" = "enabled"
-      "propagate_at_launch" = false
+      key   = "kubernetes.io/cluster/autoscaler"
+      value = "enabled"
+      propagate_at_launch = false
     }
   ]
 

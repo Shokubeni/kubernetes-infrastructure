@@ -32,9 +32,6 @@ TF_VAR_SMTP_HOST         = <string>[email-smtp.us-east-1.amazonaws.com]
 TF_VAR_SMTP_PORT         = <number>[587]
 TF_VAR_SMTP_METRICS_USER = <string>`SMTP user name`
 TF_VAR_SMTP_METRICS_PASS = <string>`SMTP user password`
-TF_VAR_SMTP_ALERTS_USER  = <string>`SMTP user name`
-TF_VAR_SMTP_ALERTS_PASS  = <string>`SMTP user password`
 TF_VAR_SLACK_ALERTS_URL  = <url>`slack alerts webhook`
 TF_VAR_SLACK_CHANNEL     = <string>`slack alerts chanel`
-TF_VAR_KUBE_CONFIG       = <string>`path to kubernetes config`
 ```

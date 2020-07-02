@@ -22,14 +22,14 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: prom/alertmanager:v0.20.0
+        image: prom/alertmanager:v0.21.0
         resources:
           requests:
-            memory: 128Mi
-            cpu: 25m
+            cpu: 10m
+            memory: 32Mi
           limits:
-            memory: 256Mi
-            cpu: 50m
+            cpu: 30m
+            memory: 64Mi
         args:
           - '--config.file=/etc/alertmanager/config.yml'
           - '--storage.path=/alertmanager'

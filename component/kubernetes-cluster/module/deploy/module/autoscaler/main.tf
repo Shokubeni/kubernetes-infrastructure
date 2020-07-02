@@ -34,8 +34,13 @@ resource "helm_release" "autoscaler" {
   name      = "autoscaler"
 
   set {
+    name  = "clusterLabel"
+    value = var.cluster_data.label
+  }
+
+  set {
     name  = "clusterId"
-    value = var.control_plane.id
+    value = var.cluster_data.id
   }
 
   set {

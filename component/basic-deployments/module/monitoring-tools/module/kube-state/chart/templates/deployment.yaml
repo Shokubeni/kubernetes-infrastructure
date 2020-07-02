@@ -4,30 +4,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: {{ $.Release.Namespace }}
-  name: kube-state
+  name: kube-state-metrics
   labels:
     version: v{{ $.Chart.AppVersion }}
-    app: kube-state
+    app: kube-state-metrics
 spec:
   replicas: 1
   selector:
     matchLabels:
       version: v{{ $.Chart.AppVersion }}
-      app: kube-state
+      app: kube-state-metrics
   template:
     metadata:
       labels:
         version: v{{ $.Chart.AppVersion }}
-        app: kube-state
+        app: kube-state-metrics
     spec:
-      serviceAccountName: kube-state
+      serviceAccountName: kube-state-metrics
       hostNetwork: false
       securityContext:
         fsGroup: 65534
         runAsGroup: 65534
         runAsUser: 65534
       containers:
-        - name: kube-state
+        - name: kube-state-metrics
           args:
             - --collectors=certificatesigningrequests
             - --collectors=configmaps
@@ -75,8 +75,8 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              memory: 128Mi
-              cpu: 25m
+              cpu: 10m
+              memory: 32Mi
             limits:
-              memory: 256Mi
-              cpu: 50m
+              cpu: 30m
+              memory: 64Mi

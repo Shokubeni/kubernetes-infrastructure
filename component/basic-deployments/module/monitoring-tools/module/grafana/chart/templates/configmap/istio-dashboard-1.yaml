@@ -8,7 +8,7 @@ metadata:
 data:
   istio-control-plane.json: |-
     {{ $.Files.Get "dashboards/istio/control-plane.json" | nindent 4 }}
-  istio-galley.json: |-
-    {{ $.Files.Get "dashboards/istio/galley.json" | nindent 4 }}
-  istio-mesh.json: |-
-    {{ $.Files.Get "dashboards/istio/mesh.json" | nindent 4 }}
+  istio-workload.json: |-
+    {{ $.Files.Get "dashboards/istio/workload.json" | nindent 4 }}
+  istio-service.json: |-
+    {{ $.Files.Get "dashboards/istio/service.json" | nindent 4 }}
