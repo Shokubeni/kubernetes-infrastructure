@@ -17,8 +17,6 @@ spec:
       app: openvpn
   template:
     metadata:
-      annotations:
-        sidecar.istio.io/inject: "false"
       labels:
         version: v{{ $.Chart.AppVersion }}
         app: openvpn

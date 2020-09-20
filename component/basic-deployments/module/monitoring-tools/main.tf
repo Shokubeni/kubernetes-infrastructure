@@ -1,7 +1,7 @@
 resource "kubernetes_namespace" "monitoring_tools" {
   metadata {
     labels = {
-      "istio-injection" = "enabled"
+      "istio-injection" = "disabled"
     }
 
     name = "monitoring-tools"
