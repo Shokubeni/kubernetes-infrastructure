@@ -53,6 +53,6 @@ resource "aws_route53_record" "private" {
   alias {
     evaluate_target_health = false
     zone_id = data.aws_elb_hosted_zone_id.main.id
-    name    = var.balancer_data.internal_hostname
+    name    = var.balancer_data.external_hostname
   }
 }
