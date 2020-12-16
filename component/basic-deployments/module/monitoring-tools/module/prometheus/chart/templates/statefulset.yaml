@@ -26,7 +26,7 @@ spec:
         fsGroup: 9090
       containers:
         - name: prometheus
-          image: quay.io/prometheus/prometheus:v2.20.1
+          image: quay.io/prometheus/prometheus:v2.23.0
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"

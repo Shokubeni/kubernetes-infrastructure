@@ -42,7 +42,7 @@ module "cluster" {
   source = "./module/cluster"
 
   control_plane  = module.identity.control_plane
-  woker_node     = module.identity.worker_node
+  worker_node     = module.identity.worker_node
   network_data   = module.network.network_data
   cluster_data   = module.prebuilt.cluster_data
   runtime_config = var.runtime_config

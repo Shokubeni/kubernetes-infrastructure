@@ -84,7 +84,7 @@ spec:
               fieldPath: metadata.namespace
         - name: LD_LIBRARY_PATH
           value: /plugins
-        image: velero/velero:v1.4.2
+        image: velero/velero:v1.5.2
         imagePullPolicy: IfNotPresent
         name: velero
         ports:

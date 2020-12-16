@@ -6,7 +6,7 @@ module "authentication" {
   control_plane_id       = module.control-plane.control_plane_id
   runtime_config         = var.runtime_config
   control_plane          = var.control_plane
-  woker_node             = var.woker_node
+  worker_node             = var.worker_node
   cluster_data           = var.cluster_data
   root_dir               = var.root_dir
 }

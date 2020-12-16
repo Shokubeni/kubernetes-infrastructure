@@ -24,7 +24,7 @@ resource "aws_security_group_rule" "control_plane_api_ingress" {
 }
 
 resource "aws_security_group_rule" "control_plane_workers_egress" {
-  description              = "Allow controll plane to communicate with worker workloads"
+  description              = "Allow control plane to communicate with worker workloads"
   type                     = "egress"
   from_port                = 10250
   to_port                  = 65535

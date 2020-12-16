@@ -58,7 +58,7 @@ variable "control_plane" {
   })
 }
 
-variable "woker_node" {
+variable "worker_node" {
   type = object({
     group_id  = string
     group_arn = string

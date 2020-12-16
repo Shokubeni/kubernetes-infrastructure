@@ -2,7 +2,7 @@
 //*                              Runtime                               *
 //**********************************************************************
 runtime_config = {
-  k8s_version = "1.17"
+  k8s_version = "1.18"
 
   auth_accounts = []
   auth_users    = []

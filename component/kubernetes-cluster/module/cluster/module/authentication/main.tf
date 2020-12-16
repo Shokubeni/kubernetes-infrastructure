@@ -54,7 +54,7 @@ resource "kubernetes_config_map" "cluster_auth" {
 locals {
   worker_provision_roles = [{
     username = "system:node:{{EC2PrivateDNSName}}"
-    rolearn  = var.woker_node.role_arn
+    rolearn  = var.worker_node.role_arn
     groups = [
       "system:bootstrappers",
       "system:nodes",
