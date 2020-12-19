@@ -1,26 +1,54 @@
-istio_component_namespaces:
-  grafana: istio-system
-  tracing: istio-system
-  istiod: istio-system
-  prometheus: istio-system
-istio_namespace: istio-system
 auth:
-  strategy: login
+  openid: {}
+  openshift:
+    client_id_prefix: kiali
+  strategy: anonymous
 deployment:
-  accessible_namespaces: ['**']
+  accessible_namespaces:
+    - '**'
+  additional_service_yaml: {}
+  affinity:
+    node: {}
+    pod: {}
+    pod_anti: {}
+  custom_dashboards:
+    excludes:
+      - ""
+    includes:
+      - '*'
+  image_name: quay.io/kiali/kiali
+  image_pull_policy: Always
+  image_pull_secrets: []
+  image_version: v1.26
+  ingress_enabled: false
+  namespace: istio-system
+  node_selector: {}
+  override_ingress_yaml:
+    metadata: {}
+  pod_annotations:
+    sidecar.istio.io/inject: "false"
+  pod_labels: {}
+  priority_class_name: ""
+  replicas: 1
+  resources: {}
+  secret_name: kiali
+  service_annotations: {}
+  service_type: ""
+  tolerations: []
+  verbose_mode: "3"
+  version_label: v1.26.0
+  view_only_mode: false
+external_services:
+  custom_dashboards:
+    enabled: true
+identity:
+  cert_file: ""
+  private_key_file: ""
+istio_namespace: istio-system
 login_token:
-  signing_key: "Zc1gLB6VMq"
+  signing_key: CHANGEME
 server:
+  metrics_enabled: true
+  metrics_port: 9090
   port: 20001
   web_root: /kiali
-external_services:
-  istio:
-    url_service_version: http://istiod.istio-system:15014/version
-  tracing:
-    url:
-    in_cluster_url: http://tracing/jaeger
-  grafana:
-    url:
-    in_cluster_url: http://grafana:3000
-  prometheus:
-    url: http://prometheus.istio-system:9090

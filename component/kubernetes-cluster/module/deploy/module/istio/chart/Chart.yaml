@@ -1,4 +1,4 @@
 apiVersion: v2
 name: istio
-appVersion: 1.6.7
+appVersion: 1.8.1
 version: 1.0.0
