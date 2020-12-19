@@ -7,7 +7,7 @@ stages:
 
 Plan Cluster Changes:
   stage: Revision
-  image: alpine/terragrunt:0.12.21
+  image: alpine/terragrunt:0.14.3
   allow_failure: false
   when: always
   only:
@@ -22,7 +22,7 @@ Plan Cluster Changes:
 
 Plan Worload Changes:
   stage: Revision
-  image: alpine/terragrunt:0.12.21
+  image: alpine/terragrunt:0.14.3
   allow_failure: false
   when: always
   only:
@@ -37,7 +37,7 @@ Plan Worload Changes:
 
 Apply Cluster:
   stage: Cluster
-  image: alpine/terragrunt:0.12.21
+  image: alpine/terragrunt:0.14.3
   allow_failure: false
   when: manual
   only:
@@ -53,7 +53,7 @@ Apply Cluster:
 
 Apply Workload:
   stage: Workload
-  image: alpine/terragrunt:0.12.21
+  image: alpine/terragrunt:0.14.3
   when: on_success
   only:
     - develop
