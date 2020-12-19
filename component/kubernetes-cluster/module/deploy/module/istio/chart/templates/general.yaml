@@ -7,7 +7,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1350,7 +1350,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1360,7 +1360,7 @@ spec:
   selector:
     matchLabels:
       app: istio-ingressgateway
-      istio: ingressgateway
+      istio: istio-ingressgateway
 ---
 
 apiVersion: policy/v1beta1
@@ -1516,7 +1516,7 @@ metadata:
   labels:
     app: istio-ingressgateway
     install.operator.istio.io/owning-resource: unknown
-    istio: ingressgateway
+    istio: istio-ingressgateway
     istio.io/rev: default
     operator.istio.io/component: IngressGateways
     release: istio
@@ -1593,7 +1593,7 @@ metadata:
   labels:
     app: istio-ingressgateway
     install.operator.istio.io/owning-resource: unknown
-    istio: ingressgateway
+    istio: istio-ingressgateway
     istio.io/rev: default
     operator.istio.io/component: IngressGateways
     release: istio
@@ -1603,7 +1603,7 @@ spec:
   selector:
     matchLabels:
       app: istio-ingressgateway
-      istio: ingressgateway
+      istio: istio-ingressgateway
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -1620,7 +1620,7 @@ spec:
         chart: gateways
         heritage: Tiller
         install.operator.istio.io/owning-resource: unknown
-        istio: ingressgateway
+        istio: istio-ingressgateway
         istio.io/rev: default
         operator.istio.io/component: IngressGateways
         release: istio
@@ -2283,7 +2283,7 @@ metadata:
   labels:
     app: istio-ingressgateway
     install.operator.istio.io/owning-resource: unknown
-    istio: ingressgateway
+    istio: istio-ingressgateway
     istio.io/rev: default
     operator.istio.io/component: IngressGateways
     release: istio
@@ -2318,7 +2318,7 @@ spec:
 {{- end }}
   selector:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
   type: LoadBalancer
 ---
 
