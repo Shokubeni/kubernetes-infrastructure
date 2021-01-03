@@ -2,9 +2,9 @@ terraform {
   source = "../../../component/basic-deployments"
 
   extra_arguments "formation" {
-    optional_var_files = ["${get_terragrunt_dir()}/${find_in_parent_folders("parameters.tfvars", "ignore")}"]
     commands = get_terraform_commands_that_need_vars()
     arguments = [
+      "-var-file=${get_terragrunt_dir()}/${path_relative_from_include()}/parameters.tfvars",
       "-var", "provider_profile=${get_env("TF_VAR_AWS_PROFILE", "k8s_operations")}",
       "-var", "smtp_metrics_user=${get_env("TF_VAR_SMTP_METRICS_USER", false)}",
       "-var", "smtp_metrics_pass=${get_env("TF_VAR_SMTP_METRICS_PASS", false)}",
@@ -23,7 +23,10 @@ terraform {
 }
 
 dependencies {
-  paths = ["../kubernetes-cluster"]
+  paths = [
+    "../kubernetes-cluster",
+    "../istio-service-mesh"
+  ]
 }
 
 include {

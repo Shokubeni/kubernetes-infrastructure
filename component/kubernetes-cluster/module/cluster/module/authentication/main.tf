@@ -11,7 +11,6 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
   host                   = data.aws_eks_cluster.cluster.endpoint
   load_config_file       = false
-  version                = "1.11.1"
 }
 
 resource "null_resource" "wait_for_cluster" {

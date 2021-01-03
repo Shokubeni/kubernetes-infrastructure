@@ -12,7 +12,6 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      version: v{{ $.Chart.AppVersion }}
       app: kube-state-metrics
   template:
     metadata:

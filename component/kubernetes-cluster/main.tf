@@ -1,11 +1,27 @@
 terraform {
+  required_providers {
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "1.13.3"
+    }
+    helm = {
+      source = "hashicorp/helm"
+      version = "2.0.1"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.22.0"
+    }
+  }
+}
+
+terraform {
   backend "s3" {}
 }
 
 provider "aws" {
   profile = var.provider_profile
   region  = var.provider_region
-  version = "2.60"
 }
 
 module "prebuilt" {

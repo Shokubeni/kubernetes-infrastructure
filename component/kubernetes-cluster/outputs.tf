@@ -1,7 +1,3 @@
-output "balancer_data" {
-  value = module.deploy.balancer_data
-}
-
 output "openid_provider" {
   value = module.cluster.openid_provider
 }

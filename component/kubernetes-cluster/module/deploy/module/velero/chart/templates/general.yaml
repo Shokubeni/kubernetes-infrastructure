@@ -59,7 +59,6 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      version: v{{ $.Chart.AppVersion }}
       app: velero
   template:
     metadata:

@@ -1,0 +1,151 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: cert-manager-cainjector
+  labels:
+    version: v{{ $.Chart.AppVersion }}
+    app: cert-manager-cainjector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cert-manager-cainjector
+  template:
+    metadata:
+      labels:
+        version: v{{ $.Chart.AppVersion }}
+        app: cert-manager-cainjector
+    spec:
+      serviceAccountName: cert-manager-cainjector
+      containers:
+        - name: cert-manager
+          image: quay.io/jetstack/cert-manager-cainjector:v1.1.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --v=2
+            - --leader-election-namespace=kube-system
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              cpu: 30m
+              memory: 256Mi
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: cert-manager
+  labels:
+    version: v{{ $.Chart.AppVersion }}
+    app: cert-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cert-manager
+  template:
+    metadata:
+      labels:
+        version: v{{ $.Chart.AppVersion }}
+        app: cert-manager
+    spec:
+      serviceAccountName: cert-manager
+      securityContext:
+        fsGroup: 65534
+      containers:
+        - name: cert-manager
+          image: quay.io/jetstack/cert-manager-controller:v1.1.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --v=2
+            - --cluster-resource-namespace=$(POD_NAMESPACE)
+            - --leader-election-namespace=kube-system
+            - --dns01-recursive-nameservers="8.8.8.8:53"
+            - --dns01-recursive-nameservers-only
+          ports:
+            - name: http-metrics
+              containerPort: 9402
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              cpu: 30m
+              memory: 256Mi
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: cert-manager-webhook
+  labels:
+    version: v{{ $.Chart.AppVersion }}
+    app: cert-manager-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cert-manager-webhook
+  template:
+    metadata:
+      labels:
+        version: v{{ $.Chart.AppVersion }}
+        app: cert-manager-webhook
+    spec:
+      serviceAccountName: cert-manager-webhook
+      containers:
+        - name: cert-manager
+          image: quay.io/jetstack/cert-manager-webhook:v1.1.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --v=2
+            - --secure-port=10250
+            - --dynamic-serving-ca-secret-namespace={{ $.Release.Namespace }}
+            - --dynamic-serving-ca-secret-name=cert-manager-webhook-ca
+            - --dynamic-serving-dns-names=cert-manager-webhook,cert-manager-webhook.{{ $.Release.Namespace }},cert-manager-webhook.{{ $.Release.Namespace }}.svc
+          ports:
+            - name: https-client
+              containerPort: 10250
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 6080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 6080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 257Mi

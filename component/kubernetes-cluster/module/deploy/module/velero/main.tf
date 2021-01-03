@@ -7,7 +7,6 @@ resource "aws_s3_account_public_access_block" "bucket_access" {
 
 resource "aws_s3_bucket" "backup" {
   bucket        = "velero-backups.${var.cluster_data.id}"
-  region        = var.cluster_data.region
   acl           = "private"
   force_destroy = true
 
@@ -141,6 +140,7 @@ resource "helm_release" "velero" {
 
   depends_on = [
     aws_s3_bucket.backup,
-    aws_iam_role.velero
+    aws_iam_role.velero,
+    var.cluster_data
   ]
 }
