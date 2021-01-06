@@ -3,6 +3,7 @@ image: alpine:3.4
 stages:
   - Revision
   - Cluster
+  - Mesh
   - Workload
 
 Plan Cluster Changes:
@@ -18,6 +19,21 @@ Plan Cluster Changes:
       - output
   script:
     - cd environment/us-east-1/kubernetes-cluster
+    - terragrunt plan
+
+Plan Mesh Changes:
+  stage: Revision
+  image: alpine/terragrunt:0.14.3
+  allow_failure: false
+  when: always
+  only:
+    - develop
+    - master
+  artifacts:
+    paths:
+      - output
+  script:
+    - cd environment/us-east-1/istio-service-mesh
     - terragrunt plan
 
 Plan Worload Changes:
@@ -50,6 +66,19 @@ Apply Cluster:
     - cd environment/us-east-1/kubernetes-cluster
     - echo "yes" | terragrunt apply
 
+Apply Mesh:
+  stage: Mesh
+  image: alpine/terragrunt:0.14.3
+  when: on_success
+  only:
+    - develop
+    - master
+  cache:
+    paths:
+      - output
+  script:
+    - cd environment/us-east-1/istio-service-mesh
+    - echo "yes" | terragrunt apply
 
 Apply Workload:
   stage: Workload

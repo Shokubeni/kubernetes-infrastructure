@@ -50,6 +50,6 @@ resource "helm_release" "autoscaler" {
 
   depends_on = [
     aws_iam_role.autoscaler,
-    var.cluster_data
+    var.control_plane
   ]
 }

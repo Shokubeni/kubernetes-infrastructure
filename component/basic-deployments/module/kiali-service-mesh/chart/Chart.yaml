@@ -1,0 +1,4 @@
+apiVersion: v2
+name: kiali
+appVersion: 1.26.1
+version: 1.0.0

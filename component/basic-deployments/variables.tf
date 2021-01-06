@@ -143,6 +143,14 @@ variable "grafana_secret" {
   type = string
 }
 
+variable "kiali_client_id" {
+  type = string
+}
+
+variable "kiali_secret" {
+  type = string
+}
+
 variable "root_dir" {
   type = string
 }

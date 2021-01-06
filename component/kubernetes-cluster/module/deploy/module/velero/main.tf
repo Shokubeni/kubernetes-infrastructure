@@ -141,6 +141,6 @@ resource "helm_release" "velero" {
   depends_on = [
     aws_s3_bucket.backup,
     aws_iam_role.velero,
-    var.cluster_data
+    var.control_plane
   ]
 }

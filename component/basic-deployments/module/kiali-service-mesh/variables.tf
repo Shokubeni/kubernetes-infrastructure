@@ -29,13 +29,12 @@ variable "network_config" {
   })
 }
 
-variable "control_plane" {
-  type = object({
-    authority = string
-    endpont   = string
-    config    = string
-    id        = string
-  })
+variable "kiali_client_id" {
+  type = string
+}
+
+variable "kiali_secret" {
+  type = string
 }
 
 variable "root_dir" {

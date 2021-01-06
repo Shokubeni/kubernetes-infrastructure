@@ -25,6 +25,7 @@ module "aws-autoscaler" {
   source = "./module/aws-autoscaler"
 
   openid_provider = var.openid_provider
+  control_plane   = var.control_plane
   cluster_data    = var.cluster_data
   root_dir        = var.root_dir
 }
@@ -34,6 +35,7 @@ module "cert_manager" {
 
   openid_provider = var.openid_provider
   network_config  = var.network_config
+  control_plane   = var.control_plane
   cluster_data    = var.cluster_data
   root_dir        = var.root_dir
 }
@@ -41,8 +43,9 @@ module "cert_manager" {
 module "ebs_storage" {
   source = "./module/ebs-storage"
 
-  cluster_data = var.cluster_data
-  root_dir     = var.root_dir
+  control_plane = var.control_plane
+  cluster_data  = var.cluster_data
+  root_dir      = var.root_dir
 }
 
 module "velero" {

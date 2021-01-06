@@ -15,11 +15,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  profile = var.provider_profile
-  region  = var.provider_region
-}
-
 terraform {
   backend "s3" {}
 }
@@ -57,9 +52,15 @@ provider "kubernetes" {
   load_config_file       = false
 }
 
+provider "aws" {
+  profile = var.provider_profile
+  region  = var.provider_region
+}
+
 module "istio-mesh" {
   source = "./module/istio-mesh"
 
-  network_config = var.network_config
-  root_dir       = var.root_dir
+  control_plane   = data.terraform_remote_state.kubernetes.outputs.control_plane
+  network_config  = var.network_config
+  root_dir        = var.root_dir
 }

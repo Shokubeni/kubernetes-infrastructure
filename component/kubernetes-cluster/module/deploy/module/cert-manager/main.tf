@@ -63,6 +63,6 @@ resource "helm_release" "cert_manager" {
 
   depends_on = [
     aws_iam_role_policy.cert_manager_policy,
-    var.cluster_data
+    var.control_plane
   ]
 }

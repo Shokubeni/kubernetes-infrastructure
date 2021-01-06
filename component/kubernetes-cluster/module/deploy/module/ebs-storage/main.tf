@@ -4,6 +4,6 @@ resource "helm_release" "ebs_storage" {
   name      = "ebs-storage"
 
   depends_on = [
-    var.cluster_data
+    var.control_plane
   ]
 }

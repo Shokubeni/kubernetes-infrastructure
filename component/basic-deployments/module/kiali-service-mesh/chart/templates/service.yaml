@@ -1,0 +1,93 @@
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: kiali
+spec:
+  selector:
+    istio: internal-ingressgateway
+  servers:
+    - port:
+        protocol: HTTP
+        number: 80
+        name: http
+      hosts:
+        - mesh.{{ $.Values.domainName }}
+      tls:
+        httpsRedirect: true
+    - port:
+        protocol: HTTPS
+        number: 443
+        name: https
+      hosts:
+        - mesh.{{ $.Values.domainName }}
+      tls:
+        credentialName: kiali-cert
+        mode: SIMPLE
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: kiali
+spec:
+  hosts:
+    - mesh.{{ $.Values.domainName }}
+  gateways:
+    - kiali
+  http:
+    - match:
+        - uri:
+            prefix: "/"
+      route:
+        - destination:
+            host: kiali
+            port:
+              number: 20001
+---
+
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  namespace: istio-system
+  name: kiali-cert
+spec:
+  commonName: mesh.{{ $.Values.domainName }}
+  secretName: kiali-cert
+  issuerRef:
+    name: dns-letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - mesh.{{ $.Values.domainName }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiali
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    helm.sh/chart: kiali-server-1.26.0
+    app: kiali
+    app.kubernetes.io/name: kiali
+    app.kubernetes.io/instance: kiali-server
+    version: "v1.26.0"
+    app.kubernetes.io/version: "v1.26.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    kiali.io/api-spec: https://kiali.io/api
+    kiali.io/api-type: rest
+spec:
+  ports:
+    - name: http-kiali
+      protocol: TCP
+      port: 20001
+    - name: http-metrics
+      protocol: TCP
+      port: 9090
+  selector:
+    app.kubernetes.io/name: kiali
+    app.kubernetes.io/instance: kiali-server

@@ -22,6 +22,7 @@ resource "null_resource" "wait_for_cluster" {
        wget --no-check-certificate -O - -q $ENDPOINT/healthz >/dev/null && exit 0 || true
        sleep 5
       done
+      sleep 10
       echo TIMEOUT && exit 1
     EOT
     environment = {

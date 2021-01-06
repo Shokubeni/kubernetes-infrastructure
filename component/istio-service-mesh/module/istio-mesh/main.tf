@@ -58,7 +58,8 @@ resource "helm_release" "istio" {
   }
 
   depends_on = [
-    kubernetes_namespace.istio
+    kubernetes_namespace.istio,
+    var.control_plane
   ]
 }
 
