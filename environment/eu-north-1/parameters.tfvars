@@ -32,9 +32,7 @@ runtime_config = {
       namespaces = [
         "basic-deployments",
         "monitoring-tools",
-        "command-center",
-        "gitlab-runners",
-        "ocp-production",
+        "production-env",
       ]
     }
     exclude = {
@@ -70,17 +68,16 @@ worker_configs = [{
     min_size            = 1
     max_size            = 5
     on_demand_capasity  = 0
-    desired_capacity    = 2
+    desired_capacity    = 1
     kubelet_extra_args  = {
       "--node-labels" = [
-        "node.smart-gears.io/lifecycle=spot",
-        "node.smart-gears.io/scope=common",
+        "node.metal-city.ru/lifecycle=spot",
+        "node.metal-city.ru/scope=common",
       ]
     }
     instance_types = [
-      "t3a.xlarge",
-      "t3a.large",
-      "t3a.medium",
+      "t3.large",
+      "t3.medium",
     ]
   }
 
@@ -97,37 +94,21 @@ worker_configs = [{
 //**********************************************************************
 network_config = {
   virtual_cloud_cidr = "172.16.0.0/16"
-  vpn_clients_cidr   = "10.0.0.0/8"
-  nat_instance_type  = "t3a.micro"
+  nat_instance_type  = "t3.micro"
+  cluster_services   = []
 
   domain_info = {
-    public_zone = "Z1IMWHN7BIT6US"
-    domain_name = "smart-gears.io"
+    public_zone = "Z00837602TL6GGSWKOWND"
+    domain_name = "metal-city.ru"
   }
 
   private_subnets = {
-    "172.16.0.0/20"  = "us-east-1a"
-    "172.16.16.0/20" = "us-east-1b"
+    "172.16.0.0/20"  = "eu-north-1a",
+    "172.16.16.0/20" = "eu-north-1b"
   }
 
   public_subnets = {
-    "172.16.32.0/20" = "us-east-1a"
-    "172.16.48.0/20" = "us-east-1b"
+    "172.16.32.0/20" = "eu-north-1a",
+    "172.16.48.0/20" = "eu-north-1b"
   }
-
-  private_services = [{
-    name: "gitlab"
-    ports: {
-      gateway: 30022
-      service: 22
-    }
-  }]
-
-  public_services = [{
-    name: "open-vpn"
-    ports: {
-      gateway: 31194
-      service: 1194
-    }
-  }]
 }

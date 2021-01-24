@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   namespace: {{ $.Release.Namespace }}
-  name: openvpn-data
+  name: alertmanager-bot-data
 spec:
   storageClassName: aws-ebs-gp2
   accessModes:

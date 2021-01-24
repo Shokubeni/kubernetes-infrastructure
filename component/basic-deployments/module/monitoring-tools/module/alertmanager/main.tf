@@ -3,26 +3,6 @@ resource "helm_release" "alertmanager" {
   namespace = var.chart_namespace
   name      = "alertmanager"
 
-  set {
-    name  = "smtp.from"
-    value = "alerts@${var.network_config.domain_info.domain_name}"
-  }
-
-  set {
-    name  = "smtp.host"
-    value = "${var.smtp_config["host"]}:${var.smtp_config["port"]}"
-  }
-
-  set {
-    name  = "slack.channel"
-    value = var.slack_channel
-  }
-
-  set {
-    name  = "slack.hook"
-    value = var.slack_hook
-  }
-
   depends_on = [
     var.chart_namespace
   ]

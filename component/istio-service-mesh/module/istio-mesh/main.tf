@@ -10,31 +10,7 @@ resource "helm_release" "istio" {
   name      = "istio"
 
   dynamic "set" {
-    for_each = var.network_config.private_services
-    content {
-      name  = "privateServices[${set.key}].name"
-      value = set.value.name
-    }
-  }
-
-  dynamic "set" {
-    for_each = var.network_config.private_services
-    content {
-      name  = "privateServices[${set.key}].ports.gateway"
-      value = set.value.ports.gateway
-    }
-  }
-
-  dynamic "set" {
-    for_each = var.network_config.private_services
-    content {
-      name  = "privateServices[${set.key}].ports.service"
-      value = set.value.ports.service
-    }
-  }
-
-  dynamic "set" {
-    for_each = var.network_config.public_services
+    for_each = var.network_config.cluster_services
     content {
       name  = "publicServices[${set.key}].name"
       value = set.value.name
@@ -42,7 +18,7 @@ resource "helm_release" "istio" {
   }
 
   dynamic "set" {
-    for_each = var.network_config.public_services
+    for_each = var.network_config.cluster_services
     content {
       name  = "publicServices[${set.key}].ports.gateway"
       value = set.value.ports.gateway
@@ -50,7 +26,7 @@ resource "helm_release" "istio" {
   }
 
   dynamic "set" {
-    for_each = var.network_config.public_services
+    for_each = var.network_config.cluster_services
     content {
       name  = "publicServices[${set.key}].ports.service"
       value = set.value.ports.service
@@ -63,18 +39,7 @@ resource "helm_release" "istio" {
   ]
 }
 
-data "kubernetes_service" "internal" {
-  metadata {
-    name      = "internal-ingressgateway"
-    namespace = "istio-system"
-  }
-
-  depends_on = [
-    helm_release.istio
-  ]
-}
-
-data "kubernetes_service" "external" {
+data "kubernetes_service" "balancer" {
   metadata {
     name      = "istio-ingressgateway"
     namespace = "istio-system"

@@ -70,26 +70,20 @@ provider "aws" {
 module "dns_configuration" {
   source = "./module/dns-configuration"
 
-  network_data   = data.terraform_remote_state.kubernetes.outputs.network_data
-  balancer_data  = data.terraform_remote_state.istio.outputs.balancer_data
-  network_config = var.network_config
+  balancer_hostname = data.terraform_remote_state.istio.outputs.balancer_hostname
+  network_data      = data.terraform_remote_state.kubernetes.outputs.network_data
+  network_config    = var.network_config
 }
 
 module "monitoring_tools" {
   source = "./module/monitoring-tools"
 
-  slack_channel     = var.slack_channel
-  slack_hook        = var.slack_hook
+  telegram_token    = var.telegram_token
+  telegram_admin    = var.telegram_admin
   grafana_client_id = var.grafana_client_id
   grafana_secret    = var.grafana_secret
   network_config    = var.network_config
   root_dir          = var.root_dir
-  smtp_config       = {
-    host         = var.smtp_host
-    port         = var.smtp_port
-    metrics_user = var.smtp_metrics_user
-    metrics_pass = var.smtp_metrics_pass
-  }
 }
 
 module "kiali_service_mesh" {
@@ -99,11 +93,4 @@ module "kiali_service_mesh" {
   kiali_secret    = var.kiali_secret
   network_config  = var.network_config
   root_dir        = var.root_dir
-}
-
-module "openvpn_server" {
-  source = "./module/openvpn-server"
-
-  network_config = var.network_config
-  root_dir       = var.root_dir
 }

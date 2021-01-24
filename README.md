@@ -1,4 +1,4 @@
-![Maintained by smart-gears.io](https://img.shields.io/badge/maintained%20by-smart--gears.io-green.svg?style=for-the-badge&logo=appveyor)
+![Maintained by metal-city.ru](https://img.shields.io/badge/maintained%20by-metal--city.ru-green.svg?style=for-the-badge&logo=appveyor)
 ![Status work in progress](https://img.shields.io/badge/status-stable-green.svg?style=for-the-badge&logo=appveyor)
 # Information
 This configuration provides a simple way for quick, secure and fully management installation of Kubernetes cluster. Advanced settings give the possibility to configure support tools such as Kube Lego, Prometeus and Grafana, which helps to monitor cluster resources and simplify its management.
@@ -23,17 +23,15 @@ terragrunt apply-all
 ## Environment
 These environment variables must be configured before you start installation.
 ```sh
-TF_VAR_GRAFANA_CLIENT_ID = <string>`OAuth application client ID`
-TF_VAR_GRAFANA_SECRET    = <string>`OAuth application secret`
-TF_VAR_KIALI_CLIENT_ID   = <string>`OAuth application client ID`
-TF_VAR_KIALI_SECRET      = <string>`OAuth application secret`
-TF_VAR_AWS_PROFILE       = <string>`AWS cluster operator profile name`
-TF_VAR_CLUSTER_NAME      = <string>[SmartGears]
-TF_VAR_CLUSTER_LABEL     = <string>[smart-gears]
-TF_VAR_SMTP_HOST         = <string>[email-smtp.us-east-1.amazonaws.com]
-TF_VAR_SMTP_PORT         = <number>[587]
-TF_VAR_SMTP_METRICS_USER = <string>`SMTP user name`
-TF_VAR_SMTP_METRICS_PASS = <string>`SMTP user password`
-TF_VAR_SLACK_ALERTS_URL  = <url>`slack alerts webhook`
-TF_VAR_SLACK_CHANNEL     = <string>`slack alerts chanel`
+TF_VAR_AWS_PROFILE       = <string>AWS cluster operator profile name
+TF_VAR_CLUSTER_NAME      = <string>[MetalCity]
+TF_VAR_CLUSTER_LABEL     = <string>[metal-city]
+TF_VAR_TELEGRAM_TOKEN    = <string>Telegram bot access token
+TF_VAR_TELEGRAM_ADMIN    = <string>Telegram bot admin ID
+TF_VAR_GRAFANA_CLIENT_ID = <string>OAuth application client ID
+TF_VAR_GRAFANA_SECRET    = <string>OAuth application secret
+TF_VAR_KIALI_CLIENT_ID   = <string>OAuth application client ID
+TF_VAR_KIALI_SECRET      = <string>OAuth application secret
+TF_VAR_SLACK_ALERTS_URL  = <url>slack alerts webhook
+TF_VAR_SLACK_CHANNEL     = <string>slack alerts chanel
 ```

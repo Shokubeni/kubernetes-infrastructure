@@ -67,20 +67,11 @@ variable "runtime_config" {
 variable "network_config" {
   type = object({
     virtual_cloud_cidr = string
-    vpn_clients_cidr   = string
     nat_instance_type  = string
     private_subnets    = map(string)
     public_subnets     = map(string)
 
-    private_services = list(object({
-      name: string
-      ports: object({
-        gateway: number
-        service: number
-      })
-    }))
-
-    public_services = list(object({
+    cluster_services = list(object({
       name: string
       ports: object({
         gateway: number
@@ -111,27 +102,11 @@ variable "backend_region" {
   type = string
 }
 
-variable "smtp_host" {
+variable "telegram_token" {
   type = string
 }
 
-variable "smtp_port" {
-  type = string
-}
-
-variable "smtp_metrics_user" {
-  type = string
-}
-
-variable "smtp_metrics_pass" {
-  type = string
-}
-
-variable "slack_channel" {
-  type = string
-}
-
-variable "slack_hook" {
+variable "telegram_admin" {
   type = string
 }
 

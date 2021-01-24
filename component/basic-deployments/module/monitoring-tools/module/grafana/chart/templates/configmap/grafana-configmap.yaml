@@ -19,9 +19,6 @@ data:
     [server]
     root_url = {{ $.Values.serverUrl }}
     domain = {{ $.Values.domainName }}
-    [smtp]
-    from_address = {{ $.Values.smtp.from }}
-    enabled = true
     [auth.basic]
     enabled = false
     [auth.anonymous]

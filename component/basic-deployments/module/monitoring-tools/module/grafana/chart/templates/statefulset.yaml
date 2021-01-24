@@ -36,22 +36,6 @@ spec:
             limits:
               cpu: 300m
               memory: 128Mi
-          env:
-            - name: GF_SMTP_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-smtp
-                  key: host
-            - name: GF_SMTP_USER
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-smtp
-                  key: user
-            - name: GF_SMTP_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-smtp
-                  key: pass
           volumeMounts:
             - name: config-ini
               mountPath: "/etc/grafana/"

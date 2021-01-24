@@ -16,7 +16,7 @@ metadata:
 data:
   config.yaml: |-
     auth:
-      strategy: login
+      strategy: anonymous
     deployment:
       accessible_namespaces:
         - '**'

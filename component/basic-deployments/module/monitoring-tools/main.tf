@@ -8,14 +8,20 @@ resource "kubernetes_namespace" "monitoring_tools" {
   }
 }
 
+module "alertmanager_bot" {
+  source = "./module/alertmanager-bot"
+
+  chart_namespace = kubernetes_namespace.monitoring_tools.metadata[0].name
+  telegram_token  = var.telegram_token
+  telegram_admin  = var.telegram_admin
+  root_dir        = var.root_dir
+}
+
 module "alertmanager" {
   source = "./module/alertmanager"
 
   chart_namespace = kubernetes_namespace.monitoring_tools.metadata[0].name
   network_config  = var.network_config
-  smtp_config     = var.smtp_config
-  slack_channel   = var.slack_channel
-  slack_hook      = var.slack_hook
   root_dir        = var.root_dir
 }
 
@@ -26,7 +32,6 @@ module "grafana" {
   grafana_client_id = var.grafana_client_id
   grafana_secret    = var.grafana_secret
   network_config    = var.network_config
-  smtp_config       = var.smtp_config
   root_dir          = var.root_dir
 }
 

@@ -1,0 +1,62 @@
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: alertmanager-bot
+  labels:
+    version: v{{ $.Chart.AppVersion }}
+    app: alertmanager-bot
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager-bot
+  serviceName: alertmanager-bot
+  template:
+    metadata:
+      labels:
+        version: v{{ $.Chart.AppVersion }}
+        app: alertmanager-bot
+    spec:
+      containers:
+        - env:
+            - name: BOLT_PATH
+              value: "/data/bot.db"
+            - name: STORE
+              value: "bolt"
+            - name: TELEGRAM_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  key: admin
+                  name: alertmanager-bot
+            - name: TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: alertmanager-bot
+          args:
+            - --alertmanager.url=http://alertmanager.monitoring-tools.svc.cluster.local:9093
+          image: metalmatze/alertmanager-bot:0.4.2
+          imagePullPolicy: IfNotPresent
+          name: alertmanager-bot
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 25m
+              memory: 64Mi
+          volumeMounts:
+            - mountPath: /data
+              name: alertmanager-bot-data
+      restartPolicy: Always
+      volumes:
+        - name: alertmanager-bot-data
+          persistentVolumeClaim:
+            claimName: alertmanager-bot-data
