@@ -51,11 +51,6 @@ variable "runtime_config" {
         resources  = list(string)
       })
     }))
-
-    logs = object({
-      retention = number
-      types     = list(string)
-    })
   })
 }
 

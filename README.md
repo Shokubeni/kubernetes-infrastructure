@@ -32,6 +32,4 @@ TF_VAR_GRAFANA_CLIENT_ID = <string>OAuth application client ID
 TF_VAR_GRAFANA_SECRET    = <string>OAuth application secret
 TF_VAR_KIALI_CLIENT_ID   = <string>OAuth application client ID
 TF_VAR_KIALI_SECRET      = <string>OAuth application secret
-TF_VAR_SLACK_ALERTS_URL  = <url>slack alerts webhook
-TF_VAR_SLACK_CHANNEL     = <string>slack alerts chanel
 ```

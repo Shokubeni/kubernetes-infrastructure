@@ -6,22 +6,13 @@ runtime_config = {
 
   auth_accounts = []
   auth_users    = []
-  auth_roles    = [
-    {
-      rolearn  = "arn:aws:iam::121055255948:role/K8SInfrastructureAdministrator",
-      username = "k8s-operations"
-      groups = [
-        "system:masters"
-      ]
-    },
-    {
-      rolearn  = "arn:aws:iam::121055255948:role/OCPProductionAdministrator",
-      username = "ocp-production"
-      groups = [
-        "ocp-prod:admin"
-      ]
-    }
-  ]
+  auth_roles    = [{
+    rolearn  = "arn:aws:iam::121055255948:role/K8SInfrastructureAdministrator",
+    username = "k8s-operations"
+    groups = [
+      "system:masters"
+    ]
+  }]
 
   backups = [{
     name     = "all-cluster"
@@ -32,7 +23,7 @@ runtime_config = {
       namespaces = [
         "basic-deployments",
         "monitoring-tools",
-        "production-env",
+        "metal-city-prod",
       ]
     }
     exclude = {
@@ -40,17 +31,6 @@ runtime_config = {
       namespaces = []
     }
   }]
-
-  logs = {
-    retention = 7,
-    types = [
-      "controllerManager",
-      "authenticator",
-      "scheduler",
-      "audit",
-      "api"
-    ]
-  }
 }
 
 //**********************************************************************
@@ -95,7 +75,13 @@ worker_configs = [{
 network_config = {
   virtual_cloud_cidr = "172.16.0.0/16"
   nat_instance_type  = "t3.micro"
-  cluster_services   = []
+  cluster_services   = [{
+    name: "open-vpn"
+    ports: {
+      gateway: 31194
+      service: 1194
+    }
+  }]
 
   domain_info = {
     public_zone = "Z00837602TL6GGSWKOWND"
@@ -112,3 +98,13 @@ network_config = {
     "172.16.48.0/20" = "eu-north-1b"
   }
 }
+
+//TF_VAR_AWS_PROFILE=k8s_operations
+//TF_VAR_CLUSTER_NAME=MetalCity
+//TF_VAR_CLUSTER_LABEL=metal-city
+//TF_VAR_TELEGRAM_TOKEN=1585786952:AAGnFA63WS4347swsKcJwTu1QWvltXO9ltg
+//TF_VAR_TELEGRAM_ADMIN=483371842
+//TF_VAR_GRAFANA_CLIENT_ID=675212423599-g79iv32vtlj26kbm4vdekpbburu2nlhf.apps.googleusercontent.com
+//TF_VAR_GRAFANA_SECRET=07fSjZVD7UknSnoA9LymSWBr
+//TF_VAR_KIALI_CLIENT_ID=675212423599-60d5h03lid04e03oc8qv9sipsk5gvb3h.apps.googleusercontent.com
+//TF_VAR_KIALI_SECRET=z7VzFxdzgTtzIZ4-VIjDkK-e

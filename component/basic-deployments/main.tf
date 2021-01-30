@@ -94,3 +94,10 @@ module "kiali_service_mesh" {
   network_config  = var.network_config
   root_dir        = var.root_dir
 }
+
+module "openvpn_server" {
+  source = "./module/openvpn-server"
+
+  network_config = var.network_config
+  root_dir       = var.root_dir
+}
