@@ -2,7 +2,7 @@
 //*                              Runtime                               *
 //**********************************************************************
 runtime_config = {
-  k8s_version = "1.18"
+  k8s_version = "1.19"
 
   auth_accounts = []
   auth_users    = []
@@ -98,13 +98,3 @@ network_config = {
     "172.16.48.0/20" = "eu-north-1b"
   }
 }
-
-//TF_VAR_AWS_PROFILE=k8s_operations
-//TF_VAR_CLUSTER_NAME=MetalCity
-//TF_VAR_CLUSTER_LABEL=metal-city
-//TF_VAR_TELEGRAM_TOKEN=1585786952:AAGnFA63WS4347swsKcJwTu1QWvltXO9ltg
-//TF_VAR_TELEGRAM_ADMIN=483371842
-//TF_VAR_GRAFANA_CLIENT_ID=675212423599-g79iv32vtlj26kbm4vdekpbburu2nlhf.apps.googleusercontent.com
-//TF_VAR_GRAFANA_SECRET=07fSjZVD7UknSnoA9LymSWBr
-//TF_VAR_KIALI_CLIENT_ID=675212423599-60d5h03lid04e03oc8qv9sipsk5gvb3h.apps.googleusercontent.com
-//TF_VAR_KIALI_SECRET=z7VzFxdzgTtzIZ4-VIjDkK-e

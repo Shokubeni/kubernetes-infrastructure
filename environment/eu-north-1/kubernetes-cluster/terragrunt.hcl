@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../component/kubernetes-cluster"
+  source = "../../..//component/kubernetes-cluster"
 
   extra_arguments "formation" {
     commands = get_terraform_commands_that_need_vars()

@@ -6,7 +6,6 @@
       "s390x": 2
     },
     "caAddress": "",
-    "centralIstiod": false,
     "configValidation": true,
     "defaultNodeSelector": {},
     "defaultPodDisruptionBudget": {
@@ -30,10 +29,6 @@
     "logAsJson": false,
     "logging": {
       "level": "default:info"
-    },
-    "meshExpansion": {
-      "enabled": false,
-      "useILB": false
     },
     "meshID": "",
     "meshNetworks": {},
@@ -100,7 +95,7 @@
     "sts": {
       "servicePort": 0
     },
-    "tag": "1.8.1",
+    "tag": "1.9.2",
     "tracer": {
       "datadog": {
         "address": "$(HOST_IP):8126"
@@ -128,13 +123,16 @@
   "revision": "",
   "sidecarInjectorWebhook": {
     "alwaysInjectSelector": [],
+    "defaultTemplates": [],
     "enableNamespacesByDefault": false,
     "injectedAnnotations": {},
     "neverInjectSelector": [],
     "objectSelector": {
       "autoInject": true,
-      "enabled": false
+      "enabled": true
     },
-    "rewriteAppHTTPProbe": true
+    "rewriteAppHTTPProbe": true,
+    "templates": {},
+    "useLegacySelectors": true
   }
 }

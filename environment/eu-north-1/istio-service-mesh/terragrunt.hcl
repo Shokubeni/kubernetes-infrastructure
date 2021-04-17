@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../component/istio-service-mesh"
+  source = "../../..//component/istio-service-mesh"
 
   extra_arguments "formation" {
     commands = get_terraform_commands_that_need_vars()

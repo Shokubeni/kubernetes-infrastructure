@@ -2,6 +2,7 @@
 .terraform
 .idea
 environment/develop
+.terraform.lock.hcl
 package-lock.json
 node_modules
 output

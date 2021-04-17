@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../component/basic-deployments"
+  source = "../../..//component/basic-deployments"
 
   extra_arguments "formation" {
     commands = get_terraform_commands_that_need_vars()
