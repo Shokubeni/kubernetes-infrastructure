@@ -64,12 +64,14 @@ data:
       version_label: v1.29.0
       view_only_mode: false
     external_services:
+      prometheus:
+        url: "http://prometheus.monitoring-tools:9090"
       custom_dashboards:
         enabled: true
     identity:
       cert_file: ""
       private_key_file: ""
-    istio_namespace: monitoring-tools
+    istio_namespace: istio-system
     login_token:
       signing_key: CHANGEME
     server:

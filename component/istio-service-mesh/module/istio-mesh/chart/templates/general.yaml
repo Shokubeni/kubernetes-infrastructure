@@ -7,7 +7,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: istio-ingressgateway
+    istio: ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1094,7 +1094,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: istio-ingressgateway
+    istio: ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1103,7 +1103,7 @@ spec:
   selector:
     matchLabels:
       app: istio-ingressgateway
-      istio: istio-ingressgateway
+      istio: ingressgateway
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -1112,7 +1112,7 @@ spec:
     metadata:
       labels:
         app: istio-ingressgateway
-        istio: istio-ingressgateway
+        istio: ingressgateway
         heritage: Tiller
         release: istio
         chart: gateways
@@ -1509,7 +1509,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: istio-ingressgateway
+    istio: ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1519,7 +1519,7 @@ spec:
   selector:
     matchLabels:
       app: istio-ingressgateway
-      istio: istio-ingressgateway
+      istio: ingressgateway
 ---
 
 apiVersion: policy/v1beta1
@@ -1621,7 +1621,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: istio-ingressgateway
+    istio: ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1673,7 +1673,7 @@ metadata:
   annotations:
   labels:
     app: istio-ingressgateway
-    istio: istio-ingressgateway
+    istio: ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1682,7 +1682,7 @@ spec:
   type: LoadBalancer
   selector:
     app: istio-ingressgateway
-    istio: istio-ingressgateway
+    istio: ingressgateway
   ports:
     -
       name: status-port
