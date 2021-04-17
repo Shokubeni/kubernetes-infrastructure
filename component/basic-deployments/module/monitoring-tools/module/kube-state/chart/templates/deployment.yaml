@@ -56,7 +56,7 @@ spec:
             - --collectors=validatingwebhookconfigurations
             - --collectors=volumeattachments
           imagePullPolicy: IfNotPresent
-          image: quay.io/coreos/kube-state-metrics:v1.9.7
+          image: quay.io/coreos/kube-state-metrics:v1.9.8
           ports:
             - name: http-metrics
               containerPort: 8080

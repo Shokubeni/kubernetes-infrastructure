@@ -4,10 +4,10 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: istio-ingressgateway-service-account
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -18,7 +18,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: istio-reader-service-account
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-reader
     release: istio
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: istiod-service-account
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istiod
     release: istio
@@ -179,7 +179,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: istio-reader-service-account
-    namespace: asf
+    namespace: {{ $.Release.Namespace }}
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -196,7 +196,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: istiod-service-account
-    namespace: asf
+    namespace: {{ $.Release.Namespace }}
 ---
 
 apiVersion: admissionregistration.k8s.io/v1beta1
@@ -212,7 +212,7 @@ webhooks:
     clientConfig:
       service:
         name: istiod
-        namespace: asf
+        namespace: {{ $.Release.Namespace }}
         path: "/validate"
       caBundle: "" # patched at runtime when the webhook is ready.
     rules:
@@ -238,7 +238,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: metadata-exchange-1.8
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -332,7 +332,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: metadata-exchange-1.9
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -426,7 +426,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: stats-filter-1.8
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
 spec:
@@ -534,7 +534,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: stats-filter-1.9
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
 spec:
@@ -672,7 +672,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: tcp-metadata-exchange-1.8
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
 spec:
@@ -730,7 +730,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: tcp-metadata-exchange-1.9
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
 spec:
@@ -788,7 +788,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: tcp-stats-filter-1.8
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
 spec:
@@ -889,7 +889,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: tcp-stats-filter-1.9
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
 spec:
@@ -1020,7 +1020,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: istio
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1037,7 +1037,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: istio-sidecar-injector
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1065,7 +1065,7 @@ webhooks:
     clientConfig:
       service:
         name: istiod
-        namespace: asf
+        namespace: {{ $.Release.Namespace }}
         path: "/inject"
       caBundle: ""
     sideEffects: None
@@ -1091,10 +1091,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: istio-ingressgateway
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1103,7 +1103,7 @@ spec:
   selector:
     matchLabels:
       app: istio-ingressgateway
-      istio: ingressgateway
+      istio: istio-ingressgateway
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -1112,7 +1112,7 @@ spec:
     metadata:
       labels:
         app: istio-ingressgateway
-        istio: ingressgateway
+        istio: istio-ingressgateway
         heritage: Tiller
         release: istio
         chart: gateways
@@ -1151,203 +1151,203 @@ spec:
             - containerPort: 15090
               protocol: TCP
               name: http-envoy-prom
-  {{- range $service := $.Values.publicServices }}
-- containerPort: {{ $service.ports.gateway }}
-  {{- end }}
-args:
-  - proxy
-  - router
-  - --domain
-  - $(POD_NAMESPACE).svc.cluster.local
-  - --proxyLogLevel=warning
-  - --proxyComponentLogLevel=misc:error
-  - --log_output_level=default:info
-  - --serviceCluster
-  - istio-ingressgateway
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-  privileged: false
-  readOnlyRootFilesystem: true
-readinessProbe:
-  failureThreshold: 30
-  httpGet:
-    path: /healthz/ready
-    port: 15021
-    scheme: HTTP
-  initialDelaySeconds: 1
-  periodSeconds: 2
-  successThreshold: 1
-  timeoutSeconds: 1
-resources:
-  limits:
-    cpu: 2000m
-    memory: 1024Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
-env:
-  - name: JWT_POLICY
-    value: third-party-jwt
-  - name: PILOT_CERT_PROVIDER
-    value: istiod
-  - name: CA_ADDR
-    value: istiod.istio-system.svc:15012
-  - name: NODE_NAME
-    valueFrom:
-      fieldRef:
-        apiVersion: v1
-        fieldPath: spec.nodeName
-  - name: POD_NAME
-    valueFrom:
-      fieldRef:
-        apiVersion: v1
-        fieldPath: metadata.name
-  - name: POD_NAMESPACE
-    valueFrom:
-      fieldRef:
-        apiVersion: v1
-        fieldPath: metadata.namespace
-  - name: INSTANCE_IP
-    valueFrom:
-      fieldRef:
-        apiVersion: v1
-        fieldPath: status.podIP
-  - name: HOST_IP
-    valueFrom:
-      fieldRef:
-        apiVersion: v1
-        fieldPath: status.hostIP
-  - name: SERVICE_ACCOUNT
-    valueFrom:
-      fieldRef:
-        fieldPath: spec.serviceAccountName
-  - name: CANONICAL_SERVICE
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['service.istio.io/canonical-name']
-  - name: CANONICAL_REVISION
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['service.istio.io/canonical-revision']
-  - name: ISTIO_META_WORKLOAD_NAME
-    value: istio-ingressgateway
-  - name: ISTIO_META_OWNER
-    value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/istio-ingressgateway
-  - name: ISTIO_META_UNPRIVILEGED_POD
-    value: "true"
-  - name: ISTIO_META_ROUTER_MODE
-    value: standard
-  - name: ISTIO_META_CLUSTER_ID
-    value: "Kubernetes"
-volumeMounts:
-  - name: istio-envoy
-    mountPath: /etc/istio/proxy
-  - name: config-volume
-    mountPath: /etc/istio/config
-  - mountPath: /var/run/secrets/istio
-    name: istiod-ca-cert
-  - name: istio-token
-    mountPath: /var/run/secrets/tokens
-    readOnly: true
-  - mountPath: /var/lib/istio/data
-    name: istio-data
-  - name: podinfo
-    mountPath: /etc/istio/pod
-  - name: ingressgateway-certs
-    mountPath: "/etc/istio/ingressgateway-certs"
-    readOnly: true
-  - name: ingressgateway-ca-certs
-    mountPath: "/etc/istio/ingressgateway-ca-certs"
-    readOnly: true
-volumes:
-  - name: istiod-ca-cert
-    configMap:
-      name: istio-ca-root-cert
-  - name: podinfo
-    downwardAPI:
-      items:
-        - path: "labels"
-          fieldRef:
-            fieldPath: metadata.labels
-        - path: "annotations"
-          fieldRef:
-            fieldPath: metadata.annotations
-        - path: "cpu-limit"
-          resourceFieldRef:
-            containerName: istio-proxy
-            resource: limits.cpu
-            divisor: 1m
-        - path: "cpu-request"
-          resourceFieldRef:
-            containerName: istio-proxy
-            resource: requests.cpu
-            divisor: 1m
-  - name: istio-envoy
-    emptyDir: {}
-  - name: istio-data
-    emptyDir: {}
-  - name: istio-token
-    projected:
-      sources:
-        - serviceAccountToken:
-            path: istio-token
-            expirationSeconds: 43200
-            audience: istio-ca
-  - name: config-volume
-    configMap:
-      name: istio
-      optional: true
-  - name: ingressgateway-certs
-    secret:
-      secretName: "istio-ingressgateway-certs"
-      optional: true
-  - name: ingressgateway-ca-certs
-    secret:
-      secretName: "istio-ingressgateway-ca-certs"
-      optional: true
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/arch
-              operator: In
-              values:
-                - "amd64"
-                - "ppc64le"
-                - "s390x"
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 2
-        preference:
-          matchExpressions:
-            - key: kubernetes.io/arch
-              operator: In
-              values:
-                - "amd64"
-      - weight: 2
-        preference:
-          matchExpressions:
-            - key: kubernetes.io/arch
-              operator: In
-              values:
-                - "ppc64le"
-      - weight: 2
-        preference:
-          matchExpressions:
-            - key: kubernetes.io/arch
-              operator: In
-              values:
-                - "s390x"
+{{- range $service := $.Values.publicServices }}
+            - containerPort: {{ $service.ports.gateway }}
+{{- end }}
+          args:
+            - proxy
+            - router
+            - --domain
+            - $(POD_NAMESPACE).svc.cluster.local
+            - --proxyLogLevel=warning
+            - --proxyComponentLogLevel=misc:error
+            - --log_output_level=default:info
+            - --serviceCluster
+            - istio-ingressgateway
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+          readinessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /healthz/ready
+              port: 15021
+              scheme: HTTP
+            initialDelaySeconds: 1
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+            - name: JWT_POLICY
+              value: third-party-jwt
+            - name: PILOT_CERT_PROVIDER
+              value: istiod
+            - name: CA_ADDR
+              value: istiod.istio-system.svc:15012
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: INSTANCE_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+            - name: SERVICE_ACCOUNT
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+            - name: CANONICAL_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['service.istio.io/canonical-name']
+            - name: CANONICAL_REVISION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['service.istio.io/canonical-revision']
+            - name: ISTIO_META_WORKLOAD_NAME
+              value: istio-ingressgateway
+            - name: ISTIO_META_OWNER
+              value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/istio-ingressgateway
+            - name: ISTIO_META_UNPRIVILEGED_POD
+              value: "true"
+            - name: ISTIO_META_ROUTER_MODE
+              value: standard
+            - name: ISTIO_META_CLUSTER_ID
+              value: "Kubernetes"
+          volumeMounts:
+            - name: istio-envoy
+              mountPath: /etc/istio/proxy
+            - name: config-volume
+              mountPath: /etc/istio/config
+            - mountPath: /var/run/secrets/istio
+              name: istiod-ca-cert
+            - name: istio-token
+              mountPath: /var/run/secrets/tokens
+              readOnly: true
+            - mountPath: /var/lib/istio/data
+              name: istio-data
+            - name: podinfo
+              mountPath: /etc/istio/pod
+            - name: ingressgateway-certs
+              mountPath: "/etc/istio/ingressgateway-certs"
+              readOnly: true
+            - name: ingressgateway-ca-certs
+              mountPath: "/etc/istio/ingressgateway-ca-certs"
+              readOnly: true
+      volumes:
+        - name: istiod-ca-cert
+          configMap:
+            name: istio-ca-root-cert
+        - name: podinfo
+          downwardAPI:
+            items:
+              - path: "labels"
+                fieldRef:
+                  fieldPath: metadata.labels
+              - path: "annotations"
+                fieldRef:
+                  fieldPath: metadata.annotations
+              - path: "cpu-limit"
+                resourceFieldRef:
+                  containerName: istio-proxy
+                  resource: limits.cpu
+                  divisor: 1m
+              - path: "cpu-request"
+                resourceFieldRef:
+                  containerName: istio-proxy
+                  resource: requests.cpu
+                  divisor: 1m
+        - name: istio-envoy
+          emptyDir: {}
+        - name: istio-data
+          emptyDir: {}
+        - name: istio-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: istio-token
+                  expirationSeconds: 43200
+                  audience: istio-ca
+        - name: config-volume
+          configMap:
+            name: istio
+            optional: true
+        - name: ingressgateway-certs
+          secret:
+            secretName: "istio-ingressgateway-certs"
+            optional: true
+        - name: ingressgateway-ca-certs
+          secret:
+            secretName: "istio-ingressgateway-ca-certs"
+            optional: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - "amd64"
+                      - "ppc64le"
+                      - "s390x"
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 2
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - "amd64"
+            - weight: 2
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - "ppc64le"
+            - weight: 2
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - "s390x"
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: istiod
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istiod
     istio.io/rev: default
@@ -1506,10 +1506,10 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: istio-ingressgateway
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1519,14 +1519,14 @@ spec:
   selector:
     matchLabels:
       app: istio-ingressgateway
-      istio: ingressgateway
+      istio: istio-ingressgateway
 ---
 
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: istiod
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istiod
     istio.io/rev: default
@@ -1546,7 +1546,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: istio-ingressgateway-sds
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     release: istio
     istio.io/rev: default
@@ -1562,7 +1562,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: istiod-istio-system
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istiod
     release: istio
@@ -1581,7 +1581,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: istio-ingressgateway-sds
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     release: istio
     istio.io/rev: default
@@ -1600,7 +1600,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: istiod-istio-system
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istiod
     release: istio
@@ -1611,17 +1611,17 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: istiod-service-account
-    namespace: asf
+    namespace: {{ $.Release.Namespace }}
 ---
 
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: istio-ingressgateway
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1644,7 +1644,7 @@ apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: istiod
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: istiod
     release: istio
@@ -1669,11 +1669,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: istio-ingressgateway
-  namespace: asf
+  namespace: {{ $.Release.Namespace }}
   annotations:
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
     release: istio
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown
@@ -1682,7 +1682,7 @@ spec:
   type: LoadBalancer
   selector:
     app: istio-ingressgateway
-    istio: ingressgateway
+    istio: istio-ingressgateway
   ports:
     -
       name: status-port
@@ -1709,18 +1709,18 @@ spec:
       port: 15443
       protocol: TCP
       targetPort: 15443
-  {{- range $service := $.Values.publicServices }}
-- name: {{ $service.name }}
-  port: {{ $service.ports.service }}
-  targetPort: {{ $service.ports.gateway }}
-  {{- end }}
+{{- range $service := $.Values.publicServices }}
+    - name: {{ $service.name }}
+      port: {{ $service.ports.service }}
+      targetPort: {{ $service.ports.gateway }}
+{{- end }}
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   name: istiod
-  namespace: istio-system
+  namespace: {{ $.Release.Namespace }}
   labels:
     istio.io/rev: default
     install.operator.istio.io/owning-resource: unknown

@@ -39,7 +39,7 @@ spec:
                   name: alertmanager-bot
           args:
             - --alertmanager.url=http://alertmanager.monitoring-tools.svc.cluster.local:9093
-          image: metalmatze/alertmanager-bot:0.4.2
+          image: metalmatze/alertmanager-bot:0.4.3
           imagePullPolicy: IfNotPresent
           name: alertmanager-bot
           ports:

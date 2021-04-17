@@ -1,4 +1,4 @@
 apiVersion: v2
 name: kube-state
-appVersion: 1.9.7
+appVersion: 1.9.8
 version: 1.0.0
