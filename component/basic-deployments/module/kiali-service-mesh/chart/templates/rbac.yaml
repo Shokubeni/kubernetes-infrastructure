@@ -6,13 +6,14 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   name: kiali
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -20,13 +21,14 @@ kind: ClusterRole
 metadata:
   name: kiali-viewer
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 rules:
   - apiGroups: [""]
     resources:
@@ -43,6 +45,12 @@ rules:
       - get
       - list
       - watch
+  - apiGroups: [""]
+    resources:
+      - pods/portforward
+    verbs:
+      - create
+      - post
   - apiGroups: ["extensions", "apps"]
     resources:
       - deployments
@@ -104,6 +112,11 @@ rules:
     verbs:
       - get
       - list
+  - apiGroups: ["authentication.k8s.io"]
+    resources:
+      - tokenreviews
+    verbs:
+      - create
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -111,13 +124,14 @@ kind: ClusterRole
 metadata:
   name: kiali
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 rules:
   - apiGroups: [""]
     resources:
@@ -135,6 +149,12 @@ rules:
       - list
       - patch
       - watch
+  - apiGroups: [""]
+    resources:
+      - pods/portforward
+    verbs:
+      - create
+      - post
   - apiGroups: ["extensions", "apps"]
     resources:
       - deployments
@@ -206,6 +226,11 @@ rules:
       - list
       - patch
       - watch
+  - apiGroups: ["authentication.k8s.io"]
+    resources:
+      - tokenreviews
+    verbs:
+      - create
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -213,17 +238,64 @@ kind: ClusterRoleBinding
 metadata:
   name: kiali
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: kiali
+subjects:
+  - kind: ServiceAccount
+    name: kiali
+    namespace: {{ $.Release.Namespace }}
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kiali-controlplane
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    helm.sh/chart: kiali-server-1.29.0
+    app: kiali
+    app.kubernetes.io/name: kiali
+    app.kubernetes.io/instance: kiali-server
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
+rules:
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs:
+      - list
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kiali-controlplane
+  namespace: istio-system
+  labels:
+    helm.sh/chart: kiali-server-1.29.0
+    app: kiali
+    app.kubernetes.io/name: kiali
+    app.kubernetes.io/instance: kiali-server
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kiali-controlplane
 subjects:
   - kind: ServiceAccount
     name: kiali

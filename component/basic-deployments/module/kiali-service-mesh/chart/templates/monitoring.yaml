@@ -5,13 +5,14 @@ kind: MonitoringDashboard
 metadata:
   name: envoy
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   title: Envoy Metrics
   #  discoverOn: "envoy_server_uptime"
@@ -64,13 +65,14 @@ kind: MonitoringDashboard
 metadata:
   name: go
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   title: Go Metrics
   runtime: Go
@@ -134,13 +136,14 @@ kind: MonitoringDashboard
 metadata:
   name: kiali
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   title: Kiali Internal Metrics
   items:
@@ -181,13 +184,14 @@ kind: MonitoringDashboard
 metadata:
   name: micrometer-1.0.6-jvm-pool
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: JVM
   title: JVM Pool Metrics
@@ -227,13 +231,14 @@ kind: MonitoringDashboard
 metadata:
   name: micrometer-1.0.6-jvm
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: JVM
   title: JVM Metrics
@@ -295,13 +300,14 @@ kind: MonitoringDashboard
 metadata:
   name: micrometer-1.1-jvm
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: JVM
   title: JVM Metrics
@@ -366,13 +372,14 @@ kind: MonitoringDashboard
 metadata:
   name: microprofile-1.1
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   title: MicroProfile Metrics
   runtime: MicroProfile
@@ -428,13 +435,14 @@ kind: MonitoringDashboard
 metadata:
   name: microprofile-x.y
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   title: MicroProfile Metrics
   runtime: MicroProfile
@@ -469,13 +477,14 @@ kind: MonitoringDashboard
 metadata:
   name: nodejs
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Node.js
   title: Node.js Metrics
@@ -531,13 +540,14 @@ kind: MonitoringDashboard
 metadata:
   name: quarkus
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   title: Quarkus Metrics
   runtime: Quarkus
@@ -567,13 +577,14 @@ kind: MonitoringDashboard
 metadata:
   name: springboot-jvm-pool
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Spring Boot
   title: JVM Pool Metrics
@@ -586,13 +597,14 @@ kind: MonitoringDashboard
 metadata:
   name: springboot-jvm
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Spring Boot
   title: JVM Metrics
@@ -605,13 +617,14 @@ kind: MonitoringDashboard
 metadata:
   name: springboot-tomcat
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Spring Boot
   title: Tomcat Metrics
@@ -624,13 +637,14 @@ kind: MonitoringDashboard
 metadata:
   name: thorntail
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Thorntail
   title: Thorntail Metrics
@@ -649,13 +663,14 @@ kind: MonitoringDashboard
 metadata:
   name: tomcat
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Tomcat
   title: Tomcat Metrics
@@ -719,13 +734,14 @@ kind: MonitoringDashboard
 metadata:
   name: vertx-client
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Vert.x
   title: Vert.x Client Metrics
@@ -782,13 +798,14 @@ kind: MonitoringDashboard
 metadata:
   name: vertx-eventbus
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Vert.x
   title: Vert.x Eventbus Metrics
@@ -844,13 +861,14 @@ kind: MonitoringDashboard
 metadata:
   name: vertx-jvm
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Vert.x
   title: JVM Metrics
@@ -863,13 +881,14 @@ kind: MonitoringDashboard
 metadata:
   name: vertx-pool
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Vert.x
   title: Vert.x Pools Metrics
@@ -934,13 +953,14 @@ kind: MonitoringDashboard
 metadata:
   name: vertx-server
   labels:
-    helm.sh/chart: kiali-server-1.26.0
+    helm.sh/chart: kiali-server-1.29.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali-server
-    version: "v1.26.0"
-    app.kubernetes.io/version: "v1.26.0"
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali"
 spec:
   runtime: Vert.x
   title: Vert.x Server Metrics
