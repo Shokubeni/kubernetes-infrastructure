@@ -19,6 +19,7 @@ spec:
         version: v{{ $.Chart.AppVersion }}
         app: alertmanager
     spec:
+      priorityClassName: system-cluster-critical
       containers:
       - name: alertmanager
         image: prom/alertmanager:v0.21.0

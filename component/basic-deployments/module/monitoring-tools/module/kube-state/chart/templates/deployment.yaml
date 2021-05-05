@@ -19,6 +19,7 @@ spec:
         version: v{{ $.Chart.AppVersion }}
         app: kube-state-metrics
     spec:
+      priorityClassName: system-cluster-critical
       serviceAccountName: kube-state-metrics
       hostNetwork: false
       securityContext:

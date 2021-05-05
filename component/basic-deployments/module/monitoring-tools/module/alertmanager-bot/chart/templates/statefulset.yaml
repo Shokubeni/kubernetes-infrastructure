@@ -21,6 +21,7 @@ spec:
         version: v{{ $.Chart.AppVersion }}
         app: alertmanager-bot
     spec:
+      priorityClassName: system-cluster-critical
       containers:
         - env:
             - name: BOLT_PATH

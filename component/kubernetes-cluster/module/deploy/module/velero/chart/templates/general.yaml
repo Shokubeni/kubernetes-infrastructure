@@ -66,6 +66,7 @@ spec:
         version: v{{ $.Chart.AppVersion }}
         app: velero
     spec:
+      priorityClassName: system-cluster-critical
       securityContext:
         fsGroup: 65534
       containers:
