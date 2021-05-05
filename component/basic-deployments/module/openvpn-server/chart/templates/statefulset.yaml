@@ -20,6 +20,15 @@ spec:
         version: v{{ $.Chart.AppVersion }}
         app: openvpn
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.metal-city.ru/scope
+                    operator: In
+                    values:
+                      - commom
       containers:
         - name: openvpn
           image: jfelten/openvpn-docker:1.1.0

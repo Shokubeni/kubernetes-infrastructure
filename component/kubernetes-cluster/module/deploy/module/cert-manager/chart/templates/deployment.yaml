@@ -109,6 +109,16 @@ spec:
         version: v{{ $.Chart.AppVersion }}
         app: cert-manager-webhook
     spec:
+      priorityClassName: system-cluster-critical
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.metal-city.ru/scope
+                    operator: In
+                    values:
+                      - commom
       serviceAccountName: cert-manager-webhook
       containers:
         - name: cert-manager

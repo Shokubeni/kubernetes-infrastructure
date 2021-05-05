@@ -43,6 +43,15 @@ spec:
         kiali.io/runtimes: go,kiali
         sidecar.istio.io/inject: "false"
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.metal-city.ru/scope
+                    operator: In
+                    values:
+                      - commom
       serviceAccountName: kiali
       containers:
         - image: "quay.io/kiali/kiali:v1.29"

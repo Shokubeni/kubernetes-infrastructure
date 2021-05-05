@@ -20,6 +20,15 @@ spec:
         app: alertmanager
     spec:
       priorityClassName: system-cluster-critical
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.metal-city.ru/scope
+                    operator: In
+                    values:
+                      - commom
       containers:
       - name: alertmanager
         image: prom/alertmanager:v0.21.0

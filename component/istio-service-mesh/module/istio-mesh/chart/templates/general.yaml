@@ -1128,6 +1128,16 @@ spec:
         prometheus.io/path: "/stats/prometheus"
         sidecar.istio.io/inject: "false"
     spec:
+      priorityClassName: system-cluster-critical
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.metal-city.ru/scope
+                    operator: In
+                    values:
+                      - commom
       securityContext:
         runAsUser: 1337
         runAsGroup: 1337
@@ -1308,39 +1318,6 @@ spec:
           secret:
             secretName: "istio-ingressgateway-ca-certs"
             optional: true
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - "amd64"
-                      - "ppc64le"
-                      - "s390x"
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 2
-              preference:
-                matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - "amd64"
-            - weight: 2
-              preference:
-                matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - "ppc64le"
-            - weight: 2
-              preference:
-                matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - "s390x"
 ---
 
 apiVersion: apps/v1
@@ -1377,6 +1354,16 @@ spec:
         prometheus.io/scrape: "true"
         sidecar.istio.io/inject: "false"
     spec:
+      priorityClassName: system-cluster-critical
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.metal-city.ru/scope
+                    operator: In
+                    values:
+                      - commom
       serviceAccountName: istiod-service-account
       securityContext:
         fsGroup: 1337
