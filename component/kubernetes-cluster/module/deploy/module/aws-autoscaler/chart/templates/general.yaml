@@ -223,7 +223,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       serviceAccountName: cluster-autoscaler
       containers:
         - name: cluster-autoscaler

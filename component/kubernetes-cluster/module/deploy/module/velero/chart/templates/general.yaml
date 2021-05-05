@@ -75,7 +75,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       securityContext:
         fsGroup: 65534
       containers:

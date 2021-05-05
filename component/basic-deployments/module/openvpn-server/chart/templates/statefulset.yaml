@@ -28,7 +28,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       containers:
         - name: openvpn
           image: jfelten/openvpn-docker:1.1.0

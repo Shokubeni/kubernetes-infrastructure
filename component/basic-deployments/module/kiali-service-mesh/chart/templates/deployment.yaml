@@ -51,7 +51,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       serviceAccountName: kiali
       containers:
         - image: "quay.io/kiali/kiali:v1.29"

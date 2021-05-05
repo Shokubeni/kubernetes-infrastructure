@@ -118,7 +118,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       serviceAccountName: cert-manager-webhook
       containers:
         - name: cert-manager

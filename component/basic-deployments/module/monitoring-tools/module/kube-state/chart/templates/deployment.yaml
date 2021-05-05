@@ -28,7 +28,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       serviceAccountName: kube-state-metrics
       hostNetwork: false
       securityContext:

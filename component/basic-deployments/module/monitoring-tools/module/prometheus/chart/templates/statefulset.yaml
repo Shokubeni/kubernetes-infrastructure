@@ -29,7 +29,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       serviceAccountName: prometheus
       securityContext:
         fsGroup: 9090

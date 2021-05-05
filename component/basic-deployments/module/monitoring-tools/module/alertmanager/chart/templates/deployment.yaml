@@ -28,7 +28,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       containers:
       - name: alertmanager
         image: prom/alertmanager:v0.21.0

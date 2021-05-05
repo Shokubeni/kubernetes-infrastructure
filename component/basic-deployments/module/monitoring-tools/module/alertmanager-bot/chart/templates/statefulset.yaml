@@ -30,7 +30,7 @@ spec:
                   - key: node.metal-city.ru/scope
                     operator: In
                     values:
-                      - commom
+                      - common
       containers:
         - env:
             - name: BOLT_PATH
