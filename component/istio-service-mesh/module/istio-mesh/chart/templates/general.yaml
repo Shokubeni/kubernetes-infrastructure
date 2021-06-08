@@ -1129,15 +1129,6 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       priorityClassName: system-cluster-critical
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node.metal-city.ru/scope
-                    operator: In
-                    values:
-                      - common
       securityContext:
         runAsUser: 1337
         runAsGroup: 1337
@@ -1355,15 +1346,6 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       priorityClassName: system-cluster-critical
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node.metal-city.ru/scope
-                    operator: In
-                    values:
-                      - common
       serviceAccountName: istiod-service-account
       securityContext:
         fsGroup: 1337

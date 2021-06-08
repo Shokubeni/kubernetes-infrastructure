@@ -38,36 +38,6 @@ runtime_config = {
 //**********************************************************************
 worker_configs = [{
   instance = {
-    node_group_label    = "production-workers"
-    shutdown_behavior   = "terminate"
-    cpu_credits         = "standard"
-    disable_termination = false
-    ebs_optimized       = false
-    monitoring          = false
-    max_price           = 0.08
-    min_size            = 1
-    max_size            = 2
-    on_demand_capasity  = 0
-    desired_capacity    = 1
-    kubelet_extra_args  = {
-      "--node-labels" = [
-        "node.metal-city.ru/lifecycle=spot",
-        "node.metal-city.ru/scope=production",
-      ]
-    }
-    instance_types = [
-      "t3.large",
-    ]
-  }
-
-  volume = {
-    volume_type = "gp2"
-    volume_size = 30
-    termination = true
-    iops        = null
-  }
-},{
-  instance = {
     node_group_label    = "common-workers"
     shutdown_behavior   = "terminate"
     cpu_credits         = "standard"

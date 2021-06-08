@@ -215,15 +215,6 @@ spec:
         app: cluster-autoscaler
     spec:
       priorityClassName: system-cluster-critical
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node.metal-city.ru/scope
-                    operator: In
-                    values:
-                      - common
       serviceAccountName: cluster-autoscaler
       containers:
         - name: cluster-autoscaler

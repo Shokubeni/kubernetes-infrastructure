@@ -67,15 +67,6 @@ spec:
         app: velero
     spec:
       priorityClassName: system-cluster-critical
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node.metal-city.ru/scope
-                    operator: In
-                    values:
-                      - common
       securityContext:
         fsGroup: 65534
       containers:

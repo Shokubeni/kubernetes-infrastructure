@@ -20,15 +20,6 @@ spec:
         app: kube-state-metrics
     spec:
       priorityClassName: system-cluster-critical
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node.metal-city.ru/scope
-                    operator: In
-                    values:
-                      - common
       serviceAccountName: kube-state-metrics
       hostNetwork: false
       securityContext:
