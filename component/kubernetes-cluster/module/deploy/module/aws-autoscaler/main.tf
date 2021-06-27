@@ -48,6 +48,11 @@ resource "helm_release" "autoscaler" {
     value = aws_iam_role.autoscaler.arn
   }
 
+  set {
+    name  = "region"
+    value = var.cluster_data.region
+  }
+
   depends_on = [
     aws_iam_role.autoscaler,
     var.control_plane
