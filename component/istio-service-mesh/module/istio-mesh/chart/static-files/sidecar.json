@@ -1,10 +1,5 @@
 {
   "global": {
-    "arch": {
-      "amd64": 2,
-      "ppc64le": 2,
-      "s390x": 2
-    },
     "caAddress": "",
     "configValidation": true,
     "defaultNodeSelector": {},
@@ -95,7 +90,7 @@
     "sts": {
       "servicePort": 0
     },
-    "tag": "1.9.3",
+    "tag": "1.10.2",
     "tracer": {
       "datadog": {
         "address": "$(HOST_IP):8126"
@@ -114,7 +109,6 @@
         "address": ""
       }
     },
-    "trustDomain": "",
     "useMCP": false
   },
   "istio_cni": {
@@ -133,6 +127,6 @@
     },
     "rewriteAppHTTPProbe": true,
     "templates": {},
-    "useLegacySelectors": true
+    "useLegacySelectors": false
   }
 }

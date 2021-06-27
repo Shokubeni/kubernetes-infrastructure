@@ -22,7 +22,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
       - name: alertmanager
-        image: prom/alertmanager:v0.21.0
+        image: prom/alertmanager:v0.22.2
         resources:
           requests:
             cpu: 10m
