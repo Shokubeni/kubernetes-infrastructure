@@ -85,7 +85,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: LD_LIBRARY_PATH
               value: /plugins
-          image: velero/velero:v1.6.1
+          image: velero/velero:v1.6.2
           imagePullPolicy: IfNotPresent
           name: velero
           ports:
@@ -104,7 +104,7 @@ spec:
             - mountPath: /scratch
               name: scratch
       initContainers:
-        - image: velero/velero-plugin-for-aws:v1.1.0
+        - image: velero/velero-plugin-for-aws:v1.2.1
           imagePullPolicy: IfNotPresent
           name: velero-plugin-for-aws
           resources: {}
