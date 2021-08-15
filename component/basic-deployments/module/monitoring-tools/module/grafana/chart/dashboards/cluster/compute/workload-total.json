@@ -258,7 +258,7 @@
               "decimals": 2,
               "link": true,
               "linkTooltip": "Drill down",
-              "linkUrl": "./d/6581e46e4e5c7ba40a07646395ef7b23/k8s-resources-pod?var-datasource=prometheus&var-cluster=$cluster&var-namespace=$namespace&var-pod=$__cell",
+              "linkUrl": "/d/6581e46e4e5c7ba40a07646395ef7b23/workload-total?var-datasource=prometheus&var-cluster=$cluster&var-namespace=$namespace&var-pod=$__cell",
               "pattern": "pod",
               "thresholds": [
 
@@ -623,7 +623,7 @@
               "decimals": 2,
               "link": true,
               "linkTooltip": "Drill down",
-              "linkUrl": "./d/6581e46e4e5c7ba40a07646395ef7b23/k8s-resources-pod?var-datasource=prometheus&var-cluster=$cluster&var-namespace=$namespace&var-pod=$__cell",
+              "linkUrl": "/d/6581e46e4e5c7ba40a07646395ef7b23/workload-total?var-datasource=prometheus&var-cluster=$cluster&var-namespace=$namespace&var-pod=$__cell",
               "pattern": "pod",
               "thresholds": [
 
@@ -908,7 +908,7 @@
               "decimals": 2,
               "link": true,
               "linkTooltip": "Drill down",
-              "linkUrl": "./d/6581e46e4e5c7ba40a07646395ef7b23/k8s-resources-pod?var-datasource=prometheus&var-cluster=$cluster&var-namespace=$namespace&var-pod=$__cell",
+              "linkUrl": "/d/6581e46e4e5c7ba40a07646395ef7b23/pods-total?var-datasource=prometheus&var-cluster=$cluster&var-namespace=$namespace&var-pod=$__cell",
               "pattern": "pod",
               "thresholds": [
 
