@@ -238,7 +238,7 @@ spec:
       dnsPolicy: "ClusterFirst"
       containers:
         - name: cluster-autoscaler
-          image: "k8s.gcr.io/autoscaling/cluster-autoscaler:v1.20.0"
+          image: "k8s.gcr.io/autoscaling/cluster-autoscaler:v1.22.0"
           imagePullPolicy: "IfNotPresent"
           command:
             - ./cluster-autoscaler

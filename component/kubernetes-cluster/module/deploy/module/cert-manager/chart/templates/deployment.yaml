@@ -24,7 +24,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: cert-manager
-          image: quay.io/jetstack/cert-manager-cainjector:v1.4.0
+          image: quay.io/jetstack/cert-manager-cainjector:v1.5.0
           imagePullPolicy: IfNotPresent
           args:
             - --v=2
@@ -68,7 +68,7 @@ spec:
         fsGroup: 65534
       containers:
         - name: cert-manager
-          image: quay.io/jetstack/cert-manager-controller:v1.4.0
+          image: quay.io/jetstack/cert-manager-controller:v1.5.0
           imagePullPolicy: IfNotPresent
           args:
             - --v=2
@@ -118,7 +118,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: cert-manager
-          image: quay.io/jetstack/cert-manager-webhook:v1.4.0
+          image: quay.io/jetstack/cert-manager-webhook:v1.5.0
           imagePullPolicy: IfNotPresent
           args:
             - --v=2
@@ -136,6 +136,9 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 60
             periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /healthz
@@ -143,6 +146,9 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
           env:
             - name: POD_NAMESPACE
               valueFrom:

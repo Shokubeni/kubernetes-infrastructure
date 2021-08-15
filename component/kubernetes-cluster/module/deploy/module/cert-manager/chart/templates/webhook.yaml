@@ -13,13 +13,14 @@ webhooks:
           - "cert-manager.io"
           - "acme.cert-manager.io"
         apiVersions:
-          - "*"
+          - "v1"
         operations:
           - CREATE
           - UPDATE
         resources:
           - "*/*"
     admissionReviewVersions: ["v1", "v1beta1"]
+    matchPolicy: Equivalent
     timeoutSeconds: 10
     failurePolicy: Fail
     sideEffects: None
@@ -53,13 +54,14 @@ webhooks:
           - "cert-manager.io"
           - "acme.cert-manager.io"
         apiVersions:
-          - "*"
+          - "v1"
         operations:
           - CREATE
           - UPDATE
         resources:
           - "*/*"
     admissionReviewVersions: ["v1", "v1beta1"]
+    matchPolicy: Equivalent
     timeoutSeconds: 10
     failurePolicy: Fail
     sideEffects: None

@@ -1,0 +1,38 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cert-manager-startupapicheck
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    version: v{{ $.Chart.AppVersion }}
+    app: startupapicheck
+spec:
+  backoffLimit: 4
+  template:
+    metadata:
+      labels:
+        version: v{{ $.Chart.AppVersion }}
+        app: startupapicheck
+    spec:
+      priorityClassName: system-cluster-critical
+      serviceAccountName: cert-manager-startupapicheck
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: cert-manager
+          image: "quay.io/jetstack/cert-manager-ctl:v1.5.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - check
+            - api
+            - --wait=1m
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 257Mi
