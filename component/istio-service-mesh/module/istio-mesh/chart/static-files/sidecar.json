@@ -1,6 +1,7 @@
 {
   "global": {
     "caAddress": "",
+    "configCluster": false,
     "configValidation": true,
     "defaultNodeSelector": {},
     "defaultPodDisruptionBudget": {
@@ -90,7 +91,7 @@
     "sts": {
       "servicePort": 0
     },
-    "tag": "1.10.2",
+    "tag": "1.11.0",
     "tracer": {
       "datadog": {
         "address": "$(HOST_IP):8126"
@@ -126,7 +127,6 @@
       "enabled": true
     },
     "rewriteAppHTTPProbe": true,
-    "templates": {},
-    "useLegacySelectors": false
+    "templates": {}
   }
 }
