@@ -2170,7 +2170,7 @@
         "multi": false,
         "name": "namespace",
         "options": [],
-        "query": "query_result(sum(istio_requests_total) by (destination_workload_namespace) or sum(istio_tcp_sent_bytes_total) by (destination_workload_namespace))",
+        "query": "query_result(sum(istio_requests_total{destination_workload_namespace!=\"unknown\"}) by (destination_workload_namespace) or sum(istio_tcp_sent_bytes_total{destination_workload_namespace!=\"unknown\"}) by (destination_workload_namespace))",
         "refresh": 1,
         "regex": "/.*_namespace=\"([^\"]*).*/",
         "sort": 0,
