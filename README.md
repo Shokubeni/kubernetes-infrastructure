@@ -30,6 +30,4 @@ TF_VAR_TELEGRAM_TOKEN    = <string>Telegram bot access token
 TF_VAR_TELEGRAM_ADMIN    = <string>Telegram bot admin ID
 TF_VAR_GRAFANA_CLIENT_ID = <string>OAuth application client ID
 TF_VAR_GRAFANA_SECRET    = <string>OAuth application secret
-TF_VAR_KIALI_CLIENT_ID   = <string>OAuth application client ID
-TF_VAR_KIALI_SECRET      = <string>OAuth application secret
 ```

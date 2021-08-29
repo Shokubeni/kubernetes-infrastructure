@@ -10,8 +10,6 @@ terraform {
       "-var", "telegram_token=${get_env("TF_VAR_TELEGRAM_TOKEN", false)}",
       "-var", "grafana_client_id=${get_env("TF_VAR_GRAFANA_CLIENT_ID", false)}",
       "-var", "grafana_secret=${get_env("TF_VAR_GRAFANA_SECRET", false)}",
-      "-var", "kiali_client_id=${get_env("TF_VAR_KIALI_CLIENT_ID", false)}",
-      "-var", "kiali_secret=${get_env("TF_VAR_KIALI_SECRET", false)}",
       "-var", "root_dir=${get_terragrunt_dir()}/../../..",
       "-var", "backend_bucket=kubernetes-cluster.terraform-state",
       "-var", "provider_region=eu-north-1",

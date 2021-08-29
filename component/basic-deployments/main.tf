@@ -88,10 +88,7 @@ module "monitoring_tools" {
 module "kiali_service_mesh" {
   source = "./module/kiali-service-mesh"
 
-  kiali_client_id = var.kiali_client_id
-  kiali_secret    = var.kiali_secret
-  network_config  = var.network_config
-  root_dir        = var.root_dir
+  root_dir = var.root_dir
 }
 
 module "openvpn_server" {
