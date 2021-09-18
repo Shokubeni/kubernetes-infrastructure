@@ -1,5 +1,3 @@
-![Maintained by metal-city.ru](https://img.shields.io/badge/maintained%20by-metal--city.ru-green.svg?style=for-the-badge&logo=appveyor)
-![Status work in progress](https://img.shields.io/badge/status-stable-green.svg?style=for-the-badge&logo=appveyor)
 # Information
 This configuration provides a simple way for quick, secure and fully management installation of Kubernetes cluster. Advanced settings give the possibility to configure support tools such as Kube Lego, Prometeus and Grafana, which helps to monitor cluster resources and simplify its management.
 
@@ -24,8 +22,8 @@ terragrunt apply-all
 These environment variables must be configured before you start installation.
 ```sh
 TF_VAR_AWS_PROFILE       = <string>AWS cluster operator profile name
-TF_VAR_CLUSTER_NAME      = <string>[MetalCity]
-TF_VAR_CLUSTER_LABEL     = <string>[metal-city]
+TF_VAR_CLUSTER_NAME      = <string>[KubernetesCluster]
+TF_VAR_CLUSTER_LABEL     = <string>[kubernetes-cluster]
 TF_VAR_TELEGRAM_TOKEN    = <string>Telegram bot access token
 TF_VAR_TELEGRAM_ADMIN    = <string>Telegram bot admin ID
 TF_VAR_GRAFANA_CLIENT_ID = <string>OAuth application client ID

@@ -7,8 +7,8 @@ runtime_config = {
   auth_accounts = []
   auth_users    = []
   auth_roles    = [{
-    rolearn  = "arn:aws:iam::121055255948:role/K8SInfrastructureAdministrator",
-    username = "k8s-operations"
+    rolearn  = "<role-arn>",
+    username = "<user-name>"
     groups = [
       "system:masters"
     ]
@@ -20,11 +20,7 @@ runtime_config = {
     lifetime = "360h0m0s"
     include  = {
       resources  = ["*"]
-      namespaces = [
-        "basic-deployments",
-        "monitoring-tools",
-        "metal-city-prod",
-      ]
+      namespaces = []
     }
     exclude = {
       resources  = []
@@ -51,8 +47,8 @@ worker_configs = [{
     desired_capacity    = 2
     kubelet_extra_args  = {
       "--node-labels" = [
-        "node.metal-city.ru/lifecycle=spot",
-        "node.metal-city.ru/scope=common",
+        "worker-node/lifecycle=spot",
+        "worker-node/scope=common",
       ]
     }
     instance_types = [
@@ -84,8 +80,8 @@ network_config = {
   }]
 
   domain_info = {
-    public_zone = "Z00837602TL6GGSWKOWND"
-    domain_name = "metal-city.ru"
+    public_zone = ""
+    domain_name = ""
   }
 
   private_subnets = {
